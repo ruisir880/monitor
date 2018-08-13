@@ -26,4 +26,9 @@ public class UserInfoServiceImpl implements UserInfoService{
         return userInfoRepository.findByUsername(username);
     }
 
+    @Override
+    public UserInfo saveUser(UserInfo userInfo) {
+        LOGGER.info("UserInfoServiceImpl.saveUser() :" + userInfo.getRealName() );
+        return userInfoRepository.save(userInfo);
+    }
 }

@@ -27,7 +27,7 @@ public class LogAspect {
      * @param:
      * @return:
      */
-    @Pointcut("execution(* com.ray.monitor.controller.*.*(..))")
+    @Pointcut("execution(* com.ray.monitor.web.controller.*.*(..))")
     public void log() {}
 
     /**

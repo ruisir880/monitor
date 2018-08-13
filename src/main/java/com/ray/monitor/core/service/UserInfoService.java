@@ -7,6 +7,8 @@ import com.ray.monitor.model.UserInfo;
  */
 public interface UserInfoService {
 
-    public UserInfo findByUsername(String username);
+    UserInfo findByUsername(String username);
+
+    UserInfo saveUser(UserInfo userInfo);
 
 }

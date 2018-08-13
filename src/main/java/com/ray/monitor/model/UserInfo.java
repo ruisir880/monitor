@@ -17,7 +17,8 @@ public class UserInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    //数据库在插入数据时，会自动给主键赋值
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long uid;// 用户id
 
     @Column(unique = true,nullable = false)

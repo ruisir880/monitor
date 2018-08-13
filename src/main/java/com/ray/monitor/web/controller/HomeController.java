@@ -1,4 +1,4 @@
-package com.ray.monitor.controller;
+package com.ray.monitor.web.controller;
 
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -24,6 +24,18 @@ public class HomeController {
     public String login() {
         return "/login";
     }
+
+
+    @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
+    public String userInfo() {
+        return "/userInfo";
+    }
+
+    @RequestMapping(value = "/userAdd", method = RequestMethod.GET)
+    public String userInfoAdd() {
+        return "/user/userAdd";
+    }
+
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
