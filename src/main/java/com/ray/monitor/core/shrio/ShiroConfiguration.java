@@ -1,5 +1,6 @@
 package com.ray.monitor.core.shrio;
 
+import com.ray.monitor.core.Constants;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -70,8 +71,8 @@ public class ShiroConfiguration {
     public HashedCredentialsMatcher hashedCredentialsMatcher(){
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
 
-        hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;
-        hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5(""));
+        hashedCredentialsMatcher.setHashAlgorithmName(Constants.HASHALGORITHMNAME);//散列算法:这里使用MD5算法;
+        hashedCredentialsMatcher.setHashIterations(Constants.HASHITERATIONS);//散列的次数，比如散列两次，相当于 md5(md5(""));
 
         return hashedCredentialsMatcher;
     }

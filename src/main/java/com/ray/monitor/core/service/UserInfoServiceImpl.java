@@ -2,6 +2,8 @@ package com.ray.monitor.core.service;
 
 import com.ray.monitor.core.repository.UserInfoRepository;
 import com.ray.monitor.model.UserInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,13 +14,15 @@ import javax.annotation.Resource;
  */
 @Service
 public class UserInfoServiceImpl implements UserInfoService{
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     @Resource
     private UserInfoRepository userInfoRepository;
 
     @Transactional(readOnly=true)
     @Override
     public UserInfo findByUsername(String username) {
-        System.out.println("UserInfoServiceImpl.findByUsername()");
+        LOGGER.info("UserInfoServiceImpl.findByUsername() :" + username );
         return userInfoRepository.findByUsername(username);
     }
 
