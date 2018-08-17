@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <script type="text/javascript" src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="/webjars/echarts/4.0.4/dist/echarts.js"></script>
+    <script type="text/javascript" src="/webjars/echarts/4.0.4/dist/echarts.common.min.js"></script>
+    <script type="text/javascript" src="/webjars/echarts/4.0.4/theme/vintage.js"></script>
+    <title>电力测温智能化管理</title>
+</head>
+<script type="text/javascript">
+    var option
+    var myChart
+
+    $(function () {
+        initChart()
+        //基于准备好的dom，初始化echarts实例
+        myChart = echarts.init(document.getElementById('main'));
+        //myChart.setOption(option)
+    })
+
+    function showWeight() {
+        $.ajax({
+            type: "GET",
+            url: "checkCurrentTemp",
+            data: {},
+            success: function (r) {
+                //console.log(r)
+                initChart()
+                //option.title.text = r.username+"的体重"
+                //option.series[0] = {"name": r.username, "type": "line", "data": []}
+                //option.series[0].name = r.username
+                //option.series[0].type = 'line'
+                for (var i in r) {
+                    option.series[0].data[i] = r[i].temperature
+                    option.xAxis[0].data[i] = '传感器'+ r[i].deviceName
+                }
+                //option.series[1] = {"name": r.username, "type": "line", "data": [1,2,8,12,21,9]}
+                myChart.setOption(option)
+            }
+        });
+    }
+
+    function initChart() {
+        option = {
+            title : {
+                text: '当前温度状态',
+                subtext: '纯属虚构'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['传感器温度']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : []
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'传感器温度',
+                    type:'bar',
+                    data:[],
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+
+
+    }
+
+</script>
+<body>
+<h1 style="text-align: center">当前温度状态</h1>
+<a href="javascript:void(0)" onclick="showWeight()"
+   style="text-decoration: none;margin-left: 140px">查看当前温度状态</a>
+<div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
+
+</body>
+</html>

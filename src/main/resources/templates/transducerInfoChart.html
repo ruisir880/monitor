@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <script type="text/javascript" src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+    <title>电力测温智能化管理</title>
+</head>
+<script type="text/javascript">
+    var option
+    var myChart
+
+    $(function () {
+        initChart()
+        //基于准备好的dom，初始化echarts实例
+        myChart = echarts.init(document.getElementById('main'));
+        //myChart.setOption(option)
+    })
+
+    function showWeight() {
+        $.ajax({
+            type: "GET",
+            url: "checkTempChart",
+            data: {},
+            success: function (r) {
+                initChart()
+                /* option.legend.data[0] = r.username
+                 option.series[0] = {"name": r.username, "type": "line", "data": []}
+                 for (var i in r.weights) {
+                 option.series[0].data[i] = r.weights[i].weight
+                 option.xAxis[0].data[i] = r.weights[i].wdate
+                 }*/
+                myChart.setOption(option)
+            }
+        });
+    }
+
+    function initChart() {
+        option = {
+            title : {
+                text: '传感器信息',
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{b}: {c}"
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : false,
+
+            series : [
+                {
+                    name:'树图',
+                    type:'tree',
+                    orient: 'horizontal',  // vertical horizontal
+                    rootLocation: {x: 100, y: '60%'}, // 根节点位置  {x: 'center',y: 10}
+                    nodePadding: 20,
+                    symbol: 'circle',
+                    symbolSize: 40,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                position: 'inside',
+                                textStyle: {
+                                    color: '#cc9999',
+                                    fontSize: 15,
+                                    fontWeight:  'bolder'
+                                }
+                            },
+                            lineStyle: {
+                                color: '#000',
+                                width: 1,
+                                type: 'broken' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
+                            }
+                        },
+                        emphasis: {
+                            label: {
+                                show: true
+                            }
+                        }
+                    },
+                    data: [
+                        {
+                            name: 'xx变电站',
+                            value: 6,
+                            symbolSize: [90, 70],
+                            children: [
+                                {
+                                    name: '建设',
+                                    value: 4,
+                                    symbolSize: [60, 60],
+                                    children: [
+                                        {
+                                            name: '传感器1',
+                                            symbol: 'circle',
+                                            symbolSize: 20,
+                                            value: 4,
+                                        },
+                                        {
+                                            name: '传感器2',
+                                            value: 4,
+                                            symbol: 'circle',
+                                            symbolSize: 20,
+
+                                        },
+                                        {
+                                            name: '传感器3',
+                                            value: 2,
+                                            symbol: 'circle',
+                                            symbolSize: 20,
+                                        }
+                                    ]
+                                }
+
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+    }
+
+</script>
+<body>
+<h1 style="text-align: center">温度信息页面</h1>
+<a href="javascript:void(0)" onclick="showWeight()"
+   style="text-decoration: none;margin-left: 140px">查看温度信息</a>
+<div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
+
+</body>
+</html>

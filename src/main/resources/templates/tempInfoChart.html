@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <script type="text/javascript" src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="/webjars/echarts/4.0.4/dist/echarts.js"></script>
+    <script type="text/javascript" src="/webjars/echarts/4.0.4/dist/echarts.common.min.js"></script>
+    <script type="text/javascript" src="/webjars/echarts/4.0.4/theme/vintage.js"></script>
+    <title>电力测温智能化管理</title>
+</head>
+<script type="text/javascript">
+    var option
+    var myChart
+
+    $(function () {
+        initChart()
+        //基于准备好的dom，初始化echarts实例
+        myChart = echarts.init(document.getElementById('main'));
+        //myChart.setOption(option)
+    })
+
+    function showWeight() {
+        $.ajax({
+            type: "GET",
+            url: "checkTempChart",
+            data: {},
+            success: function (r) {
+                initChart()
+                option.legend.data[0] = r.username
+                option.series[0] = {"name": r.username, "type": "line", "data": []}
+                for (var i in r.weights) {
+                    option.series[0].data[i] = r.weights[i].weight
+                    option.xAxis[0].data[i] = r.weights[i].wdate
+                }
+                myChart.setOption(option)
+            }
+        });
+    }
+
+    function initChart() {
+        option = {
+            title: {
+                text: "温度信息",
+                x: "center"
+            },
+            tooltip: {
+                trigger: "item",
+                formatter: "{a} <br/>{b} : {c}kg"
+            },
+            legend: {
+                x: 'left',
+                data: []
+            },
+            xAxis: [
+                {
+                    type: "category",
+                    name: "日期",
+                    splitLine: {show: false},
+                    data: []
+                }
+            ],
+            yAxis: [
+                {
+                    type: "value",
+                    axisLabel: {
+                        formatter: '{value} 度'
+                    },
+                    name: "温度",
+                    max: 90,
+                    min: 50,
+                    splitNumber: 5
+                }
+            ],
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {
+                        show: true
+                    },
+                    dataView: {
+                        show: true,
+                        readOnly: true
+                    },
+                    restore: {
+                        show: true
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+                }
+            },
+            calculable: true,
+            series: []
+        };
+    }
+
+</script>
+<body>
+<h1 style="text-align: center">温度信息页面</h1>
+<a href="javascript:void(0)" onclick="showWeight()"
+   style="text-decoration: none;margin-left: 140px">查看温度信息</a>
+<div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
+
+</body>
+</html>

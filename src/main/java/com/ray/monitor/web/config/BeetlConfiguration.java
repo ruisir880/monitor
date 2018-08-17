@@ -21,7 +21,8 @@ public class BeetlConfiguration {
     @Bean(initMethod = "init", name = "beetlConfig")
     public BeetlGroupUtilConfiguration getBeetlGroupUtilConfiguration() {
         BeetlGroupUtilConfiguration beetlGroupUtilConfiguration = new BeetlGroupUtilConfiguration();
-        ResourcePatternResolver patternResolver = ResourcePatternUtils.getResourcePatternResolver(new DefaultResourceLoader());
+        ResourcePatternResolver patternResolver = ResourcePatternUtils
+                .getResourcePatternResolver(new DefaultResourceLoader());
         try {
             // WebAppResourceLoader 配置root路径是关键
             WebAppResourceLoader webAppResourceLoader =
@@ -35,10 +36,11 @@ public class BeetlConfiguration {
     }
 
     @Bean(name = "beetlViewResolver")
-    public BeetlSpringViewResolver getBeetlSpringViewResolver(@Qualifier("beetlConfig") BeetlGroupUtilConfiguration beetlGroupUtilConfiguration) {
+    public BeetlSpringViewResolver getBeetlSpringViewResolver(@Qualifier("beetlConfig")
+    BeetlGroupUtilConfiguration beetlGroupUtilConfiguration) {
         BeetlSpringViewResolver beetlSpringViewResolver = new BeetlSpringViewResolver();
-       // beetlSpringViewResolver.setPrefix("WEB-INF/views/");
-        beetlSpringViewResolver.setPrefix("resources/templates/");
+        //beetlSpringViewResolver.setPrefix("WEB-INF/views/");
+        beetlSpringViewResolver.setPrefix("templates/");
         beetlSpringViewResolver.setSuffix(".html");
         beetlSpringViewResolver.setContentType("text/html;charset=UTF-8");
         beetlSpringViewResolver.setOrder(0);
