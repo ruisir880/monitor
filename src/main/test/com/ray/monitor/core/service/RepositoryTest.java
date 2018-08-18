@@ -1,14 +1,8 @@
 package com.ray.monitor.core.service;
 
 import com.ray.monitor.StartApplication;
-import com.ray.monitor.core.repository.AreaRepository;
-import com.ray.monitor.core.repository.MonitorRepository;
-import com.ray.monitor.core.repository.RoleRepository;
-import com.ray.monitor.core.repository.SensorRepository;
-import com.ray.monitor.model.Area;
-import com.ray.monitor.model.MonitorPoint;
-import com.ray.monitor.model.RoleInfo;
-import com.ray.monitor.model.SensorInfo;
+import com.ray.monitor.core.repository.*;
+import com.ray.monitor.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +27,9 @@ public class RepositoryTest {
 
     @Autowired
     private SensorRepository sensorRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Test
     public void test1() throws Exception {
@@ -60,6 +57,17 @@ public class RepositoryTest {
         SensorInfo sensor  =  sensorRepository.findOne(1L);
         System.out.println("========================"+sensor.getGenTime());
         System.out.println("========================"+sensor.getMonitorPoint().getName());
+        System.out.println("========================"+sensor.getCommentInfoList().size());
+    }
+
+    @Test
+    public void test_AddComment() throws Exception {
+        CommentInfo commentInfo = new CommentInfo();
+        commentInfo.setMessage("test add message");
+        SensorInfo sensorInfo = new SensorInfo();
+        sensorInfo.setId(1L);
+        commentInfo.setSensorInfo(sensorInfo);
+        commentRepository.save(commentInfo);
     }
 
 }

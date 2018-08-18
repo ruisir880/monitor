@@ -21,6 +21,9 @@ public class SensorInfo implements Serializable {
     @JoinColumn(name="monitor_point_id")//设置在employee表中的关联字段(外键)
     private MonitorPoint monitorPoint;
 
+    @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    private List<CommentInfo> commentInfoList;
+
 
     public long getId() {
         return id;
@@ -54,4 +57,11 @@ public class SensorInfo implements Serializable {
         this.monitorPoint = monitorPoint;
     }
 
+    public List<CommentInfo> getCommentInfoList() {
+        return commentInfoList;
+    }
+
+    public void setCommentInfoList(List<CommentInfo> commentInfoList) {
+        this.commentInfoList = commentInfoList;
+    }
 }

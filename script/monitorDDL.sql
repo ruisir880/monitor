@@ -87,7 +87,7 @@ create table temp_info(
   id bigint not null auto_increment,
   monitor_point_id bigint,
   gen_time datetime default CURRENT_TIMESTAMP,
-  tempareture  double(6,2),
+  temperature  double(6,2),
   state varchar(20),
   primary key (id)
 );
