@@ -11,11 +11,8 @@ import java.util.List;
 @Entity
 public class UserInfo implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 4344665541172157520L;
     @Id
     //数据库在插入数据时，会自动给主键赋值
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,13 +37,11 @@ public class UserInfo implements Serializable {
 
     private Date generationTime;
 
-    private byte state;// 用户状态,0:创建未认证（比如没有激活，没有输入验证码等等）--等待验证的用户 ,
-    // 1:正常状态,2：用户被锁定.
 
     @ManyToMany(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据
-    @JoinTable(name = "SysUserRole", joinColumns = { @JoinColumn(name = "uid") }, inverseJoinColumns = {
+    @JoinTable(name = "UserRoleMap", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
             @JoinColumn(name = "roleId") })
-    private List<SysRole> roleList;// 一个用户具有多个角色
+    private List<RoleInfo> roleList;// 一个用户具有多个角色
 
     public long getUid() {
         return uid;
@@ -88,19 +83,12 @@ public class UserInfo implements Serializable {
         this.salt = salt;
     }
 
-    public byte getState() {
-        return state;
-    }
 
-    public void setState(byte state) {
-        this.state = state;
-    }
-
-    public List<SysRole> getRoleList() {
+    public List<RoleInfo> getRoleList() {
         return roleList;
     }
 
-    public void setRoleList(List<SysRole> roleList) {
+    public void setRoleList(List<RoleInfo> roleList) {
         this.roleList = roleList;
     }
 
@@ -139,8 +127,8 @@ public class UserInfo implements Serializable {
 
     @Override
     public String toString() {
-        return "UserInfo [uid=" + uid + ", username=" + username + ", realName=" + realName + ", password=" + password
-                + ", salt=" + salt + ", state=" + state + "]";
+        return "UserInfo{" +
+                "username='" + username + '\'' +
+                '}';
     }
-
 }

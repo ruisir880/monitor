@@ -1,9 +1,6 @@
 package com.ray.monitor.web.controller;
 
-import com.ray.monitor.model.Person;
-import com.ray.monitor.model.Transducer;
-import com.ray.monitor.model.User;
-import com.ray.monitor.model.Weight;
+import com.ray.monitor.model.SensorInfo;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.stereotype.Controller;
@@ -74,9 +71,7 @@ public class HomeController {
     @RequestMapping("/userList")
     public ModelAndView userList() {
         ModelAndView modelAndView = new ModelAndView();
-        User user = new User(1001,"ray","张三那","123456","test@qq.com");
-        modelAndView.addObject("user",user);
-        modelAndView.setViewName("userList");
+
         return modelAndView;
     }
 
@@ -88,19 +83,7 @@ public class HomeController {
         return modelAndView;
     }
 
-    @GetMapping("/checkTempChart")
-    @ResponseBody
-    public Person getPerson(Integer id) {
-        Person person = new Person();
-        person.setUsername("Ray");
-        List<Weight> weights= new ArrayList<>();
-        weights.add(new Weight(60, "5"));
-        weights.add(new Weight(61, "6"));
-        weights.add(new Weight(62, "7"));
-        person.setWeights(weights);
 
-        return person;
-    }
 
     @GetMapping("/currentTemp")
     public ModelAndView currentTemp(Integer id) {
@@ -125,17 +108,7 @@ public class HomeController {
         return modelAndView;
     }
 
-    @GetMapping("/checkCurrentTemp")
-    @ResponseBody
-    public List<Transducer> checkCurrentTemp(Integer id) {
-        List<Transducer> transducers = new ArrayList<>();
-        transducers.add(new Transducer(1L,"1",22.3));
-        transducers.add(new Transducer(2L,"2",23.3));
-        transducers.add(new Transducer(3L,"3",30));
-        transducers.add(new Transducer(4L,"4",35));
-        transducers.add(new Transducer(5L, "5", 12));
-        return transducers;
-    }
+
 
     @GetMapping("/transducerInfoChart")
     public ModelAndView transducerInfo() {
@@ -146,7 +119,7 @@ public class HomeController {
 
     @GetMapping("/checkTransducerInfo")
     @ResponseBody
-    public List<Transducer> checkTransducerInfo() {
+    public List<SensorInfo> checkTransducerInfo() {
 
         return null;
     }

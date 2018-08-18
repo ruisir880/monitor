@@ -33,7 +33,7 @@ public class UserInfoServiceImplTest {
 
     @Test
     public void test3() throws Exception {
-        List<UserInfo> userInfo = userInfoService.findByCondition(null, "展", null);
+        List<UserInfo> userInfo = userInfoService.findByCondition(null, "张", null);
         System.out.println("================================="+userInfo.size());
     }
 }

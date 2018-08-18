@@ -1,8 +1,8 @@
 package com.ray.monitor.core.shrio;
 
 import com.ray.monitor.core.service.UserInfoService;
-import com.ray.monitor.model.SysPermission;
-import com.ray.monitor.model.SysRole;
+import com.ray.monitor.model.PrivilegeInfo;
+import com.ray.monitor.model.RoleInfo;
 import com.ray.monitor.model.UserInfo;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -63,13 +63,13 @@ public class MyShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         UserInfo userInfo = (UserInfo) principals.getPrimaryPrincipal();
 
-        for(SysRole role:userInfo.getRoleList()){
+        for(RoleInfo role:userInfo.getRoleList()){
 
-            authorizationInfo.addRole(role.getRole());
+            authorizationInfo.addRole(role.getRoleName());
             System.out.println(role.getPermissions());
-            for(SysPermission p:role.getPermissions()){
+            for(PrivilegeInfo p:role.getPermissions()){
                 System.out.println(p);
-                authorizationInfo.addStringPermission(p.getPermission());
+                authorizationInfo.addStringPermission(p.getPrivilegeName());
             }
         }
         return authorizationInfo;
