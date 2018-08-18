@@ -1,11 +1,17 @@
 package com.ray.monitor.core.service;
 
+import com.ray.monitor.core.Constants;
+import com.ray.monitor.core.repository.PageQueryRepository;
 import com.ray.monitor.core.repository.UserInfoRepository;
 import com.ray.monitor.model.UserInfo;
 import org.apache.shiro.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +23,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ray.monitor.core.Constants.PAGE_SIZE;
 
 /**
  * Created by rui on 2018/8/12.
@@ -31,6 +39,10 @@ public class UserInfoServiceImpl implements UserInfoService{
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private PageQueryRepository<UserInfo, Long> pageQueryRepository;
+
+
     @Transactional(readOnly=true)
     @Override
     public UserInfo findByUsername(String username) {
@@ -42,6 +54,34 @@ public class UserInfoServiceImpl implements UserInfoService{
     public UserInfo saveUser(UserInfo userInfo) {
         LOGGER.info("UserInfoServiceImpl.saveUser() :" + userInfo.getRealName() );
         return userInfoRepository.save(userInfo);
+    }
+
+    @Override
+    public Page<UserInfo> pageQuery(int page) {
+        return pageQueryRepository.findAll(new PageRequest(page,PAGE_SIZE));
+    }
+
+    public Page<UserInfo> pageUserQuery(int page ,String username,String realName,String mobile){
+        Specification<UserInfo> specification = new Specification<UserInfo>() {
+            @Override
+            public Predicate toPredicate(Root<UserInfo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> predicates = new ArrayList<>(); //所有的断言
+                if(StringUtils.hasText(username)){
+                    predicates.add(cb.like(root.get("username"), "%"+username+"%"));
+                }
+                if(StringUtils.hasText(realName)){
+                    predicates.add(cb.like(root.get("realName"),"%"+realName+"%"));
+                }
+                if(StringUtils.hasText(mobile)){
+                    predicates.add(cb.like(root.get("mobile"), "%"+mobile+"%"));
+                }
+                return cb.and(predicates.toArray(new Predicate[0]));
+            }
+        };
+        //分页信息
+        Pageable pageable = new PageRequest(page-1, Constants.PAGE_SIZE); //页码：前端从1开始，jpa从0开始，做个转换
+        //查询
+        return this.userInfoRepository.findAll(specification,pageable);
     }
 
 
@@ -64,4 +104,7 @@ public class UserInfoServiceImpl implements UserInfoService{
         query.where(predicateArr);
         return entityManager.createQuery(query).getResultList();
     }
+
+
+
 }

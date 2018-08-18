@@ -1,6 +1,9 @@
 package com.ray.monitor.core.repository;
 
 import com.ray.monitor.model.UserInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -15,5 +18,7 @@ public interface UserInfoRepository extends CrudRepository<UserInfo, Long> {
     UserInfo save (UserInfo userInfo);
 
     List<UserInfo> findAll();
+
+    Page<UserInfo> findAll(Specification<UserInfo> spec, Pageable pageable);
 
 }

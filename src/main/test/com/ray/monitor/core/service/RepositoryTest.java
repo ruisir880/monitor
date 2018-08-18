@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import sun.management.Sensor;
 
@@ -30,6 +32,12 @@ public class RepositoryTest {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private PageQueryRepository<UserInfo, Long> pageQueryRepository;
+
+    @Autowired
+    private UserInfoService userInfoService;
 
     @Test
     public void test1() throws Exception {
@@ -68,6 +76,22 @@ public class RepositoryTest {
         sensorInfo.setId(1L);
         commentInfo.setSensorInfo(sensorInfo);
         commentRepository.save(commentInfo);
+    }
+
+    @Test
+    public void test_PageQuery() throws Exception {
+        Page<UserInfo> userInfos = pageQueryRepository.findAll(new PageRequest(0,10));
+        System.out.println("========================"+userInfos.getTotalPages());
+        System.out.println("========================"+userInfos.getSize());
+        System.out.println("========================"+userInfos.getNumberOfElements());
+    }
+
+    @Test
+    public void test_PageQuery2(){
+        Page<UserInfo> userInfos  = userInfoService.pageUserQuery(1,null,null,null);
+        System.out.println("========================"+userInfos.getTotalPages());
+        System.out.println("========================"+userInfos.getSize());
+        System.out.println("========================"+userInfos.getNumberOfElements());
     }
 
 }

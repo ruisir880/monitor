@@ -27,25 +27,16 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
-        return "/login";
+    public ModelAndView login() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/login");
+        return modelAndView;
     }
-
-
-    @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
-    public String userInfo() {
-        return "/userInfo";
-    }
-
-    @RequestMapping(value = "/userAdd", method = RequestMethod.GET)
-    public String userInfoAdd() {
-        return "/user/userAdd";
-    }
-
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(HttpServletRequest request, Model m, Map<String, Object> map) {
+    public ModelAndView login(HttpServletRequest request, Model m, Map<String, Object> map) {
+        ModelAndView modelAndView = new ModelAndView();
         // 登录失败从request中获取shiro处理的异常信息
         // shiroLoginFailure:就是shiro异常类的全类名
         String exception = (String) request.getAttribute("shiroLoginFailure");
@@ -61,19 +52,14 @@ public class HomeController {
             } else {
                 msg = "else >> " + exception;
             }
-            return "/login";
+            modelAndView.setViewName("/login");
         }
-        map.put("msg", msg);
+        modelAndView.addObject("msg",msg);
         // 此方法不处理登录成功,由shiro进行处理.
-        return "/index";
-    }
-
-    @RequestMapping("/userList")
-    public ModelAndView userList() {
-        ModelAndView modelAndView = new ModelAndView();
-
+        modelAndView.setViewName("/index");
         return modelAndView;
     }
+
 
 
     @RequestMapping("/my")
