@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class SensorInfo implements Serializable {
@@ -22,7 +23,10 @@ public class SensorInfo implements Serializable {
     private MonitorPoint monitorPoint;
 
     @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    private List<CommentInfo> commentInfoList;
+    private Set<CommentInfo> commentInfoList;
+
+    @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    private Set<TempInfo> tempInfoList;
 
 
     public long getId() {
@@ -57,11 +61,19 @@ public class SensorInfo implements Serializable {
         this.monitorPoint = monitorPoint;
     }
 
-    public List<CommentInfo> getCommentInfoList() {
+    public Set<CommentInfo> getCommentInfoList() {
         return commentInfoList;
     }
 
-    public void setCommentInfoList(List<CommentInfo> commentInfoList) {
+    public void setCommentInfoList(Set<CommentInfo> commentInfoList) {
         this.commentInfoList = commentInfoList;
+    }
+
+    public Set<TempInfo> getTempInfoList() {
+        return tempInfoList;
+    }
+
+    public void setTempInfoList(Set<TempInfo> tempInfoList) {
+        this.tempInfoList = tempInfoList;
     }
 }

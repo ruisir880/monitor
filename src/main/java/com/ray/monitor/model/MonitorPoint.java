@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by rui on 2018/8/18.
@@ -25,7 +26,7 @@ public class MonitorPoint implements Serializable {
     private long areaId;
 
     @OneToMany(mappedBy="monitorPoint",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    private List<SensorInfo> sensorInfoList;
+    private Set<SensorInfo> sensorInfoList;
 
     public long getId() {
         return id;
@@ -67,11 +68,11 @@ public class MonitorPoint implements Serializable {
         this.areaId = areaId;
     }
 
-    public List<SensorInfo> getSensorInfoList() {
+    public Set<SensorInfo> getSensorInfoList() {
         return sensorInfoList;
     }
 
-    public void setSensorInfoList(List<SensorInfo> sensorInfoList) {
+    public void setSensorInfoList(Set<SensorInfo> sensorInfoList) {
         this.sensorInfoList = sensorInfoList;
     }
 }

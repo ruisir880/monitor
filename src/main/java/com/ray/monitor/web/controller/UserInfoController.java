@@ -44,15 +44,22 @@ public class UserInfoController {
      * 用户添加;
      * @return
      */
-    @RequestMapping("/addUser")
-    @RequiresPermissions("userInfo:add")//权限管理;
-    public String userInfoAdd(UserInfo user){
+    @RequestMapping(value = "/addUser", method =RequestMethod.POST )
+    //@RequiresPermissions("userInfo:add")//权限管理;
+    @ResponseBody
+    public int userInfoAdd(UserInfo user){
+        ModelAndView modelAndView = new ModelAndView();
+        UserInfo userInfo = userInfoService.findByUsername(user.getUsername());
+        if(userInfo!=null) {
+            modelAndView.addObject("msg", "username alread exist");
+            return 1;
+        }
         String salt = UserUtil.generateSalt(user.getPassword());
         String password = UserUtil.encryptPassword(user.getUsername(),user.getPassword(),salt);
         user.setSalt(salt);
         user.setPassword(password);
         userInfoService.saveUser(user);
-        return "userInfoAdd";
+        return 0;
     }
     /**
      * 用户删除;

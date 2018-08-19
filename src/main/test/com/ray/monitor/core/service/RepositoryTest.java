@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import sun.management.Sensor;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -38,6 +39,9 @@ public class RepositoryTest {
 
     @Autowired
     private UserInfoService userInfoService;
+
+    @Autowired
+    private TempRepository tempRepository;
 
     @Test
     public void test1() throws Exception {
@@ -92,6 +96,13 @@ public class RepositoryTest {
         System.out.println("========================"+userInfos.getTotalPages());
         System.out.println("========================"+userInfos.getSize());
         System.out.println("========================"+userInfos.getNumberOfElements());
+    }
+
+    @Test
+    public void test_Temp() throws Exception {
+        List<Long> longs = Arrays.asList(1L,2L,3L);
+        List<TempInfo> tempInfoList = tempRepository.findBySensorId(longs);
+        System.out.println("========================"+tempInfoList.size());
     }
 
 }

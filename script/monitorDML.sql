@@ -3352,30 +3352,32 @@ insert into user_monitor_map(user_id,monitor_point_id) values(1,2);
 insert into user_monitor_map(user_id,monitor_point_id) values(2,2);
 insert into user_monitor_map(user_id,monitor_point_id) values(2,3);
 
-insert into temp_info(monitor_point_id,temperature,state) values(1,15.2,'normal');
-insert into temp_info(monitor_point_id,temperature,state) values(1,19,'normal');
-insert into temp_info(monitor_point_id,temperature,state) values(1,20,'normal');
-insert into temp_info(monitor_point_id,temperature,state) values(1,15,'normal');
-insert into temp_info(monitor_point_id,temperature,state) values(1,10,'normal');
-insert into temp_info(monitor_point_id,temperature,state) values(2,30,'warning');
-insert into temp_info(monitor_point_id,temperature,state) values(2,38,'warning');
-insert into temp_info(monitor_point_id,temperature,state) values(2,20,'normal');
-insert into temp_info(monitor_point_id,temperature,state) values(2,26.5,'normal');
-insert into temp_info(monitor_point_id,temperature,state) values(3,22.2,'normal');
-insert into temp_info(monitor_point_id,temperature,state) values(3,19,'normal');
-insert into temp_info(monitor_point_id,temperature,state) values(3,39,'warning');
-insert into temp_info(monitor_point_id,temperature,state) values(3,15,'normal');
-insert into temp_info(monitor_point_id,temperature,state) values(3,10,'normal');
+insert into sensor_info(monitor_point_id,sensor_id) values(1,10);
+insert into sensor_info(monitor_point_id,sensor_id) values(1,8);
+insert into sensor_info(monitor_point_id,sensor_id) values(1,7);
+insert into sensor_info(monitor_point_id,sensor_id) values(2,6);
+insert into sensor_info(monitor_point_id,sensor_id) values(3,5);
+insert into sensor_info(monitor_point_id,sensor_id) values(3,4);
+insert into sensor_info(monitor_point_id,sensor_id) values(3,3);
+insert into sensor_info(monitor_point_id,sensor_id) values(3,2);
+insert into sensor_info(monitor_point_id,sensor_id) values(3,1);
 
-insert into sensor_info(monitor_point_id) values(1);
-insert into sensor_info(monitor_point_id) values(1);
-insert into sensor_info(monitor_point_id) values(1);
-insert into sensor_info(monitor_point_id) values(2);
-insert into sensor_info(monitor_point_id) values(3);
-insert into sensor_info(monitor_point_id) values(3);
-insert into sensor_info(monitor_point_id) values(3);
-insert into sensor_info(monitor_point_id) values(3);
-insert into sensor_info(monitor_point_id) values(3);
+
+insert into temp_info(sensor_id,temperature,state) values(1,15.2,'normal');
+insert into temp_info(sensor_id,temperature,state) values(2,19,'normal');
+insert into temp_info(sensor_id,temperature,state) values(3,20,'normal');
+insert into temp_info(sensor_id,temperature,state) values(4,15,'normal');
+insert into temp_info(sensor_id,temperature,state) values(5,10,'normal');
+insert into temp_info(sensor_id,temperature,state) values(6,30,'warning');
+insert into temp_info(sensor_id,temperature,state) values(7,38,'warning');
+insert into temp_info(sensor_id,temperature,state) values(8,20,'normal');
+insert into temp_info(sensor_id,temperature,state) values(10,26.5,'normal');
+insert into temp_info(sensor_id,temperature,state) values(1,22.2,'normal');
+insert into temp_info(sensor_id,temperature,state) values(1,19,'normal');
+insert into temp_info(sensor_id,temperature,state) values(2,39,'warning');
+insert into temp_info(sensor_id,temperature,state) values(2,15,'normal');
+insert into temp_info(sensor_id,temperature,state) values(2,10,'normal');
+
 
 
 insert into comment_info(message,sensor_id) values("this is comment1",1);

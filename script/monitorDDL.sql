@@ -83,17 +83,6 @@ alter table user_monitor_map add constraint fk_user_monitor_u foreign key (user_
 alter table user_monitor_map add constraint fk_user_monitor_m foreign key (monitor_point_id)  references monitor_point (id);
 
 
-create table temp_info(
-  id bigint not null auto_increment,
-  monitor_point_id bigint,
-  gen_time datetime default CURRENT_TIMESTAMP,
-  temperature  double(6,2),
-  state varchar(20),
-  primary key (id)
-);
-alter table temp_info add constraint fk_temp_info foreign key (monitor_point_id)  references monitor_point (id);
-
-
 create table sensor_info(
   id bigint not null auto_increment,
   sensor_id not null,
@@ -110,4 +99,14 @@ create table comment_info(
   primary key (id)
 );
 alter table comment_info add constraint fk_comment_info foreign key (sensor_id)  references sensor_info (id);
+
+create table temp_info(
+  id bigint not null auto_increment,
+  sensor_id bigint,
+  gen_time datetime default CURRENT_TIMESTAMP,
+  temperature  double(6,2),
+  state varchar(20),
+  primary key (id)
+);
+alter table temp_info add constraint fk_temp_info foreign key (sensor_id)  references sensor_info (id);
 

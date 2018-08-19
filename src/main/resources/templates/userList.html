@@ -53,9 +53,8 @@
             var mobile = $("#mobile").val();
              var targetUrl = "/queryUserPage?username="+username+"&realName="+realName+"&mobile="+mobile+"&jumpNumTxt="+jumpNumTxt;
 
-            //var targetUrl = "/queryUserPage?pageIndex=1&username=&realName=&mobile=";
-
-            $("#submitForm").attr("action",targetUrl ).submit();
+          //  $("#submitForm").attr("action",targetUrl ).submit();
+            window.location.href=targetUrl;
         }
 
 

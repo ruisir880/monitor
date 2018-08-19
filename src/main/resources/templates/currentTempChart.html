@@ -22,18 +22,19 @@
     function showWeight() {
         $.ajax({
             type: "GET",
-            url: "checkCurrentTemp",
+            url: "checkCurrentTempInfo",
             data: {},
-            success: function (r) {
+            success: function (result) {
                 //console.log(r)
                 initChart()
                 //option.title.text = r.username+"的体重"
                 //option.series[0] = {"name": r.username, "type": "line", "data": []}
                 //option.series[0].name = r.username
                 //option.series[0].type = 'line'
-                for (var i in r) {
-                    option.series[0].data[i] = r[i].temperature
-                    option.xAxis[0].data[i] = '传感器'+ r[i].deviceName
+                for (var i in result.sensorVOList) {
+                    option.title.text = result.monitorPointName
+                    option.series[0].data[i] = result.sensorVOList[i].crruentTemp
+                    option.xAxis[0].data[i] = '传感器'+ result.sensorVOList[i].sensorName
                 }
                 //option.series[1] = {"name": r.username, "type": "line", "data": [1,2,8,12,21,9]}
                 myChart.setOption(option)
@@ -45,7 +46,7 @@
         option = {
             title : {
                 text: '当前温度状态',
-                subtext: '纯属虚构'
+                subtext: '当前温度状态'
             },
             tooltip : {
                 trigger: 'axis'
