@@ -60,7 +60,6 @@ create table area(
   parentid bigint,
   primary key (id)
 );
-alter table area add constraint uq_area_name unique (area_name);
 alter table area add constraint fk_area foreign key (parentid)  references area (id);
 
 create table monitor_point(
@@ -85,7 +84,7 @@ alter table user_monitor_map add constraint fk_user_monitor_m foreign key (monit
 
 create table sensor_info(
   id bigint not null auto_increment,
-  sensor_id not null,
+  sensor_id VARCHAR(50)not null,
   monitor_point_id bigint,
   gen_time datetime default CURRENT_TIMESTAMP,
   primary key (id)

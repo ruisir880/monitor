@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by rui on 2018/8/19.
  */
-public class CurrentTempVO implements Serializable{
+public class TempVO implements Serializable{
     private static final long serialVersionUID = 865630214650445611L;
 
     private String monitorPointName;

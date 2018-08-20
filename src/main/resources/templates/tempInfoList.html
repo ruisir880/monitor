@@ -17,7 +17,17 @@
 
         /** 模糊查询来电用户  **/
         function search(){
-            $("#submitForm").attr("action", "house_list.html?page=" + 1).submit();
+            var jumpNumTxt = 1;
+            if($("#jumpNumTxt").val())
+                jumpNumTxt=$("#jumpNumTxt").val();
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            var state = $("#state").val();
+
+            var endTime = $("#endTime").val();
+
+            var targetUrl = "/checkTempInfo?startTime="+startTime+"&endTime="+endTime+"&state="+state;
+            window.location.href=targetUrl;
         }
 
 
@@ -57,9 +67,13 @@
                 <div id="box_border">
                     <div id="box_top">搜索</div>
                     <div id="box_center">
-                        全部&nbsp;&nbsp;<input type="checkbox" name="all" id="all" value=""/>
-                        无告警&nbsp;&nbsp;<input type="checkbox" name="noWarn" id="noWarn" value=""/>
-                        告警&nbsp;&nbsp;<input type="checkbox" name="warn" id="warn" value=""/>
+                       状态
+                        <select name="state" id="state" class="ui_select01">
+                            <option value="all">全部</option>
+                            <option value="noWarn">无告警</option>
+                            <option value="warn">告警</option>
+                        </select>
+
                         时间段：&nbsp;&nbsp;<input type="datetime-local" id="startTime" name="startTime" class="ui_input_txt02_date" />
                         到&nbsp;&nbsp;<input type="datetime-local" id="endTime" name="endTime" class="ui_input_txt02_date" />
                     </div>
@@ -75,39 +89,37 @@
                     <tr>
 
                         </th>
-                        <th>选择</th>
-                        <th>用户ID</th>
-                        <th>用户名</th>
-                        <th>真实姓名</th>
-                        <th>电话号码</th>
-                        <th>邮件</th>
+                        <th>传感器名</th>
+                        <th>时间</th>
+                        <th>温度</th>
+                        <th>状态</th>
                         <th>操作</th>
                     </tr>
-                    @if(!isEmpty(user)){
+                    @if(!isEmpty(tempPage)){
+                    @for(temp in tempPage){
                     <tr>
-                        <td width="30"><input type="checkbox" value="14458625716623"/>
-                        </td>
-                        <td>${user.id}</td>
-                        <td>${user.username}</td>
-                        <td>${user.realName}</td>
-                        <td>${user.mobile}</td>
-                        <td>${user.email}</td>
+                        <td>${temp.sensorInfo.sensorId}</td>
+                        <td>${temp.genTime}</td>
+                        <td>${temp.temperature}</td>
+                        <td>${temp.state}</td>
                         <td>
-                            <a href="house_edit.html?fyID=14458579642011" class="edit">编辑</a>
-                            <a href="javascript:del('14458579642011');">删除</a>
+                            <a href="/userEdit.html?userId=${temp.id}" class="edit">编辑</a>
+                            <a href="javascript:del(${temp.id});">删除</a>
                         </td>
                     </tr>
+                    @}
                     @}
                 </table>
             </div>
             <div class="ui_tb_h30">
                 <div class="ui_flt" style="height: 30px; line-height: 30px;">
                     共有
-                    <span class="ui_txt_bold04">90</span>
+                    <span class="ui_txt_bold04">${tempPage.totalElements}</span>
                     条记录，当前第
-						<span class="ui_txt_bold04">1
+						<span class="ui_txt_bold04">
+                            ${tempPage.number + 1}
 						/
-						9</span>
+						${tempPage.totalPages}</span>
                     页
                 </div>
                 <div class="ui_frt">

@@ -80,17 +80,10 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-    </dependency>
-
-
-    <dependency>
       <groupId>org.webjars.bower</groupId>
       <artifactId>echarts</artifactId>
       <version>4.0.4</version>
     </dependency>
-
   </dependencies>
 
   <build>

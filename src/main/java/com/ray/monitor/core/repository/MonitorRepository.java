@@ -1,6 +1,5 @@
 package com.ray.monitor.core.repository;
 
-import com.ray.monitor.model.Area;
 import com.ray.monitor.model.MonitorPoint;
 import org.springframework.data.repository.CrudRepository;
 

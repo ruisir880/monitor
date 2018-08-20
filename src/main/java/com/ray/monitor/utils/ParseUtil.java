@@ -2,7 +2,8 @@ package com.ray.monitor.utils;
 
 import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TempInfo;
-import com.ray.monitor.web.vo.CurrentTempVO;
+import com.ray.monitor.web.vo.TempHistoryVO;
+import com.ray.monitor.web.vo.TempVO;
 import com.ray.monitor.web.vo.SensorVO;
 
 import java.util.*;
@@ -12,22 +13,44 @@ import java.util.*;
  */
 public class ParseUtil {
 
-    public static CurrentTempVO setTempIntoSensor(Set<SensorInfo> sensorInfoList, List<TempInfo> tempInfoList){
+    public static TempVO setTempIntoSensor(Set<SensorInfo> sensorInfoList, List<TempInfo> tempInfoList){
         Map<Long,TempInfo> tempInfoMap = new HashMap<>();
         List<SensorVO> sensorVOlist = new ArrayList<>();
-        CurrentTempVO currentTempVO = new CurrentTempVO();
+        TempVO tempVO = new TempVO();
 
         for(TempInfo tempInfo : tempInfoList){
             tempInfoMap.put(tempInfo.getSensorInfo().getId(),tempInfo);
         }
         for(SensorInfo sensor : sensorInfoList){
             TempInfo temp = tempInfoMap.get(sensor.getId());
-            currentTempVO.setMonitorPointName(sensor.getMonitorPoint().getName());
+            tempVO.setMonitorPointName(sensor.getMonitorPoint().getName());
             if(temp!=null){
-                sensorVOlist.add(new SensorVO(sensor.getId(),temp.getTemperature(),String.valueOf(sensor.getSensorId()),temp.getState()));
+                sensorVOlist.add(new SensorVO(sensor.getId(),temp.getTemperature(),sensor.getSensorId(),temp.getState()));
             }
         }
-        currentTempVO.setSensorVOList(sensorVOlist);
-        return currentTempVO;
+        tempVO.setSensorVOList(sensorVOlist);
+        return tempVO;
+    }
+
+    public static TempVO getTempInto( List<TempInfo> tempInfoList){
+        Map<Long,SensorVO> tempInfoMap = new LinkedHashMap<>();
+        TempVO tempVO = new TempVO();
+
+        for(TempInfo tempInfo : tempInfoList){
+            List<TempHistoryVO> tempHistoryVOs;
+            if(!tempInfoMap.containsKey(tempInfo.getSensorInfo().getId())) {
+                tempVO.setMonitorPointName(tempInfo.getSensorInfo().getMonitorPoint().getName());
+                SensorVO sensorVO = new SensorVO(tempInfo.getSensorInfo().getId(),tempInfo.getSensorInfo().getSensorId());
+                tempInfoMap.put(tempInfo.getSensorInfo().getId(), sensorVO);
+                tempHistoryVOs = new ArrayList<>();
+                sensorVO.setTempHistoryVOList(tempHistoryVOs);
+            }else {
+                tempHistoryVOs = tempInfoMap.get(tempInfo.getSensorInfo().getId()).getTempHistoryVOList();
+            }
+            tempHistoryVOs.add(new TempHistoryVO(tempInfo.getTemperature(),tempInfo.getGenTime()));
+        }
+
+        tempVO.setSensorVOList(new ArrayList<SensorVO>(tempInfoMap.values()));
+        return tempVO;
     }
 }

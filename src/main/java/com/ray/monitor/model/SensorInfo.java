@@ -1,9 +1,16 @@
 package com.ray.monitor.model;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,7 +21,7 @@ public class SensorInfo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long sensorId;
+    private String sensorId;
 
     private Date genTime;
 
@@ -25,7 +32,7 @@ public class SensorInfo implements Serializable {
     @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private Set<CommentInfo> commentInfoList;
 
-    @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
     private Set<TempInfo> tempInfoList;
 
 
@@ -37,11 +44,11 @@ public class SensorInfo implements Serializable {
         this.id = id;
     }
 
-    public long getSensorId() {
+    public String getSensorId() {
         return sensorId;
     }
 
-    public void setSensorId(long sensorId) {
+    public void setSensorId(String sensorId) {
         this.sensorId = sensorId;
     }
 

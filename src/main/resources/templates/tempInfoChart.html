@@ -22,15 +22,29 @@
     function showWeight() {
         $.ajax({
             type: "GET",
-            url: "checkTempChart",
+            url: "checkTempInfoChart",
             data: {},
-            success: function (r) {
+            success: function (result) {
                 initChart()
-                option.legend.data[0] = r.username
-                option.series[0] = {"name": r.username, "type": "line", "data": []}
-                for (var i in r.weights) {
-                    option.series[0].data[i] = r.weights[i].weight
-                    option.xAxis[0].data[i] = r.weights[i].wdate
+                option.title.text = result.monitorPointName
+                //option.series[0] = {"name": r.username, "type": "line", "data": []}
+
+
+               /* option.legend.data[0] = '传感器:'+ result.sensorVOList[0].sensorName
+                var a = new Array();
+                for (var j in result.sensorVOList[0].tempHistoryVOList) {
+                    a[j]= [result.sensorVOList[0].tempHistoryVOList[j].genTime,result.sensorVOList[0].tempHistoryVOList[j].temp]
+                }
+                option.series[0].data =a*/
+
+                for (var i in result.sensorVOList) {
+                    option.legend.data[i] = '传感器:'+ result.sensorVOList[i].sensorName
+
+                    var a = new Array();
+                    for (var j in result.sensorVOList[i].tempHistoryVOList) {
+                         a[j]= [result.sensorVOList[i].tempHistoryVOList[j].genTime,result.sensorVOList[i].tempHistoryVOList[j].temp]
+                    }
+                    option.series[i].data =a
                 }
                 myChart.setOption(option)
             }
@@ -39,59 +53,62 @@
 
     function initChart() {
         option = {
-            title: {
-                text: "温度信息",
-                x: "center"
+            title : {
+                text: '双数值轴折线',
+                subtext: '纯属虚构'
             },
-            tooltip: {
-                trigger: "item",
-                formatter: "{a} <br/>{b} : {c}kg"
-            },
-            legend: {
-                x: 'left',
-                data: []
-            },
-            xAxis: [
-                {
-                    type: "category",
-                    name: "日期",
-                    splitLine: {show: false},
-                    data: []
-                }
-            ],
-            yAxis: [
-                {
-                    type: "value",
-                    axisLabel: {
-                        formatter: '{value} 度'
-                    },
-                    name: "温度",
-                    max: 90,
-                    min: 50,
-                    splitNumber: 5
-                }
-            ],
-            toolbox: {
-                show: true,
-                feature: {
-                    mark: {
-                        show: true
-                    },
-                    dataView: {
-                        show: true,
-                        readOnly: true
-                    },
-                    restore: {
-                        show: true
-                    },
-                    saveAsImage: {
-                        show: true
+            tooltip : {
+                trigger: 'axis',
+                axisPointer:{
+                    show: true,
+                    type : 'cross',
+                    lineStyle: {
+                        type : 'dashed',
+                        width : 1
                     }
                 }
             },
-            calculable: true,
-            series: []
+            legend: {
+                data:['数据1','数据2']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataZoom : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type: 'value'
+                }
+            ],
+            yAxis : [
+                {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#dc143c'
+                        }
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'数据1',
+                    type:'line',
+                    data:[
+                        //[1.5, 10], [5, 7], [8, 8], [12, 6], [11, 12], [16, 9], [14, 6], [17, 4], [19, 9]
+                    ]
+                }
+            ]
         };
+
     }
 
 </script>
