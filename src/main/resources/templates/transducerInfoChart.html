@@ -20,16 +20,36 @@
     function showWeight() {
         $.ajax({
             type: "GET",
-            url: "checkTempChart",
+            url: "checkCurrentTempInfo",
             data: {},
-            success: function (r) {
+            success: function (result) {
                 initChart()
-                /* option.legend.data[0] = r.username
-                 option.series[0] = {"name": r.username, "type": "line", "data": []}
-                 for (var i in r.weights) {
-                 option.series[0].data[i] = r.weights[i].weight
-                 option.xAxis[0].data[i] = r.weights[i].wdate
-                 }*/
+                option.series[0].data[0].name = result.monitorPointName
+                 for (var i in result.sensorVOList) {
+                    var a= {
+                        name: '传感器'+result.sensorVOList[i].sensorName,
+                        symbol: 'circle',
+                        symbolSize: 20,
+                        value: result.sensorVOList[i].crruentTemp,
+                        itemStyle: {
+                            normal: {
+                                color: '#fa6900',
+                                label: {
+                                    show: true,
+                                    position: 'right'
+                                },
+
+                            },
+                            emphasis: {
+                                label: {
+                                    show: false
+                                },
+                                borderWidth: 0
+                            }
+                        }
+                    }
+                     option.series[0].data[0].children[i]=a
+                 }
                 myChart.setOption(option)
             }
         });
@@ -57,7 +77,7 @@
                     name:'树图',
                     type:'tree',
                     orient: 'horizontal',  // vertical horizontal
-                    rootLocation: {x: 100, y: '60%'}, // 根节点位置  {x: 'center',y: 10}
+                    rootLocation: {x: 100, y: '50%'}, // 根节点位置  {x: 'center',y: 10}
                     nodePadding: 20,
                     symbol: 'circle',
                     symbolSize: 40,
@@ -90,32 +110,7 @@
                             value: 6,
                             symbolSize: [90, 70],
                             children: [
-                                {
-                                    name: '建设',
-                                    value: 4,
-                                    symbolSize: [60, 60],
-                                    children: [
-                                        {
-                                            name: '传感器1',
-                                            symbol: 'circle',
-                                            symbolSize: 20,
-                                            value: 4,
-                                        },
-                                        {
-                                            name: '传感器2',
-                                            value: 4,
-                                            symbol: 'circle',
-                                            symbolSize: 20,
 
-                                        },
-                                        {
-                                            name: '传感器3',
-                                            value: 2,
-                                            symbol: 'circle',
-                                            symbolSize: 20,
-                                        }
-                                    ]
-                                }
 
                             ]
                         }
