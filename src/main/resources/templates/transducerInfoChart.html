@@ -4,20 +4,58 @@
     <meta charset="UTF-8"/>
     <script type="text/javascript" src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
     <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
     <title>电力测温智能化管理</title>
 </head>
 <script type="text/javascript">
     var option
     var myChart
 
+    var red="#900"
+    var yellow="#96992a"
+    var green="#14991c"
     $(function () {
         initChart()
         //基于准备好的dom，初始化echarts实例
         myChart = echarts.init(document.getElementById('main'));
+        myChart.on("click", eConsole);
+        $("#addButton").click(function() {
+            if($("#sensorname").val()==""){
+                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'传感器编号', ok:true,});
+                return false;
+            }
+            addSensor();
+        });
         //myChart.setOption(option)
     })
 
-    function showWeight() {
+    function addSensor() {
+        var sensorname = $('#sensorname').val();
+        $.ajax({
+            type:"POST",
+            url:"/addSensor",
+            data:{"sensorname":sensorname},
+            dataType : "text",
+            success:function(data){
+                if(data=="1"){
+                    art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'传感器编号已存在', ok:true,});
+                    $("#username").css("background", "#EEE");
+                    $("#username").focus();
+                    return false;
+                }else if(data=="0"){
+                    art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'传感器添加成功', ok:true,});
+                }
+            }
+        });
+    }
+
+
+    function eConsole() {
+        console.log('dddddddddddddd ');
+        myChart.refresh(); //一定要refresh，否则不起作用
+    }
+
+    function showData() {
         $.ajax({
             type: "GET",
             url: "checkCurrentTempInfo",
@@ -26,6 +64,12 @@
                 initChart()
                 option.series[0].data[0].name = result.monitorPointName
                  for (var i in result.sensorVOList) {
+                     var color;
+                     if('normal'==result.sensorVOList[i].state){
+                         color=green;
+                     }else{
+                         color=red;
+                     }
                     var a= {
                         name: '传感器'+result.sensorVOList[i].sensorName,
                         symbol: 'circle',
@@ -33,7 +77,8 @@
                         value: result.sensorVOList[i].crruentTemp,
                         itemStyle: {
                             normal: {
-                                color: '#fa6900',
+
+                                color: color,
                                 label: {
                                     show: true,
                                     position: 'right'
@@ -123,10 +168,33 @@
 
 </script>
 <body>
-<h1 style="text-align: center">温度信息页面</h1>
-<a href="javascript:void(0)" onclick="showWeight()"
-   style="text-decoration: none;margin-left: 140px">查看温度信息</a>
+<h1 style="text-align: center">传感器信息页面</h1>
+<a href="javascript:void(0)" onclick="showData()"
+   style="text-decoration: none;margin-left: 140px">传感器信息页面</a>
 <div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
+<div>
+    <form id="addUser" action="">
+        <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
+            <tr>
+                <td class="ui_text_lt" width="80">传感器编号</td>
+                <td class="ui_text_lt">
+                    <input type="text" id="sensorname" name="sensorname"  class="ui_input_txt02"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td>&nbsp;</td>
+                <td class="ui_text_lt">
+                    &nbsp;<input id="addButton" type="button" value="添加" class="ui_input_btn01"/>
+                    &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+
+</div>
+
 
 </body>
 </html>

@@ -3,7 +3,6 @@ package com.ray.monitor.core.service;
 import com.ray.monitor.core.Constants;
 import com.ray.monitor.core.repository.SensorRepository;
 import com.ray.monitor.core.repository.TempRepository;
-import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TempInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by rui on 2018/8/19.
@@ -31,10 +29,6 @@ public class TempInfoServiceImpl implements TempInfoService {
         return tempRepository.findBySensorId(sensorIdList);
     }
 
-    @Override
-    public Set<SensorInfo> findSensorByMonitorPointIdWithTemp(long monitorPointId) {
-        return sensorRepository.findSensorInfoByMonitorIdWithTemp(monitorPointId);
-    }
 
     @Override
     public List<TempInfo> findTempByCondition(long monitorPointId, Date startDate, Date endDate) {

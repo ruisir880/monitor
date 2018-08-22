@@ -12,6 +12,13 @@ import java.util.Set;
  */
 public interface SensorRepository extends CrudRepository<SensorInfo, Long> {
 
-    @Query(value = "select s  from SensorInfo s join fetch s.tempInfoList where s.monitorPoint.id=:monitorPointId order by s.id")
+    @Query(value = "select s  from SensorInfo s where s.monitorPoint.id=:monitorPointId order by s.id")
     Set<SensorInfo> findSensorInfoByMonitorIdWithTemp(@Param(value="monitorPointId") long monitorPointId);
+
+
+    @Query(value = "select s  from SensorInfo s where s.monitorPoint.id=:monitorPointId and s.sensorId=:sensorName")
+    SensorInfo findBySensorName(
+            @Param(value="monitorPointId") long monitorPointId,
+            @Param(value="sensorName") String sensorName
+            );
 }

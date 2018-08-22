@@ -1,5 +1,6 @@
 package com.ray.monitor.utils;
 
+import com.ray.monitor.core.Constants;
 import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TempInfo;
 import com.ray.monitor.web.vo.TempHistoryVO;
@@ -26,9 +27,19 @@ public class ParseUtil {
             tempVO.setMonitorPointName(sensor.getMonitorPoint().getName());
             if(temp!=null){
                 sensorVOlist.add(new SensorVO(sensor.getId(),temp.getTemperature(),sensor.getSensorId(),temp.getState()));
+            }else {
+                sensorVOlist.add(new SensorVO(sensor.getId(),0,sensor.getSensorId(), Constants.TEMP_STATE_NORMAL));
             }
+
         }
         tempVO.setSensorVOList(sensorVOlist);
+        Collections.sort(sensorVOlist, new Comparator<SensorVO>() {
+            @Override
+            public int compare(SensorVO o1, SensorVO o2) {
+                return o1.getSensorName().compareTo(o2.getSensorName());
+            }
+
+        });
         return tempVO;
     }
 

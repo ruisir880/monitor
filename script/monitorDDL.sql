@@ -90,6 +90,7 @@ create table sensor_info(
   primary key (id)
 );
 alter table sensor_info add constraint fk_sensor_info foreign key (monitor_point_id)  references monitor_point (id);
+alter table sensor_info add column  threshold_value double(6,2) default 30 ;
 
 create table comment_info(
   id bigint not null auto_increment,

@@ -25,6 +25,8 @@ public class SensorInfo implements Serializable {
 
     private Date genTime;
 
+    private double thresholdValue;
+
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示company不能为空
     @JoinColumn(name="monitor_point_id")//设置在employee表中的关联字段(外键)
     private MonitorPoint monitorPoint;
@@ -82,5 +84,13 @@ public class SensorInfo implements Serializable {
 
     public void setTempInfoList(Set<TempInfo> tempInfoList) {
         this.tempInfoList = tempInfoList;
+    }
+
+    public double getThresholdValue() {
+        return thresholdValue;
+    }
+
+    public void setThresholdValue(double thresholdValue) {
+        this.thresholdValue = thresholdValue;
     }
 }

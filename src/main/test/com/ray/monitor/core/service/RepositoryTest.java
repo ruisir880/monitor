@@ -141,8 +141,16 @@ public class RepositoryTest {
         Date  startDate = calendar.getTime();
         Pageable pageable = new PageRequest(0, Constants.PAGE_SIZE); //页码：前端从1开始，jpa从0开始，做个转换
 
-        Page<TempInfo> tempInfoSet  = tempRepository.findByPage(1L,startDate,new Date(),pageable);
+        Page<TempInfo> tempInfoSet  = tempRepository.findByPage(1L, startDate, new Date(), pageable);
         System.out.println("========================"+tempInfoSet.getTotalElements());
+    }
+
+
+    @Test
+    public void test_SaveThreshold() throws Exception {
+        SensorInfo sensor  =  sensorRepository.findOne(1L);
+        sensor.setThresholdValue(36.0);
+        sensorRepository.save(sensor);
     }
 
 }
