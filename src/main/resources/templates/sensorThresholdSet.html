@@ -17,26 +17,51 @@
     var yellow="#96992a"
     var green="#14991c"
     $(function () {
+
+
+
+
         event.cancelBubble = true;
-        flt = document.getElementsByTagName('div')[0];
+       // flt = document.getElementsByTagName('div')[0];
+        flt=$("#div_sensorSet");
+
+        $(document).click(function(){
+            hideHover();
+        });
+
         initChart()
         //基于准备好的dom，初始化echarts实例
         myChart = echarts.init(document.getElementById('main'));
         myChart.on("click", showHover);
         //myChart.setOption(option)
+
+
+
     })
 
 
 
     function showHover(param) {
-        flt.style.top =300;
-        flt.style.left = 300;
-        flt.style.display = 'block';
+        event.stopPropagation();
+        var x=param.event.clientX;
+        var y=param.event.clientY;
+        flt.css({"top":y,"left":x});
+        flt.show();
+
+    }
+
+    function hideHover() {
+        flt.hide();
+        var x=-1000,y=-1000;
+        flt.css({"top":y,"left":x});
+
+
     }
 
 
 
     function showData() {
+        event.stopPropagation();
         $.ajax({
             type: "GET",
             url: "checkCurrentTempInfo",
@@ -150,10 +175,9 @@
 </script>
 <body>
 <h1 style="text-align: center">传感器信息页面</h1>
-<a href="javascript:void(0)" onclick="showData()"
-   style="text-decoration: none;margin-left: 140px">传感器信息页面</a>
+<a href="javascript:void(0)" onclick="showData()" style="text-decoration: none;margin-left: 140px">传感器信息页面</a>
 
-<div  class="hoverButton">
+<div  id="div_sensorSet" class="hoverButton" style="position:absolute;display:none;top:-1000px;left:-1000px;z-index:99">
     <ul id="nav" style="text-align: center; ">
         <li style="list-style-type: none; "><a href="">Demo 1</a></li>
         <li style="list-style-type: none; "><a href="">Demo 2</a></li>
