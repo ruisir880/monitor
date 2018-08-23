@@ -1,9 +1,9 @@
 package com.ray.monitor.web.controller;
 
-import com.ray.monitor.core.repository.PageQueryRepository;
 import com.ray.monitor.core.service.UserInfoService;
 import com.ray.monitor.model.UserInfo;
 import com.ray.monitor.utils.UserUtil;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,6 +36,7 @@ public class UserInfoController {
     @RequestMapping("/userList")
     public ModelAndView userList() {
         ModelAndView modelAndView = new ModelAndView();
+        SecurityUtils.getSubject().getPrincipal();
         modelAndView.setViewName("userList");
         return modelAndView;
     }

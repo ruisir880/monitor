@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by rui on 2018/8/19.
@@ -33,4 +34,21 @@ public class SensorController {
     }
 
 
+    @RequestMapping(value = "/sensorThresholdSet")
+    //@RequiresPermissions("userInfo:add")//权限管理;
+    @ResponseBody
+    public ModelAndView sensorThresholdSet(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("sensorThresholdSet");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/hover")
+    //@RequiresPermissions("userInfo:add")//权限管理;
+    @ResponseBody
+    public ModelAndView hover(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("hover");
+        return modelAndView;
+    }
 }
