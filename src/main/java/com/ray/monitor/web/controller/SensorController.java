@@ -2,6 +2,8 @@ package com.ray.monitor.web.controller;
 
 import com.ray.monitor.core.service.SensorInfoService;
 import com.ray.monitor.model.SensorInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class SensorController {
+    private static Logger logger = LoggerFactory.getLogger(SensorController.class);
 
     @Autowired
     private SensorInfoService sensorInfoService;
@@ -51,4 +54,19 @@ public class SensorController {
         modelAndView.setViewName("hover");
         return modelAndView;
     }
+
+
+    @RequestMapping(value = "/deleteSensor", method = RequestMethod.POST )
+    //@RequiresPermissions("userInfo:add")//权限管理;
+    @ResponseBody
+    public int deleteSensor(String sensorname){
+        try {
+            sensorInfoService.deleteSensor(1L, sensorname);
+        }catch (Exception e){
+            logger.error("Error occurs when delete sensor:",e);
+            return 1;
+        }
+        return 0;
+    }
+
 }

@@ -6,6 +6,7 @@ import com.ray.monitor.model.UserInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +37,9 @@ public interface TempRepository extends CrudRepository<TempInfo, Long> {
             @Param(value="startDate") Date startDate,
             @Param(value="endDate") Date endDate,
             Pageable pageable);
+
+
+    @Modifying
+    @Query(value = "delete  from temp_info where sensor_id=:sensorId",nativeQuery = true)
+    void deleteBySensorId( @Param(value="sensorId") long sensorId);
 }

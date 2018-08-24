@@ -5,20 +5,28 @@
     <script type="text/javascript" src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
     <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/sensor.js?"></script>
+    <link href="${ctxPath}/style/authority/sensor.css" rel="stylesheet" type="text/css">
     <title>电力测温智能化管理</title>
 </head>
 <script type="text/javascript">
     var option
     var myChart
+    var flt
+    var deleteSensorName;
 
     var red="#900"
     var yellow="#96992a"
     var green="#14991c"
     $(function () {
         initChart()
+        flt=$("#div_sensorSet");
+        $(document).click(function(){
+            hideHover(flt);
+        });
+
         //基于准备好的dom，初始化echarts实例
         myChart = echarts.init(document.getElementById('main'));
-        myChart.on("click", eConsole);
         $("#addButton").click(function() {
             if($("#sensorname").val()==""){
                 art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'传感器编号', ok:true,});
@@ -26,8 +34,43 @@
             }
             addSensor();
         });
+
+        $("#deleteSensorBtn").click(function() {
+            var isSure = confirm("确认提交？");
+            if(isSure) {
+                deleteSensor();
+            }
+        });
+
+        myChart.on("click", showHover);
         //myChart.setOption(option)
     })
+
+
+    function showHover(param) {
+        event.stopPropagation();
+        var x=param.event.clientX;
+        var y=param.event.clientY;
+        deleteSensorName = param.data.name.substring(3)
+        flt.css({"top":y,"left":x});
+        flt.show();
+    }
+
+    function deleteSensor(){
+        $.ajax({
+            type:"POST",
+            url:"/deleteSensor",
+            data:{"sensorname":deleteSensorName},
+            dataType : "text",
+            success:function(data){
+                 if(data=="0"){
+                    art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'删除成功', ok:true,});
+                }else{
+                     art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'删除失败', ok:true,});
+                 }
+            }
+        });
+    }
 
     function addSensor() {
         var sensorname = $('#sensorname').val();
@@ -47,12 +90,6 @@
                 }
             }
         });
-    }
-
-
-    function eConsole() {
-        console.log('dddddddddddddd ');
-        myChart.refresh(); //一定要refresh，否则不起作用
     }
 
     function showData() {
@@ -171,9 +208,15 @@
 <h1 style="text-align: center">传感器信息页面</h1>
 <a href="javascript:void(0)" onclick="showData()"
    style="text-decoration: none;margin-left: 140px">传感器信息页面</a>
+<div  id="div_sensorSet" class="hoverButton" style="position:absolute;display:none;top:-1000px;left:-1000px;z-index:99">
+    <ul id="nav" style="text-align: center; ">
+        <li style="list-style-type: none; "><input id="deleteSensorBtn" type="button" value="删除" class="ui_input_btn01"/></li>
+    </ul>
+</div>
+
 <div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
 <div>
-    <form id="addUser" action="">
+    <form id="addSensor" action="">
         <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
             <tr>
                 <td class="ui_text_lt" width="80">传感器编号</td>

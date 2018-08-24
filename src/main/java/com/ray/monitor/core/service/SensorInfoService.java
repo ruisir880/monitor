@@ -11,6 +11,8 @@ public interface SensorInfoService {
 
     SensorInfo addSensor(long monitorId,String sensorName);
 
+    void deleteSensor(long monitorId,String sensorName);
+
     SensorInfo findBySensorName(long monitorId,String sensorName);
 
     Set<SensorInfo> findSensorByMonitorPointId(long monitorPointId);

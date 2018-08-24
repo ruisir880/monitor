@@ -62,6 +62,9 @@ public class RepositoryTest {
     @Autowired
     private TempInfoService tempInfoService;
 
+    @Autowired
+    private SensorInfoService sensorInfoService;
+
     @Test
     public void test1() throws Exception {
         List<RoleInfo> roles  = (List<RoleInfo>) roleRepository.findAll();
@@ -153,4 +156,8 @@ public class RepositoryTest {
         sensorRepository.save(sensor);
     }
 
+    @Test
+    public void test_DeleteSensro() throws Exception {
+       // sensorInfoService.deleteSensor(1L,"7");
+    }
 }

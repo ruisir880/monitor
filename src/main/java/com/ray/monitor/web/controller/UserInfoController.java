@@ -36,7 +36,7 @@ public class UserInfoController {
     @RequestMapping("/userList")
     public ModelAndView userList() {
         ModelAndView modelAndView = new ModelAndView();
-        SecurityUtils.getSubject().getPrincipal();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         modelAndView.setViewName("userList");
         return modelAndView;
     }
