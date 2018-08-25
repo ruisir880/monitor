@@ -23,10 +23,10 @@
             var startTime = $("#startTime").val();
             var endTime = $("#endTime").val();
             var state = $("#state").val();
-
             var endTime = $("#endTime").val();
+            var monitorPoint = $("#monitorPoint").val();
 
-            var targetUrl = "/checkTempInfo?startTime="+startTime+"&endTime="+endTime+"&state="+state;
+            var targetUrl = "/checkTempInfo?monitorPoint="+monitorPoint+"startTime="+startTime+"&endTime="+endTime+"&state="+state;
             window.location.href=targetUrl;
         }
 
@@ -67,6 +67,14 @@
                 <div id="box_border">
                     <div id="box_top">搜索</div>
                     <div id="box_center">
+                        检测点：&nbsp;&nbsp;
+                        <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
+                            @if(!isEmpty(monitorPointList)){
+                            @for(monitorPoint in monitorPointList){
+                            <option value="${monitorPoint.id}">监测点:${monitorPoint.name}</option>
+                            @}
+                            @}
+                        </select>
                        状态
                         <select name="state" id="state" class="ui_select01">
                             <option value="all">全部</option>

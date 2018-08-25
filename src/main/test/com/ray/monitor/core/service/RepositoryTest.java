@@ -2,13 +2,8 @@ package com.ray.monitor.core.service;
 
 import com.ray.monitor.StartApplication;
 import com.ray.monitor.core.Constants;
-import com.ray.monitor.core.repository.AreaRepository;
-import com.ray.monitor.core.repository.CommentRepository;
-import com.ray.monitor.core.repository.MonitorRepository;
-import com.ray.monitor.core.repository.PageQueryRepository;
-import com.ray.monitor.core.repository.RoleRepository;
-import com.ray.monitor.core.repository.SensorRepository;
-import com.ray.monitor.core.repository.TempRepository;
+import com.ray.monitor.core.MonitorCache;
+import com.ray.monitor.core.repository.*;
 import com.ray.monitor.model.Area;
 import com.ray.monitor.model.CommentInfo;
 import com.ray.monitor.model.MonitorPoint;
@@ -55,6 +50,9 @@ public class RepositoryTest {
 
     @Autowired
     private UserInfoService userInfoService;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     @Autowired
     private TempRepository tempRepository;
@@ -159,5 +157,19 @@ public class RepositoryTest {
     @Test
     public void test_DeleteSensro() throws Exception {
        // sensorInfoService.deleteSensor(1L,"7");
+    }
+
+    @Test
+    public void test_Queryuser() throws Exception {
+       UserInfo userInfo = userInfoRepository.findWithMonitorPoint(3L);
+        System.out.println("========================================="+userInfo.getMonitorPointList().size());
+    }
+
+    @Autowired
+    private MonitorCache monitorCache;
+    @Test
+    public void test_Cache() throws Exception {
+        List<MonitorPoint> monitorPoints =  monitorCache.get(3L);
+        System.out.println("==============================="+monitorPoints.size());
     }
 }

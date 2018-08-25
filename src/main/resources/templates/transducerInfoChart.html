@@ -206,37 +206,59 @@
 </script>
 <body>
 <h1 style="text-align: center">传感器信息页面</h1>
-<a href="javascript:void(0)" onclick="showData()"
-   style="text-decoration: none;margin-left: 140px">传感器信息页面</a>
-<div  id="div_sensorSet" class="hoverButton" style="position:absolute;display:none;top:-1000px;left:-1000px;z-index:99">
-    <ul id="nav" style="text-align: center; ">
-        <li style="list-style-type: none; "><input id="deleteSensorBtn" type="button" value="删除" class="ui_input_btn01"/></li>
-    </ul>
+<div id="container">
+    <div class="ui_content">
+        <div id="box_border">
+            <div id="box_center">
+                检测点：&nbsp;&nbsp;
+                <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
+                    @if(!isEmpty(monitorPointList)){
+                    @for(monitorPoint in monitorPointList){
+                    <option value="">监测点:${monitorPoint.name}</option>
+                    @}
+                    @}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui_content">
+        <a href="javascript:void(0)" onclick="showData()"
+           style="text-decoration: none;margin-left: 140px">传感器信息页面</a>
+        <div  id="div_sensorSet" class="hoverButton" style="position:absolute;display:none;top:-1000px;left:-1000px;z-index:99">
+            <ul id="nav" style="text-align: center; ">
+                <li style="list-style-type: none; "><input id="deleteSensorBtn" type="button" value="删除" class="ui_input_btn01"/></li>
+            </ul>
+        </div>
+
+        <div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
+        <div>
+            <form id="addSensor" action="">
+                <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
+                    <tr>
+                        <td class="ui_text_lt" width="80">传感器编号</td>
+                        <td class="ui_text_lt">
+                            <input type="text" id="sensorname" name="sensorname"  class="ui_input_txt02"/>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td class="ui_text_lt">
+                            &nbsp;<input id="addButton" type="button" value="添加" class="ui_input_btn01"/>
+                            &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+
+
+        </div>
+
+    </div>
+
 </div>
 
-<div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
-<div>
-    <form id="addSensor" action="">
-        <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
-            <tr>
-                <td class="ui_text_lt" width="80">传感器编号</td>
-                <td class="ui_text_lt">
-                    <input type="text" id="sensorname" name="sensorname"  class="ui_input_txt02"/>
-                </td>
-            </tr>
-
-            <tr>
-                <td>&nbsp;</td>
-                <td class="ui_text_lt">
-                    &nbsp;<input id="addButton" type="button" value="添加" class="ui_input_btn01"/>
-                    &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
-                </td>
-            </tr>
-        </table>
-    </form>
-
-
-</div>
 
 
 </body>

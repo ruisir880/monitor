@@ -120,7 +120,11 @@
             <div id="box_center">
                 检测点：&nbsp;&nbsp;
                 <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
-                    <option value="">--请选择--</option>
+                    @if(!isEmpty(monitorPointList)){
+                        @for(monitorPoint in monitorPointList){
+                    <option value="">监测点:${monitorPoint.name}</option>
+                        @}
+                    @}
                 </select>
             </div>
         </div>

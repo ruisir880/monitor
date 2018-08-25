@@ -4,7 +4,9 @@ import com.ray.monitor.model.UserInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -20,5 +22,8 @@ public interface UserInfoRepository extends CrudRepository<UserInfo, Long> {
     List<UserInfo> findAll();
 
     Page<UserInfo> findAll(Specification<UserInfo> spec, Pageable pageable);
+
+    @Query(value = "select u from UserInfo u left join fetch u.monitorPointList where u.uid=:userId ")
+    UserInfo findWithMonitorPoint(@Param(value="userId") long userId);
 
 }

@@ -7,4 +7,9 @@ public class Constants {
     public static final int PAGE_SIZE =10;
     public static final String TEMP_STATE_NORMAL ="normal";
     public static final String TEMP_STATE_WARN ="warn";
+
+
+    public static final String LOG_GETMONITOR_ERROR ="Error occurs when get monitorPointList under user:";
+
+
 }

@@ -62,52 +62,11 @@ public class HomeController {
 
 
 
-    @RequestMapping("/my")
-    public ModelAndView userEdit() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("chart");
-        return modelAndView;
-    }
 
 
 
-    @GetMapping("/currentTemp")
-    public ModelAndView currentTemp(Integer id) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("currentTempChart");
-        return modelAndView;
-    }
-
-    @GetMapping("/tempInfoList")
-    @ResponseBody
-    public ModelAndView tempInfoList(Integer id) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("tempInfoList");
-        return modelAndView;
-    }
-
-    @GetMapping("/tempInfoChart")
-    @ResponseBody
-    public ModelAndView tempInfoChart() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("tempInfoChart");
-        return modelAndView;
-    }
 
 
 
-    @GetMapping("/transducerInfoChart")
-    public ModelAndView transducerInfo() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("transducerInfoChart");
-        return modelAndView;
-    }
-
-    @GetMapping("/checkTransducerInfo")
-    @ResponseBody
-    public List<SensorInfo> checkTransducerInfo() {
-
-        return null;
-    }
 
 }

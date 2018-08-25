@@ -1,15 +1,21 @@
 package com.ray.monitor.web.controller;
 
+import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.core.service.TempInfoService;
 import com.ray.monitor.model.MonitorPoint;
 import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TempInfo;
+import com.ray.monitor.model.UserInfo;
 import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.TempVO;
+import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,18 +24,70 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import static com.ray.monitor.core.Constants.LOG_GETMONITOR_ERROR;
 
 /**
  * Created by rui on 2018/8/19.
  */
 @Controller
 public class TempController {
+    private static Logger logger = LoggerFactory.getLogger(SensorController.class);
 
     @Autowired
     private MonitorPointService monitorPointService;
 
     @Autowired
     private TempInfoService tempInfoService;
+
+    @Autowired
+    private MonitorCache monitorCache;
+
+    @GetMapping("/currentTemp")
+    public ModelAndView currentTemp(Integer id) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("currentTempChart");
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        try {
+            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getUid());
+            modelAndView.addObject("monitorPointList",monitorPointList);
+        } catch (ExecutionException e) {
+            logger.error(LOG_GETMONITOR_ERROR,e);
+        }
+        return modelAndView;
+    }
+
+    @GetMapping("/tempInfoList")
+    @ResponseBody
+    public ModelAndView tempInfoList(Integer id) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("tempInfoList");
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        try {
+            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getUid());
+            modelAndView.addObject("monitorPointList",monitorPointList);
+        } catch (ExecutionException e) {
+            logger.error(LOG_GETMONITOR_ERROR,e);
+        }
+        return modelAndView;
+    }
+
+    @GetMapping("/tempInfoChart")
+    @ResponseBody
+    public ModelAndView tempInfoChart() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("tempInfoChart");
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        try {
+            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getUid());
+            modelAndView.addObject("monitorPointList",monitorPointList);
+        } catch (ExecutionException e) {
+            logger.error(LOG_GETMONITOR_ERROR,e);
+        }
+        return modelAndView;
+    }
+
 
     @RequestMapping("/checkCurrentTempInfo")
     @ResponseBody
@@ -74,6 +132,15 @@ public class TempController {
         modelAndView.setViewName("tempInfoList");
         Page<TempInfo> tempInfoPage =  tempInfoService.pageUserQuery(1L, 1, startDate, endDate, null);
         modelAndView.addObject("tempPage", tempInfoPage);
+
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        try {
+            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getUid());
+            modelAndView.addObject("monitorPointList",monitorPointList);
+        } catch (ExecutionException e) {
+            logger.error(LOG_GETMONITOR_ERROR,e);
+        }
+
         return modelAndView;
     }
 

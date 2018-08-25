@@ -1,6 +1,9 @@
 package com.ray.monitor.web.controller;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.ray.monitor.core.service.UserInfoService;
+import com.ray.monitor.model.MonitorPoint;
 import com.ray.monitor.model.UserInfo;
 import com.ray.monitor.utils.UserUtil;
 import org.apache.shiro.SecurityUtils;
@@ -19,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class UserInfoController {
 
+
     @Autowired
     private UserInfoService userInfoService;
 
@@ -36,7 +40,6 @@ public class UserInfoController {
     @RequestMapping("/userList")
     public ModelAndView userList() {
         ModelAndView modelAndView = new ModelAndView();
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         modelAndView.setViewName("userList");
         return modelAndView;
     }

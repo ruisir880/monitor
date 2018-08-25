@@ -43,6 +43,11 @@ public class UserInfo implements Serializable {
             @JoinColumn(name = "roleId") })
     private List<RoleInfo> roleList;// 一个用户具有多个角色
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "UserMonitorMap", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
+            @JoinColumn(name = "monitorPointId  ") })
+    private List<MonitorPoint> monitorPointList;
+
     public long getUid() {
         return uid;
     }
@@ -116,19 +121,15 @@ public class UserInfo implements Serializable {
         this.generationTime = generationTime;
     }
 
-    /**
-     * 密码盐.
-     *
-     * @return
-     */
     public String getCredentialsSalt() {
         return this.username + this.salt;
     }
 
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-                "username='" + username + '\'' +
-                '}';
+    public List<MonitorPoint> getMonitorPointList() {
+        return monitorPointList;
+    }
+
+    public void setMonitorPointList(List<MonitorPoint> monitorPointList) {
+        this.monitorPointList = monitorPointList;
     }
 }
