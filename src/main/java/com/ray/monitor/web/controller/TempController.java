@@ -8,6 +8,7 @@ import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TempInfo;
 import com.ray.monitor.model.UserInfo;
 import com.ray.monitor.utils.ParseUtil;
+import com.ray.monitor.web.vo.PageTempVO;
 import com.ray.monitor.web.vo.TempVO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -120,7 +121,7 @@ public class TempController {
 
     @RequestMapping("/checkTempInfo")
     @ResponseBody
-    public ModelAndView checkTempInfo(String state,String startTime,String endTime,long monitorPointId) throws ParseException {
+    public PageTempVO checkTempInfo(String state, String startTime, String endTime, long monitorPointId) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         Calendar calendar = Calendar.getInstance();
 
@@ -140,7 +141,8 @@ public class TempController {
 
         modelAndView.setViewName("tempInfoList");
         Page<TempInfo> tempInfoPage =  tempInfoService.pageUserQuery(monitorPointId, 1, startDate, endDate, null);
-        modelAndView.addObject("tempPage", tempInfoPage);
+        return ParseUtil.getPageTempVO(tempInfoPage);
+       /* modelAndView.addObject("tempPage", tempInfoPage);
 
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
@@ -150,7 +152,7 @@ public class TempController {
             logger.error(LOG_GETMONITOR_ERROR,e);
         }
 
-        return modelAndView;
+        return modelAndView;*/
     }
 
 

@@ -20,9 +20,77 @@
     var green="#14991c"
     $(function () {
         initChart()
+        flt=$("#div_sensorSet");
+        $(document).click(function(){
+            hideHover(flt);
+        });
+
         //基于准备好的dom，初始化echarts实例
         myChart = echarts.init(document.getElementById('main'));
+        $("#addButton").click(function() {
+            if($("#sensorname").val()==""){
+                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'传感器编号', ok:true,});
+                return false;
+            }
+            addSensor();
+        });
+
+        $("#deleteSensorBtn").click(function() {
+            var isSure = confirm("确认提交？");
+            if(isSure) {
+                deleteSensor();
+            }
+        });
+
+        myChart.on("click", showHover);
+        //myChart.setOption(option)
     })
+
+
+    function showHover(param) {
+        event.stopPropagation();
+        var x=param.event.clientX;
+        var y=param.event.clientY;
+        deleteSensorName = param.data.name.substring(3)
+        flt.css({"top":y,"left":x});
+        flt.show();
+    }
+
+    function deleteSensor(){
+        $.ajax({
+            type:"POST",
+            url:"/deleteSensor",
+            data:{"sensorname":deleteSensorName,"monitorPointId":$("#monitorPoint").val()},
+            dataType : "text",
+            success:function(data){
+                 if(data=="0"){
+                    art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'删除成功', ok:true,});
+                }else{
+                     art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'删除失败', ok:true,});
+                 }
+            }
+        });
+    }
+
+    function addSensor() {
+        var sensorname = $('#sensorname').val();
+        $.ajax({
+            type:"POST",
+            url:"/addSensor",
+            data:{"sensorname":sensorname,"monitorPointId":$("#monitorPoint").val()},
+            dataType : "text",
+            success:function(data){
+                if(data=="1"){
+                    art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'传感器编号已存在', ok:true,});
+                    $("#username").css("background", "#EEE");
+                    $("#username").focus();
+                    return false;
+                }else if(data=="0"){
+                    art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'传感器添加成功', ok:true,});
+                }
+            }
+        });
+    }
 
     function showData() {
         $.ajax({
@@ -157,8 +225,38 @@
     <div class="ui_content">
         <a href="javascript:void(0)" onclick="showData()"
            style="text-decoration: none;margin-left: 140px">传感器信息页面</a>
+        <div  id="div_sensorSet" class="hoverButton" style="position:absolute;display:none;top:-1000px;left:-1000px;z-index:99">
+            <ul id="nav" style="text-align: center; ">
+                <li style="list-style-type: none; "><input id="deleteSensorBtn" type="button" value="删除" class="ui_input_btn01"/></li>
+            </ul>
+        </div>
+
         <div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
+        <div>
+            <form id="addSensor" action="">
+                <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
+                    <tr>
+                        <td class="ui_text_lt" width="80">传感器编号</td>
+                        <td class="ui_text_lt">
+                            <input type="text" id="sensorname" name="sensorname"  class="ui_input_txt02"/>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td class="ui_text_lt">
+                            &nbsp;<input id="addButton" type="button" value="添加" class="ui_input_btn01"/>
+                            &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+
+
+        </div>
+
     </div>
+
 </div>
 
 

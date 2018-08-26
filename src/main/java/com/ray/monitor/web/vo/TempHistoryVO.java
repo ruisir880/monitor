@@ -12,9 +12,12 @@ public class TempHistoryVO implements Serializable {
 
     private Date genTime;
 
-    public TempHistoryVO(double temp, Date genTime) {
+    private String state;
+
+    public TempHistoryVO(double temp, Date genTime,String state) {
         this.temp = temp;
         this.genTime = genTime;
+        this.state = state;
     }
 
     public double getTemp() {
@@ -35,5 +38,13 @@ public class TempHistoryVO implements Serializable {
 
     public String getFormatGenTime(){
        return ParseUtil.formateDate(this.genTime);
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

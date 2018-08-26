@@ -3,9 +3,11 @@ package com.ray.monitor.utils;
 import com.ray.monitor.core.Constants;
 import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TempInfo;
+import com.ray.monitor.web.vo.PageTempVO;
 import com.ray.monitor.web.vo.TempHistoryVO;
 import com.ray.monitor.web.vo.TempVO;
 import com.ray.monitor.web.vo.SensorVO;
+import org.springframework.data.domain.Page;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,7 +66,7 @@ public class ParseUtil {
             }else {
                 tempHistoryVOs = tempInfoMap.get(tempInfo.getSensorInfo().getId()).getTempHistoryVOList();
             }
-            tempHistoryVOs.add(new TempHistoryVO(tempInfo.getTemperature(),tempInfo.getGenTime()));
+            tempHistoryVOs.add(new TempHistoryVO(tempInfo.getTemperature(),tempInfo.getGenTime(),tempInfo.getState()));
         }
 
         tempVO.setSensorVOList(new ArrayList<SensorVO>(tempInfoMap.values()));
@@ -79,5 +81,16 @@ public class ParseUtil {
     public static String formateDate(Date date){
         SimpleDateFormat sdf= new SimpleDateFormat(DATETIME_PARTTERN);
         return sdf.format(date);
+    }
+
+
+    public static PageTempVO getPageTempVO(Page<TempInfo> tempInfoPage){
+        PageTempVO pageTempVO = new PageTempVO();
+        pageTempVO.setTotalCount(tempInfoPage.getTotalElements());
+        pageTempVO.setTotalPage(tempInfoPage.getTotalPages());
+        pageTempVO.setPage(tempInfoPage.getNumber());
+        pageTempVO.setTempVO( getTempInto(tempInfoPage.getContent()));
+        return pageTempVO;
+
     }
 }

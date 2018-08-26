@@ -45,6 +45,7 @@
 
     function showData() {
         event.stopPropagation();
+        myChart.refresh()
         $.ajax({
             type: "GET",
             url: "checkCurrentTempInfo",
@@ -184,7 +185,7 @@
         <a href="javascript:void(0)" onclick="showData()" style="text-decoration: none;margin-left: 140px">传感器信息页面</a>
         <div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
     </div>
-</div>>
+</div>
 
 </body>
 </html>

@@ -48,6 +48,20 @@ public class SensorController {
         return modelAndView;
     }
 
+    @GetMapping("/sensorInfoSet")
+    public ModelAndView sensorInfoSet() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("sensorInfoSet");
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        try {
+            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getUid());
+            modelAndView.addObject("monitorPointList",monitorPointList);
+        } catch (ExecutionException e) {
+            logger.error(LOG_GETMONITOR_ERROR,e);
+        }
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/sensorThresholdSet")
     //@RequiresPermissions("userInfo:add")//权限管理;
     @ResponseBody
