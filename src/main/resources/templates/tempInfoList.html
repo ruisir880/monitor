@@ -26,7 +26,7 @@
             var endTime = $("#endTime").val();
             var monitorPoint = $("#monitorPoint").val();
 
-            var targetUrl = "/checkTempInfo?monitorPoint="+monitorPoint+"startTime="+startTime+"&endTime="+endTime+"&state="+state;
+            var targetUrl = "/checkTempInfo?monitorPointId="+monitorPoint+"&startTime="+startTime+"&endTime="+endTime+"&state="+state;
             window.location.href=targetUrl;
         }
 

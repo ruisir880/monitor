@@ -23,7 +23,7 @@
         flt=$("#div_sensorSet");
 
         $(document).click(function(){
-            hideHover();
+            hideHover(flt);
         });
 
         initChart()
@@ -48,7 +48,7 @@
         $.ajax({
             type: "GET",
             url: "checkCurrentTempInfo",
-            data: {},
+            data: {"monitorPointId":$("#monitorPoint").val()},
             success: function (result) {
                 initChart()
                 option.series[0].data[0].name = result.monitorPointName
@@ -172,7 +172,7 @@
                 <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
                     @if(!isEmpty(monitorPointList)){
                     @for(monitorPoint in monitorPointList){
-                    <option value="">监测点:${monitorPoint.name}</option>
+                    <option value=${monitorPoint.id}>监测点:${monitorPoint.name}</option>
                     @}
                     @}
                 </select>

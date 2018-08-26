@@ -7,12 +7,18 @@ import com.ray.monitor.web.vo.TempHistoryVO;
 import com.ray.monitor.web.vo.TempVO;
 import com.ray.monitor.web.vo.SensorVO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * Created by rui on 2018/8/19.
  */
 public class ParseUtil {
+
+    public static final String HTML_DATE_PARTTERN = "yyyy-MM-dd hh:mm";
+
+    public static final String DATETIME_PARTTERN = "yyyyMMddhhmmss";
 
     public static TempVO setTempIntoSensor(Set<SensorInfo> sensorInfoList, List<TempInfo> tempInfoList){
         Map<Long,TempInfo> tempInfoMap = new HashMap<>();
@@ -63,5 +69,15 @@ public class ParseUtil {
 
         tempVO.setSensorVOList(new ArrayList<SensorVO>(tempInfoMap.values()));
         return tempVO;
+    }
+
+    public static Date parseDate(String htmlTime) throws ParseException {
+        SimpleDateFormat sdf= new SimpleDateFormat(HTML_DATE_PARTTERN);
+        return sdf.parse(  htmlTime.replace("T"," "));
+    }
+
+    public static String formateDate(Date date){
+        SimpleDateFormat sdf= new SimpleDateFormat(DATETIME_PARTTERN);
+        return sdf.format(date);
     }
 }

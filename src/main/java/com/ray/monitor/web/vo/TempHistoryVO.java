@@ -1,5 +1,7 @@
 package com.ray.monitor.web.vo;
 
+import com.ray.monitor.utils.ParseUtil;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,5 +31,9 @@ public class TempHistoryVO implements Serializable {
 
     public void setGenTime(Date genTime) {
         this.genTime = genTime;
+    }
+
+    public String getFormatGenTime(){
+       return ParseUtil.formateDate(this.genTime);
     }
 }

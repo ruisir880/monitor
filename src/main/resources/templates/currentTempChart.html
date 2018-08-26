@@ -19,11 +19,11 @@
         //myChart.setOption(option)
     })
 
-    function showWeight() {
+    function showData() {
         $.ajax({
             type: "GET",
             url: "checkCurrentTempInfo",
-            data: {},
+            data: {"monitorPointId":$("#monitorPoint").val()},
             success: function (result) {
                 //console.log(r)
                 initChart()
@@ -111,7 +111,7 @@
                 <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
                     @if(!isEmpty(monitorPointList)){
                     @for(monitorPoint in monitorPointList){
-                    <option value="">监测点:${monitorPoint.name}</option>
+                    <option value=${monitorPoint.id}>监测点:${monitorPoint.name}</option>
                     @}
                     @}
                 </select>
@@ -120,7 +120,7 @@
     </div>
 
     <div class="ui_content">
-        <a href="javascript:void(0)" onclick="showWeight()"
+        <a href="javascript:void(0)" onclick="showData()"
            style="text-decoration: none;margin-left: 140px">查看当前温度状态</a>
         <div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
     </div>

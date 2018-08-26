@@ -23,28 +23,30 @@
         $.ajax({
             type: "GET",
             url: "checkTempInfoChart",
-            data: {},
+            data: {"monitorPointId":$("#monitorPoint").val()},
             success: function (result) {
                 initChart()
                 option.title.text = result.monitorPointName
-                //option.series[0] = {"name": r.username, "type": "line", "data": []}
-
-
-               /* option.legend.data[0] = '传感器:'+ result.sensorVOList[0].sensorName
-                var a = new Array();
-                for (var j in result.sensorVOList[0].tempHistoryVOList) {
-                    a[j]= [result.sensorVOList[0].tempHistoryVOList[j].genTime,result.sensorVOList[0].tempHistoryVOList[j].temp]
-                }
-                option.series[0].data =a*/
-
                 for (var i in result.sensorVOList) {
                     option.legend.data[i] = '传感器:'+ result.sensorVOList[i].sensorName
-
                     var a = new Array();
                     for (var j in result.sensorVOList[i].tempHistoryVOList) {
-                         a[j]= [result.sensorVOList[i].tempHistoryVOList[j].genTime,result.sensorVOList[i].tempHistoryVOList[j].temp]
+                        a[j]= [
+                            result.sensorVOList[i].tempHistoryVOList[j].genTime,
+                            result.sensorVOList[i].tempHistoryVOList[j].temp,
+                               50
+                            ]
                     }
-                    option.series[i].data =a
+
+                    option.series[i] ={
+                        name: option.legend.data[i],
+                        type: 'line',
+                        showAllSymbol: true,
+                        symbolSize: function (value){
+                            return Math.round(value[2]/10) + 2;
+                        },
+                        data: a
+                    }
                 }
                 myChart.setOption(option)
             }
@@ -54,58 +56,76 @@
     function initChart() {
         option = {
             title : {
-                text: '双数值轴折线',
-                subtext: '纯属虚构'
+                text : '时间坐标折线图',
             },
             tooltip : {
-                trigger: 'axis',
-                axisPointer:{
-                    show: true,
-                    type : 'cross',
-                    lineStyle: {
-                        type : 'dashed',
-                        width : 1
-                    }
+                trigger: 'item',
+                formatter : function (params) {
+                    var date = new Date(params.value[0]);
+                    data = date.getFullYear() + '-'
+                            + (date.getMonth() + 1) + '-'
+                            + date.getDate() + ' '
+                            + date.getHours() + ':'
+                            + date.getMinutes();
+                    return data + '<br/>'
+                            + params.value[1] + ', '
+                            + params.value[2];
                 }
-            },
-            legend: {
-                data:['数据1','数据2']
             },
             toolbox: {
                 show : true,
                 feature : {
                     mark : {show: true},
-                    dataZoom : {show: true},
                     dataView : {show: true, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
                     restore : {show: true},
                     saveAsImage : {show: true}
                 }
             },
-            calculable : true,
+            dataZoom: {
+                show: true,
+                start : 70
+            },
+            legend : {
+                data : ['series1']
+            },
+            grid: {
+                y2: 80
+            },
             xAxis : [
                 {
-                    type: 'value'
+                    type : 'time',
+                    splitNumber:10
                 }
             ],
             yAxis : [
                 {
-                    type: 'value',
-                    axisLine: {
-                        lineStyle: {
-                            color: '#dc143c'
-                        }
-                    }
+                    type : 'value'
                 }
             ],
             series : [
                 {
-                    name:'数据1',
-                    type:'line',
-                    data:[
-                        //[1.5, 10], [5, 7], [8, 8], [12, 6], [11, 12], [16, 9], [14, 6], [17, 4], [19, 9]
-                    ]
+                    name: 'series1',
+                    type: 'line',
+                    showAllSymbol: true,
+                    symbolSize: function (value){
+                        return Math.round(value[2]/10) + 2;
+                    },
+                    data: (function () {
+                        var d = [];
+                        var len = 0;
+                        var now = new Date();
+                        var value;
+                        while (len++ < 200) {
+                            d.push([
+                                new Date(2014, 9, 1, 0, len * 10000),
+                                (Math.random()*30).toFixed(2) - 0,
+                                (Math.random()*100).toFixed(2) - 0
+                            ]);
+                        }
+                        return d;
+                    })()
                 }
+
             ]
         };
 
@@ -122,7 +142,7 @@
                 <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
                     @if(!isEmpty(monitorPointList)){
                         @for(monitorPoint in monitorPointList){
-                    <option value="">监测点:${monitorPoint.name}</option>
+                    <option value=${monitorPoint.id}>监测点:${monitorPoint.name}</option>
                         @}
                     @}
                 </select>

@@ -15,11 +15,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -91,8 +93,8 @@ public class TempController {
 
     @RequestMapping("/checkCurrentTempInfo")
     @ResponseBody
-    public TempVO checkCurrentTempInfo() {
-        MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(1L);
+    public TempVO checkCurrentTempInfo(long monitorPointId) {
+        MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(monitorPointId);
         List<Long> sensorIdList = new ArrayList<>();
         for(SensorInfo sensorInfo : monitorPoint.getSensorInfoList()){
             sensorIdList.add(sensorInfo.getId());
@@ -103,7 +105,7 @@ public class TempController {
 
     @RequestMapping("/checkTempInfoChart")
     @ResponseBody
-    public TempVO checkTempInfoChart(String state,Date startDate,Date endDate) {
+    public TempVO checkTempInfoChart(long monitorPointId,String state,Date startDate,Date endDate) {
         Calendar calendar = Calendar.getInstance();
         if(startDate == null){
             calendar.set(2000,1,1);
@@ -112,25 +114,32 @@ public class TempController {
         if(endDate == null){
             endDate = new Date();
         }
-        List<TempInfo> tempInfoList= tempInfoService.findTempByCondition(1L, startDate, endDate);
+        List<TempInfo> tempInfoList= tempInfoService.findTempByCondition(monitorPointId, startDate, endDate);
         return  ParseUtil.getTempInto(tempInfoList);
     }
 
     @RequestMapping("/checkTempInfo")
     @ResponseBody
-    public ModelAndView checkTempInfo(String state,Date startDate,Date endDate) {
+    public ModelAndView checkTempInfo(String state,String startTime,String endTime,long monitorPointId) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         Calendar calendar = Calendar.getInstance();
-        if(startDate == null){
+
+        Date startDate = null;
+        Date endDate = null;
+        if(StringUtils.isEmpty(startTime)){
             calendar.set(2000,1,1);
             startDate = calendar.getTime();
+        }else {
+            startDate= ParseUtil.parseDate(startTime);
         }
-        if(endDate == null){
+        if(StringUtils.isEmpty(endTime)){
             endDate = new Date();
+        }else {
+            endDate= ParseUtil.parseDate(endTime);
         }
 
         modelAndView.setViewName("tempInfoList");
-        Page<TempInfo> tempInfoPage =  tempInfoService.pageUserQuery(1L, 1, startDate, endDate, null);
+        Page<TempInfo> tempInfoPage =  tempInfoService.pageUserQuery(monitorPointId, 1, startDate, endDate, null);
         modelAndView.addObject("tempPage", tempInfoPage);
 
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();

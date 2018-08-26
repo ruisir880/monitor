@@ -70,8 +70,8 @@ public class SensorController {
     @RequestMapping(value = "/addSensor", method = RequestMethod.POST )
     //@RequiresPermissions("userInfo:add")//权限管理;
     @ResponseBody
-    public int addSensor(String sensorname){
-        SensorInfo sensorInfo = sensorInfoService.findBySensorName(1L, sensorname);
+    public int addSensor(long monitorPointId,String sensorname){
+        SensorInfo sensorInfo = sensorInfoService.findBySensorName(monitorPointId, sensorname);
         if(sensorInfo !=null){
             return 1;
         }
@@ -82,9 +82,9 @@ public class SensorController {
     @RequestMapping(value = "/deleteSensor", method = RequestMethod.POST )
     //@RequiresPermissions("userInfo:add")//权限管理;
     @ResponseBody
-    public int deleteSensor(String sensorname){
+    public int deleteSensor(long monitorPointId,String sensorname){
         try {
-            sensorInfoService.deleteSensor(1L, sensorname);
+            sensorInfoService.deleteSensor(monitorPointId, sensorname);
         }catch (Exception e){
             logger.error("Error occurs when delete sensor:",e);
             return 1;
