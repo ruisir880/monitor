@@ -6,7 +6,6 @@
     <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
     <link href="${ctxPath}/style/authority/sensor.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript"  src="${ctxPath}/scripts/sensor.js?"></script>
     <title>电力测温智能化管理</title>
 </head>
 <script type="text/javascript">
@@ -22,24 +21,28 @@
        // flt = document.getElementsByTagName('div')[0];
         flt=$("#div_sensorSet");
 
-        $(document).click(function(){
-            hideHover(flt);
-        });
-
         initChart()
         //基于准备好的dom，初始化echarts实例
         myChart = echarts.init(document.getElementById('main'));
         myChart.on("click", showHover);
     })
 
-
-
     function showHover(param) {
         event.stopPropagation();
-        var x=param.event.clientX;
-        var y=param.event.clientY;
-        flt.css({"top":y,"left":x});
-        flt.show();
+        $("#sensorSpan").empty()
+        $("#sensorSpan").append(param.name)
+    }
+    
+    function setThreshold() {
+        $.ajax({
+            type: "POST",
+            url: "setThreshold",
+            data: {"monitorPointId":monitorPoint,
+                startTime:startTime
+            },
+            success: function (result) {
+            }
+            });
     }
 
 
@@ -187,5 +190,12 @@
     </div>
 </div>
 
+<div  id="div_thresholdSet">
+    <form id="thresholdForm" action="">
+        传感器：<span id="sensorSpan"></span>
+        &nbsp;阈值：<input type="text" id="threshold" name="threshold"  style="width: 50px"/>
+        &nbsp;<input id="setButton" type="button" value="确定" class="ui_input_btn01" onclick="setThreshold();"/>
+    </form>
+</div>
 </body>
 </html>

@@ -49,8 +49,8 @@
 
     function showHover(param) {
         event.stopPropagation();
-        var x=param.event.clientX;
-        var y=param.event.clientY;
+        var x=param.event.pageX;
+        var y=param.event.pageY;
         deleteSensorName = param.data.name.substring(3)
         flt.css({"top":y,"left":x});
         flt.show();
