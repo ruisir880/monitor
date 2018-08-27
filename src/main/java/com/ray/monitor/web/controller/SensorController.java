@@ -89,7 +89,7 @@ public class SensorController {
         if(sensorInfo !=null){
             return 1;
         }
-        sensorInfoService.addSensor(1L,sensorname);
+        sensorInfoService.addSensor(1L, sensorname);
         return 0;
     }
 
@@ -101,6 +101,18 @@ public class SensorController {
             sensorInfoService.deleteSensor(monitorPointId, sensorname);
         }catch (Exception e){
             logger.error("Error occurs when delete sensor:",e);
+            return 1;
+        }
+        return 0;
+    }
+
+    @RequestMapping(value = "/setThreshold", method = RequestMethod.POST )
+    @ResponseBody
+    public int setThreshold(long monitorPointId,String sensorName,double threshold){
+        try {
+            sensorInfoService.setThreshold(monitorPointId, sensorName, threshold);
+        }catch (Exception e){
+            logger.error("Error occurs when set threshold:",e);
             return 1;
         }
         return 0;

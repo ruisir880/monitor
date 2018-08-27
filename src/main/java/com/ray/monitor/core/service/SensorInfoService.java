@@ -16,4 +16,6 @@ public interface SensorInfoService {
     SensorInfo findBySensorName(long monitorId,String sensorName);
 
     Set<SensorInfo> findSensorByMonitorPointId(long monitorPointId);
+
+    void setThreshold(long monitorPointId,String sensorName,double threshold);
 }

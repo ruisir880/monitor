@@ -1,12 +1,8 @@
 package com.ray.monitor.web.controller;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.ray.monitor.core.service.UserInfoService;
-import com.ray.monitor.model.MonitorPoint;
 import com.ray.monitor.model.UserInfo;
 import com.ray.monitor.utils.UserUtil;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

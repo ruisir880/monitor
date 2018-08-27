@@ -12,13 +12,13 @@
     var option
     var myChart
     var flt
+    var sensorName
 
     var red="#900"
     var yellow="#96992a"
     var green="#14991c"
     $(function () {
         event.cancelBubble = true;
-       // flt = document.getElementsByTagName('div')[0];
         flt=$("#div_sensorSet");
 
         initChart()
@@ -29,20 +29,28 @@
 
     function showHover(param) {
         event.stopPropagation();
+        sensorName = param.name;
         $("#sensorSpan").empty()
-        $("#sensorSpan").append(param.name)
+        $("#sensorSpan").append(sensorName)
     }
     
     function setThreshold() {
+        var monitorName = param.data.name.substring(3)
         $.ajax({
             type: "POST",
             url: "setThreshold",
             data: {"monitorPointId":monitorPoint,
-                startTime:startTime
+                "sensorName":sensorName,
+                "threshold": $("#threshold").val()
             },
             success: function (result) {
+                if(result=="0"){
+                    art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'设置成功', ok:true,});
+                }else{
+                    art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'设置失败', ok:true,});
+                }
             }
-            });
+        });
     }
 
 

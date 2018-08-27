@@ -64,4 +64,10 @@ public class SensorInfoServiceImpl implements SensorInfoService{
         sensorRepository.delete(sensorInfo.getId());
 
     }
+
+    @Override
+    @Transactional
+    public void setThreshold(long monitorPointId, String sensorName, double threshold) {
+        sensorRepository.setThresholdValue(threshold, monitorPointId, sensorName);
+    }
 }

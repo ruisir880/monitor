@@ -30,4 +30,11 @@ public interface SensorRepository extends CrudRepository<SensorInfo, Long> {
     @Query(value = "delete  from sensor_info where id =:id",nativeQuery = true)
     void delete(@Param(value="id") long id);
 
+    @Modifying
+    @Query(value = "update SensorInfo set thresholdValue=:thresholdValue where monitorPoint.id=:monitorPointId and sensorId=:sensorName",nativeQuery = true)
+    void setThresholdValue(
+            @Param(value="thresholdValue") double thresholdValue,
+            @Param(value="monitorPoint") long monitorPoint,
+            @Param(value="sensorName") String sensorName);
+
 }
