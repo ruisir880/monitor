@@ -18,7 +18,7 @@ public class Area implements Serializable {
 
     private long parentid;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentid")
     private List<Area> sonAreas;
 

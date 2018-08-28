@@ -71,7 +71,7 @@ public class RepositoryTest {
 
     @Test
     public void test_area() throws Exception {
-        Area area  =  areaRepository.findOne(110000L);
+        Area area  =  areaRepository.findOne(0L);
         System.out.println("========================"+area.getSonAreas().size());
     }
 

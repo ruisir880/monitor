@@ -12,25 +12,17 @@
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            /*
-             * 提交
-             */
+
             $("#submitbutton").click(function() {
                 if(validateForm()){
                     checkFyFhSubmit();
                 }
             });
 
-            /*
-             * 取消
-             */
             $("#cancelbutton").click(function() {
-                $('#username').val('');
-                $('#password').val('');
-                $("#realName").val('');
-                $("#mobile").val('');
-                $("#address").val('');
-                $("#email").val('');
+                $('#name').val('');
+                $('#address').val('');
+                $("#clientCompany").val('');
             });
 
             var result = 'null';
@@ -40,13 +32,27 @@
             }
         });
 
+        function getSonArea(areaId, nextSelect){
+            $.ajax({
+                type:"get",
+                url:"/getSonAreas",
+                data:{"areaId":areaId},
+                dataType : "text",
+                success:function(result){
+                    var elem
+                    for (var i in result) {
+                        elem = result[i]
+                        $('#city').append("<option value="+elem.id+">"+elem.areaName+"</option>");
+                    }
+                }
+            });
+            return true;
+        }
+
         function checkFyFhSubmit(){
-            var username = $('#username').val();
-            var password = $('#password').val();
-            var realName = $("#realName").val();
-            var mobile = $("#mobile").val();
-            var address = $("#address").val();
-            var email = $("#email").val();
+            var name = $('#name').val();
+            var address = $('#address').val();
+            var clientCompany = $("#clientCompany").val();
             if(username!="" && realName!="" && mobile!="" && address!=""&& email!=""){
                 $.ajax({
                     type:"POST",
@@ -72,24 +78,20 @@
 
         /** 表单验证  **/
         function validateForm(){
-            if($("#username").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'用户名', ok:true,});
+            if($("#name").val()==""){
+                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'名称', ok:true,});
                 return false;
             }
-            if($("#password").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'密码', ok:true,});
+            if($("#address").val()==""){
+                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'地址', ok:true,});
                 return false;
             }
-            if($("#realName").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'真实姓名', ok:true,});
+            if($("#clientCompany").val()==""){
+                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'客户公司', ok:true,});
                 return false;
             }
-            if($("#mobile").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'电话号码', ok:true,});
-                return false;
-            }
-            if($("#role").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'用户角色', ok:true,});
+            if($("#district").val()==""){
+                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'区域', ok:true,});
                 return false;
             }
             return true;
@@ -108,58 +110,44 @@
             </div>
         </div>
         <td class="ui_content">
-            <form id="addUser" action="">
+            <form id="eidtMonitorpoint" action="">
                 <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
                 <tr>
-                    <td class="ui_text_lt" width="80">用户名</td>
+                    <td class="ui_text_lt" width="80">名称</td>
                     <td class="ui_text_lt">
-                        <input type="text" id="username" name="username"  class="ui_input_txt02"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="ui_text_lt" width="80">密码</td>
-                    <td class="ui_text_lt">
-                        <input type="password" id="password" name="password"  class="ui_input_txt02"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="ui_text_lt" width="80">真实姓名</td>
-                    <td class="ui_text_lt">
-                        <input type="text" id="realName" name="realName"  class="ui_input_txt02"/>
+                        <input type="text" id="name" name="name"  class="ui_input_txt02"/>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="ui_text_lt" width="80">电话号码</td>
+                    <td class="ui_text_lt">区域</td>
                     <td class="ui_text_lt">
-                        <input type="text" id="mobile" name="mobile"  class="ui_input_txt02"/>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="ui_text_lt" width="80">邮件地址</td>
-                    <td class="ui_text_lt">
-                        <input type="text" id="email" name="email"  class="ui_input_txt02"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="ui_text_lt" width="80">用户权限</td>
-                    <td class="ui_text_lt">
-                        编辑用户<input type="checkbox" value=""/>
-                        &nbsp;添加用户<input type="checkbox" value=""/>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="ui_text_lt">用户角色</td>
-                    <td class="ui_text_lt">
-                        <select name="role" id="role" class="ui_select01">
-                            <option value="">--请选择--</option>
-                            <option value="admin">管理员</option>
-                            <option value="superintendent">项目负责人</option>
-                            <option value="cooperation">协作单位</option>
-                            <option value="technician">技术专家</option>
+                        <select name="province" id="province" class="ui_select01" onchange="getSonArea(this.value,city)">
+                            @if(!isEmpty(provinces)){
+                            @for(province in provinces){
+                            <option value=${province.id}>${province.areaName}</option>
+                            @}
+                            @}
                         </select>
+                    </td>
+                    <td class="ui_text_lt">
+                        <select name="city" id="city" class="ui_select01" onchange="getSonArea(this.value,district)"/>
+                    </td>
+                    <td class="ui_text_lt">
+                        <select name="district" id="district" class="ui_select01"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="ui_text_lt" width="80">地址</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="address" name="address"  class="ui_input_txt02"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_lt" width="80">客户公司</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="clientCompany" name="clientCompany"  class="ui_input_txt02"/>
                     </td>
                 </tr>
 
