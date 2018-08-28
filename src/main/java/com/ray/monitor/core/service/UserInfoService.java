@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface UserInfoService {
 
+    UserInfo findById(long userId);
+
     UserInfo findByUsername(String username);
 
     UserInfo saveUser(UserInfo userInfo);

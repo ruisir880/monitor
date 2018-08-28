@@ -46,7 +46,7 @@ public class UserInfoServiceImpl implements UserInfoService{
     @Transactional(readOnly=true)
     @Override
     public UserInfo findByUsername(String username) {
-        LOGGER.info("UserInfoServiceImpl.findByUsername() :" + username );
+        LOGGER.info("UserInfoServiceImpl.findById() :" + username );
         return userInfoRepository.findByUsername(username);
     }
 
@@ -106,5 +106,8 @@ public class UserInfoServiceImpl implements UserInfoService{
     }
 
 
-
+    @Override
+    public UserInfo findById(long userId) {
+        return userInfoRepository.findOne(userId);
+    }
 }

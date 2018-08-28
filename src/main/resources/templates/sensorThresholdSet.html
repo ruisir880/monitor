@@ -35,12 +35,11 @@
     }
     
     function setThreshold() {
-        var monitorName = param.data.name.substring(3)
         $.ajax({
             type: "POST",
-            url: "setThreshold",
-            data: {"monitorPointId":monitorPoint,
-                "sensorName":sensorName,
+            url: "/setThreshold",
+            data: {"monitorPointId":$("#monitorPoint").val(),
+                "sensorName":sensorName.substring(3),
                 "threshold": $("#threshold").val()
             },
             success: function (result) {

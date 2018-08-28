@@ -7,10 +7,10 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * Created by rui on 2018/8/12.
@@ -73,11 +73,31 @@ public class UserInfoController {
 
     @RequestMapping(value = "/queryUserPage",method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView queryUserPage(String jumpNumTxt,String username,String realName,String mobile){
+    public ModelAndView queryUserPage(String username,String realName,String mobile){
         ModelAndView modelAndView = new ModelAndView();
-        Page<UserInfo> userInfoPage = userInfoService.pageUserQuery(1,username,realName,mobile);
-        modelAndView.addObject("userPage",userInfoPage);
+        List<UserInfo> userInfoList = userInfoService.findByCondition(username,realName,mobile);
+        modelAndView.addObject("userPage",userInfoList);
         modelAndView.setViewName("userList");
         return modelAndView;
+    }
+
+    @GetMapping("/userEdit")
+    public ModelAndView userEdit(long userId){
+        ModelAndView modelAndView = new ModelAndView();
+        UserInfo userInfo = userInfoService.findById(userId);
+        modelAndView.addObject("userInfo",userInfo);
+        modelAndView.setViewName("userEdit");
+        return modelAndView;
+    }
+
+    @PostMapping("/updateUser")
+    @ResponseBody
+    public int updateUser(UserInfo userInfo){
+        UserInfo userInDB = userInfoService.findById(userInfo.getUid());
+        userInDB.setRealName(userInfo.getRealName());
+        userInDB.setEmail(userInfo.getEmail());
+        userInDB.setMobile(userInfo.getMobile());
+        userInfoService.saveUser(userInDB);
+        return 0;
     }
 }
