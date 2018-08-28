@@ -172,4 +172,11 @@ public class RepositoryTest {
         List<MonitorPoint> monitorPoints =  monitorCache.get(3L);
         System.out.println("==============================="+monitorPoints.size());
     }
+
+    @Test
+    public void test_QueryMonitor() throws Exception {
+        List<MonitorPoint> monitorPoints =  monitorRepository.findAll();
+        System.out.println("==============================="+monitorPoints.size());
+    }
+
 }

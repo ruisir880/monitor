@@ -11,4 +11,7 @@ import java.util.List;
 public interface MonitorRepository extends CrudRepository<MonitorPoint, Long> {
 
     List<MonitorPoint> findByAreaId(long areaId);
+
+
+    List<MonitorPoint> findAll();
 }

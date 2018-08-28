@@ -5,6 +5,8 @@ import com.ray.monitor.model.MonitorPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by rui on 2018/8/19.
  */
@@ -17,5 +19,10 @@ public class MonitorPointServiceImpl implements MonitorPointService{
     @Override
     public MonitorPoint findMonitorPoint(long monitorPointId) {
         return monitorRepository.findOne(monitorPointId);
+    }
+
+    @Override
+    public List<MonitorPoint> findAll() {
+        return monitorRepository.findAll();
     }
 }

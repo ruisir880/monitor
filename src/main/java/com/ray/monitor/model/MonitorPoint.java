@@ -23,7 +23,11 @@ public class MonitorPoint implements Serializable {
 
     private Date genTime;
 
-    private long areaId;
+    private String address;
+
+    @OneToOne
+    @JoinColumn(name="area_id")//设置在employee表中的关联字段(外键)
+    private Area area;
 
     @OneToMany(mappedBy="monitorPoint",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private Set<SensorInfo> sensorInfoList;
@@ -60,12 +64,12 @@ public class MonitorPoint implements Serializable {
         this.genTime = genTime;
     }
 
-    public long getAreaId() {
-        return areaId;
+    public Area getArea() {
+        return area;
     }
 
-    public void setAreaId(long areaId) {
-        this.areaId = areaId;
+    public void setArea(Area area) {
+        this.area = area;
     }
 
     public Set<SensorInfo> getSensorInfoList() {
@@ -74,5 +78,13 @@ public class MonitorPoint implements Serializable {
 
     public void setSensorInfoList(Set<SensorInfo> sensorInfoList) {
         this.sensorInfoList = sensorInfoList;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

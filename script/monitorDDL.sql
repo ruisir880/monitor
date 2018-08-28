@@ -68,6 +68,7 @@ create table monitor_point(
   gen_time datetime default CURRENT_TIMESTAMP,
   client_company varchar(100),
   area_id bigint,
+  address VARCHAR (255),
   primary key (id)
 );
 alter table monitor_point add constraint fk_monitor_point foreign key (area_id)  references area (id);
