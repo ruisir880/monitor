@@ -63,15 +63,14 @@ public class MyShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         UserInfo userInfo = (UserInfo) principals.getPrimaryPrincipal();
 
-        for(RoleInfo role:userInfo.getRoleList()){
-
-            authorizationInfo.addRole(role.getRoleName());
-            System.out.println(role.getPermissions());
-            for(PrivilegeInfo p:role.getPermissions()){
-                System.out.println(p);
-                authorizationInfo.addStringPermission(p.getPrivilegeName());
-            }
+        RoleInfo role = userInfo.getRoleInfo();
+        authorizationInfo.addRole(role.getRoleName());
+        System.out.println(role.getPermissions());
+        for(PrivilegeInfo p:role.getPermissions()){
+            System.out.println(p);
+            authorizationInfo.addStringPermission(p.getPrivilegeName());
         }
+
         return authorizationInfo;
     }
 

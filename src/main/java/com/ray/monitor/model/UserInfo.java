@@ -38,10 +38,10 @@ public class UserInfo implements Serializable {
     private Date generationTime;
 
 
-    @ManyToMany(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据
+    @ManyToOne(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据
     @JoinTable(name = "UserRoleMap", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
             @JoinColumn(name = "roleId") })
-    private List<RoleInfo> roleList;// 一个用户具有多个角色
+    private RoleInfo roleInfo;// 一个用户具有多个角色
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "UserAreaMap", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
@@ -88,13 +88,12 @@ public class UserInfo implements Serializable {
         this.salt = salt;
     }
 
-
-    public List<RoleInfo> getRoleList() {
-        return roleList;
+    public RoleInfo getRoleInfo() {
+        return roleInfo;
     }
 
-    public void setRoleList(List<RoleInfo> roleList) {
-        this.roleList = roleList;
+    public void setRoleInfo(RoleInfo roleInfo) {
+        this.roleInfo = roleInfo;
     }
 
     public String getMobile() {

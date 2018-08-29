@@ -1,15 +1,14 @@
 package com.ray.monitor.web.controller;
 
 import com.ray.monitor.core.AreaCache;
+import com.ray.monitor.core.RoleCache;
 import com.ray.monitor.core.service.UserInfoService;
 import com.ray.monitor.model.Area;
 import com.ray.monitor.model.UserInfo;
 import com.ray.monitor.utils.UserUtil;
 import com.ray.monitor.web.vo.AreaVO;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,13 +21,14 @@ import java.util.concurrent.ExecutionException;
  */
 @Controller
 public class UserInfoController {
-
-
     @Autowired
     private UserInfoService userInfoService;
 
     @Autowired
     private AreaCache areaCache;
+
+    @Autowired
+    private RoleCache roleCache;
 
     @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
     public String userInfo() {
@@ -39,9 +39,8 @@ public class UserInfoController {
     public ModelAndView userInfoAdd() throws ExecutionException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("userAdd");
-        List<AreaVO>  areaVOS= areaCache.getSonArea(0L);
-        modelAndView.addObject("provinces",areaVOS);
-        modelAndView.addObject("cities",areaCache.getSonArea(areaVOS.get(0).getId()));
+
+        setAreaInfo(modelAndView);
         return modelAndView;
     }
 
@@ -60,7 +59,7 @@ public class UserInfoController {
     @RequestMapping(value = "/addUser", method =RequestMethod.POST )
     //@RequiresPermissions("userInfo:save")//权限管理;
     @ResponseBody
-    public int userInfoAdd(UserInfo user,long areaId){
+    public int userInfoAdd(UserInfo user,long areaId,String role) throws ExecutionException {
         ModelAndView modelAndView = new ModelAndView();
         UserInfo userInfo = userInfoService.findByUsername(user.getUsername());
         if(userInfo!=null) {
@@ -71,9 +70,13 @@ public class UserInfoController {
         String password = UserUtil.encryptPassword(user.getUsername(),user.getPassword(),salt);
         user.setSalt(salt);
         user.setPassword(password);
+
         Area area = new Area();
         area.setId(areaId);
         user.setArea(area);
+
+        user.setRoleInfo(roleCache.getRole(role));
+
         userInfoService.saveUser(user);
         return 0;
     }
@@ -103,15 +106,15 @@ public class UserInfoController {
         UserInfo userInfo = userInfoService.findById(userId);
         modelAndView.addObject("userInfo",userInfo);
         modelAndView.setViewName("userEdit");
-        List<AreaVO>  areaVOS= areaCache.getSonArea(0L);
-        modelAndView.addObject("provinces",areaVOS);
-        modelAndView.addObject("provinceId",getProvinceId(userInfo));
+
+        setAreaInfo(modelAndView);
+        setSelectedArea(modelAndView,userInfo);
         return modelAndView;
     }
 
     @PostMapping("/updateUser")
     @ResponseBody
-    public int updateUser(UserInfo userInfo,long areaId){
+    public int updateUser(UserInfo userInfo,long areaId,String role) throws ExecutionException {
         UserInfo userInDB = userInfoService.findById(userInfo.getUid());
         userInDB.setRealName(userInfo.getRealName());
         userInDB.setEmail(userInfo.getEmail());
@@ -119,18 +122,36 @@ public class UserInfoController {
         Area area = new Area();
         area.setId(areaId);
         userInDB.setArea(area);
+        userInDB.setRoleInfo(roleCache.getRole(role));
         userInfoService.saveUser(userInDB);
         return 0;
     }
 
-    private long getProvinceId(UserInfo userInfo){
+    private void  setSelectedArea(ModelAndView modelAndView,UserInfo userInfo){
         Area area = userInfo.getArea();
         if(area == null){
-            return -1;
+            return ;
         }
-        while (area.getParentArea().getId()!=0L){
-            area = area.getParentArea();
+        long provinceId;
+        long cityId;
+        long districtId;
+        if(area.getParentArea() !=null && area.getParentArea().getParentArea()!=null){
+            provinceId = area.getParentArea().getParentArea().getId();
+            cityId = area.getParentArea().getId();
+            districtId = area.getId();
+        }else {
+            provinceId = area.getParentArea().getId();
+            cityId = area.getId();
+            districtId = -1;
         }
-        return area.getId();
+        modelAndView.addObject("provinceId",provinceId);
+        modelAndView.addObject("cityId",cityId);
+        modelAndView.addObject("districtId",districtId);
+    }
+
+    public void setAreaInfo(ModelAndView modelAndView) throws ExecutionException {
+        List<AreaVO>  areaVOS= areaCache.getSonArea(0L);
+        modelAndView.addObject("provinces",areaVOS);
+        modelAndView.addObject("cities",areaCache.getSonArea(areaVOS.get(0).getId()));
     }
 }

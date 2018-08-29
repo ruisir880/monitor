@@ -24,5 +24,15 @@ function validateForm(){
         art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'用户角色', ok:true,});
         return false;
     }
+    var areaId
+    if($('#district').val()){
+        areaId = $('#district').val()
+    }else {
+        areaId = $('#city').val()
+    }
+    if(areaId==""){
+        art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'所属区域', ok:true,});
+        return false;
+    }
     return true;
 }

@@ -7,4 +7,6 @@ import org.springframework.data.repository.CrudRepository;
  * Created by rui on 2018/8/18.
  */
 public interface RoleRepository extends CrudRepository<RoleInfo, Long> {
+
+    RoleInfo findByRoleName(String roleName);
 }

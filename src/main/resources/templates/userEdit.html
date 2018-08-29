@@ -49,6 +49,7 @@
             var mobile = $("#mobile").val();
             var address = $("#address").val();
             var email = $("#email").val();
+            var role = $("#role").val();
             var areaId
             if($('#district').val()){
                 areaId = $('#district').val()
@@ -59,7 +60,8 @@
                 $.ajax({
                     type:"POST",
                     url:"/updateUser",
-                    data:{"uid":userId,"password":password,"realName":realName, "mobile":mobile, "address":address, "email":email,"areaId":areaId},
+                    data:{"uid":userId,"password":password,"realName":realName, "mobile":mobile,
+                        "address":address, "email":email,"areaId":areaId,"role":role},
                     dataType : "text",
                     success:function(data){
                        if(data=="0"){
@@ -141,7 +143,11 @@
                             <option value="">--请选择--</option>
                             @if(!isEmpty(cities)){
                             @for(city in cities){
-                            <option value=${city.id}>${city.name}</option>
+                            <option value=${city.id}
+                                    @if(city.id == cityId){
+                                    selected="true"
+                                    @}
+                            >${city.name}</option>
                             @}
                             @}
                         </select>
@@ -159,7 +165,7 @@
                         <select name="role" id="role" class="ui_select01">
                             <option value="">--请选择--</option>
                             <option value="admin">管理员</option>
-                            <option value="superintendent">项目负责人</option>
+                            <option value="projectManager">项目负责人</option>
                             <option value="cooperation">协作单位</option>
                             <option value="technician">技术专家</option>
                         </select>
