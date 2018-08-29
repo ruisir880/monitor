@@ -20,19 +20,23 @@ public class SensorVO implements Serializable{
 
     private String state;
 
+    private double threshold;
+
     private List<TempHistoryVO> tempHistoryVOList;
 
-    public SensorVO(long sensorId, double crruentTemp, String sensorName,String state) {
+    public SensorVO(long sensorId, double crruentTemp, String sensorName,String state,double threshold) {
         this.sensorId = sensorId;
         this.crruentTemp = crruentTemp;
         this.sensorName = sensorName;
         this.state = state;
+        this.threshold = threshold;
     }
 
 
-    public SensorVO(long sensorId, String sensorName) {
+    public SensorVO(long sensorId, String sensorName, double threshold) {
         this.sensorId = sensorId;
         this.sensorName = sensorName;
+        this.threshold = threshold;
     }
 
     public long getSensorId() {
@@ -81,5 +85,13 @@ public class SensorVO implements Serializable{
 
     public void setTempHistoryVOList(List<TempHistoryVO> tempHistoryVOList) {
         this.tempHistoryVOList = tempHistoryVOList;
+    }
+
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
     }
 }

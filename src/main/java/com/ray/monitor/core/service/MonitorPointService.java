@@ -12,4 +12,6 @@ public interface MonitorPointService {
     MonitorPoint findMonitorPoint(long monitorPointId);
 
     List<MonitorPoint> findAll();
+
+    void save(MonitorPoint monitorPoint);
 }

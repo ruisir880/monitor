@@ -25,4 +25,10 @@ public class MonitorPointServiceImpl implements MonitorPointService{
     public List<MonitorPoint> findAll() {
         return monitorRepository.findAll();
     }
+
+    @Override
+    public void save(MonitorPoint monitorPoint) {
+        monitorRepository.save(monitorPoint);
+    }
+
 }

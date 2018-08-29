@@ -25,18 +25,12 @@
             url: "checkCurrentTempInfo",
             data: {"monitorPointId":$("#monitorPoint").val()},
             success: function (result) {
-                //console.log(r)
                 initChart()
-                //option.title.text = r.username+"的体重"
-                //option.series[0] = {"name": r.username, "type": "line", "data": []}
-                //option.series[0].name = r.username
-                //option.series[0].type = 'line'
                 for (var i in result.sensorVOList) {
                     option.title.text = result.monitorPointName
                     option.series[0].data[i] = result.sensorVOList[i].crruentTemp
-                    option.xAxis[0].data[i] = '传感器'+ result.sensorVOList[i].sensorName
+                    option.xAxis[0].data[i] = '传感器'+ result.sensorVOList[i].sensorName +"  阈值："+result.sensorVOList[i].threshold
                 }
-                //option.series[1] = {"name": r.username, "type": "line", "data": [1,2,8,12,21,9]}
                 myChart.setOption(option)
             }
         });

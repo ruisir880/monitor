@@ -121,7 +121,7 @@ public class TempController {
 
     @RequestMapping("/checkTempInfo")
     @ResponseBody
-    public PageTempVO checkTempInfo(String state, String startTime, String endTime, long monitorPointId) throws ParseException {
+    public PageTempVO checkTempInfo(String state, String startTime, String endTime, long monitorPointId,int page) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         Calendar calendar = Calendar.getInstance();
 
@@ -140,7 +140,7 @@ public class TempController {
         }
 
         modelAndView.setViewName("tempInfoList");
-        Page<TempInfo> tempInfoPage =  tempInfoService.pageUserQuery(monitorPointId, 1, startDate, endDate, null);
+        Page<TempInfo> tempInfoPage =  tempInfoService.pageUserQuery(monitorPointId, page, startDate, endDate, null);
         return ParseUtil.getPageTempVO(tempInfoPage);
        /* modelAndView.addObject("tempPage", tempInfoPage);
 

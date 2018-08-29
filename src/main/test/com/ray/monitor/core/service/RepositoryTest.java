@@ -98,7 +98,7 @@ public class RepositoryTest {
     @Test
     public void test_AddComment() throws Exception {
         CommentInfo commentInfo = new CommentInfo();
-        commentInfo.setMessage("test add message");
+        commentInfo.setMessage("test save message");
         SensorInfo sensorInfo = new SensorInfo();
         sensorInfo.setId(1L);
         commentInfo.setSensorInfo(sensorInfo);

@@ -129,7 +129,13 @@
                 <tr>
                     <td class="ui_text_lt" width="80">名称</td>
                     <td class="ui_text_lt">
-                        <input type="text" id="name" name="name"  class="ui_input_txt02"/>
+                        @if(!isEmpty(monitorPoint)){}
+                        <input type="text" id="name" name="name"
+                               @if(!isEmpty(monitorPoint)){
+                               value="${monitorPoint.name}"
+                               @}
+                               class="ui_input_txt02"/>
+
                     </td>
                 </tr>
 
@@ -160,13 +166,21 @@
                 <tr>
                     <td class="ui_text_lt" width="80">地址</td>
                     <td class="ui_text_lt">
-                        <input type="text" id="address" name="address"  class="ui_input_txt02"/>
+                        <input type="text" id="address" name="address"
+                               @if(!isEmpty(monitorPoint)){
+                               value="${monitorPoint.address}"
+                               @}
+                               class="ui_input_txt02"/>
                     </td>
                 </tr>
                 <tr>
                     <td class="ui_text_lt" width="80">客户公司</td>
                     <td class="ui_text_lt">
-                        <input type="text" id="clientCompany" name="clientCompany"  class="ui_input_txt02"/>
+                        <input type="text" id="clientCompany" name="clientCompany"
+                               @if(!isEmpty(monitorPoint)){
+                               value="${monitorPoint.clientCompany}"
+                               @}
+                               class="ui_input_txt02"/>
                     </td>
                 </tr>
 

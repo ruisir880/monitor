@@ -28,7 +28,7 @@
                 initChart()
                 option.title.text = result.monitorPointName
                 for (var i in result.sensorVOList) {
-                    option.legend.data[i] = '传感器:'+ result.sensorVOList[i].sensorName
+                    option.legend.data[i] = '传感器:'+ result.sensorVOList[i].sensorName +' 阈值：'+result.sensorVOList[i].threshold
                     var a = new Array();
                     for (var j in result.sensorVOList[i].tempHistoryVOList) {
                         a[j]= [

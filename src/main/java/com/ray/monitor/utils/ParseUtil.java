@@ -33,9 +33,9 @@ public class ParseUtil {
             TempInfo temp = tempInfoMap.get(sensor.getId());
             tempVO.setMonitorPointName(sensor.getMonitorPoint().getName());
             if(temp!=null){
-                sensorVOlist.add(new SensorVO(sensor.getId(),temp.getTemperature(),sensor.getSensorId(),temp.getState()));
+                sensorVOlist.add(new SensorVO(sensor.getId(),temp.getTemperature(),sensor.getSensorId(),temp.getState(),sensor.getThresholdValue()));
             }else {
-                sensorVOlist.add(new SensorVO(sensor.getId(),0,sensor.getSensorId(), Constants.TEMP_STATE_NORMAL));
+                sensorVOlist.add(new SensorVO(sensor.getId(),0,sensor.getSensorId(), Constants.TEMP_STATE_NORMAL,sensor.getThresholdValue()));
             }
 
         }
@@ -58,7 +58,7 @@ public class ParseUtil {
             List<TempHistoryVO> tempHistoryVOs;
             if(!tempInfoMap.containsKey(tempInfo.getSensorInfo().getId())) {
                 tempVO.setMonitorPointName(tempInfo.getSensorInfo().getMonitorPoint().getName());
-                SensorVO sensorVO = new SensorVO(tempInfo.getSensorInfo().getId(),tempInfo.getSensorInfo().getSensorId());
+                SensorVO sensorVO = new SensorVO(tempInfo.getSensorInfo().getId(),tempInfo.getSensorInfo().getSensorId(),tempInfo.getSensorInfo().getThresholdValue());
                 tempInfoMap.put(tempInfo.getSensorInfo().getId(), sensorVO);
                 tempHistoryVOs = new ArrayList<>();
                 sensorVO.setTempHistoryVOList(tempHistoryVOs);

@@ -45,7 +45,7 @@ public class UserInfoController {
      * @return
      */
     @RequestMapping(value = "/addUser", method =RequestMethod.POST )
-    //@RequiresPermissions("userInfo:add")//权限管理;
+    //@RequiresPermissions("userInfo:save")//权限管理;
     @ResponseBody
     public int userInfoAdd(UserInfo user){
         ModelAndView modelAndView = new ModelAndView();

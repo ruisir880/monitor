@@ -63,7 +63,7 @@ public class SensorController {
     }
 
     @RequestMapping(value = "/sensorThresholdSet")
-    //@RequiresPermissions("userInfo:add")//权限管理;
+    //@RequiresPermissions("userInfo:save")//权限管理;
     @ResponseBody
     public ModelAndView sensorThresholdSet(){
         ModelAndView modelAndView = new ModelAndView();
@@ -82,7 +82,7 @@ public class SensorController {
      * 传感器添加;
      */
     @RequestMapping(value = "/addSensor", method = RequestMethod.POST )
-    //@RequiresPermissions("userInfo:add")//权限管理;
+    //@RequiresPermissions("userInfo:save")//权限管理;
     @ResponseBody
     public int addSensor(long monitorPointId,String sensorname){
         SensorInfo sensorInfo = sensorInfoService.findBySensorName(monitorPointId, sensorname);
@@ -94,7 +94,7 @@ public class SensorController {
     }
 
     @RequestMapping(value = "/deleteSensor", method = RequestMethod.POST )
-    //@RequiresPermissions("userInfo:add")//权限管理;
+    //@RequiresPermissions("userInfo:save")//权限管理;
     @ResponseBody
     public int deleteSensor(long monitorPointId,String sensorname){
         try {
