@@ -6,6 +6,8 @@ import com.ray.monitor.core.repository.AreaRepository;
 import com.ray.monitor.model.Area;
 import com.ray.monitor.model.MonitorPoint;
 import com.ray.monitor.model.UserInfo;
+import com.ray.monitor.utils.ParseUtil;
+import com.ray.monitor.web.vo.AreaVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +21,16 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class AreaCache {
 
-    private Cache<Long,List<Area>> cache = CacheBuilder.newBuilder().softValues().build();
+    private Cache<Long,List<AreaVO>> cache = CacheBuilder.newBuilder().softValues().build();
 
     @Autowired
     private AreaRepository areaRepository;
 
-    public List<Area> getSonArea(long areaId) throws ExecutionException {
-        return cache.get(areaId, new Callable<List<Area>>() {
+    public List<AreaVO> getSonArea(long areaId) throws ExecutionException {
+        return cache.get(areaId, new Callable<List<AreaVO>>() {
             @Override
-            public List<Area> call() throws Exception {
-               return areaRepository.findByParentid(areaId);
+            public List<AreaVO> call() throws Exception {
+                return ParseUtil.getAreaVOS(areaRepository.findByParentid(areaId));
             }
         });
     }

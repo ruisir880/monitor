@@ -60,7 +60,6 @@ create table area(
   parentid bigint,
   primary key (id)
 );
-alter table area add constraint fk_area foreign key (parentid)  references area (id);
 
 create table monitor_point(
   id bigint not null auto_increment,

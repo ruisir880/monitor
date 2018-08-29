@@ -15,7 +15,7 @@
 
             $("#submitbutton").click(function() {
                 if(validateForm()){
-                    checkFyFhSubmit();
+                    checkSubmit();
                 }
             });
 
@@ -33,42 +33,56 @@
         });
 
         function getSonArea(areaId, nextSelect){
+            var controll
+            if (nextSelect == 'city') {
+                controll= $('#city')
+            }else {
+                controll= $('#district')
+            }
+            controll.empty()
+
+            var firstId
             $.ajax({
-                type:"get",
+                type:"GET",
                 url:"/getSonAreas",
                 data:{"areaId":areaId},
                 dataType : "text",
-                success:function(result){
+                success:function(data){
                     var elem
+                    var result = eval(data);
+                    firstId = result[0].id
                     for (var i in result) {
                         elem = result[i]
-                        $('#city').append("<option value="+elem.id+">"+elem.areaName+"</option>");
+                        controll.append("<option value=" + elem.id + ">" + elem.name + "</option>");
+                    }
+
+                    if (nextSelect == 'city') {
+                        getSonArea(firstId,'district')
                     }
                 }
             });
-            return true;
+
         }
 
-        function checkFyFhSubmit(){
+        function checkSubmit(){
             var name = $('#name').val();
             var address = $('#address').val();
             var clientCompany = $("#clientCompany").val();
-            if(username!="" && realName!="" && mobile!="" && address!=""&& email!=""){
+            var areaId
+            if($('#district').val()){
+                areaId = $('#district').val()
+            }else {
+                areaId = $('#city').val()
+            }
+            if(name!="" && address!="" && clientCompany!="" && areaId!=""){
                 $.ajax({
                     type:"POST",
-                    url:"/addUser",
-                    data:{"username":username,"password":password,"realName":realName, "mobile":mobile, "address":address, "email":email},
+                    url:"/addMonitorpoint",
+                    data:{"name":name,"address":address,"clientCompany":clientCompany, "areaId":areaId,},
                     dataType : "text",
-                    success:function(data){
-// 					alert(data);
-                        // 如果返回数据不为空，更改“房源信息”
-                        if(data=="1"){
-                            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'用户名已存在', ok:true,});
-                            $("#username").css("background", "#EEE");
-                            $("#username").focus();
-                            return false;
-                        }else if(data=="0"){
-                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'用户添加成功', ok:true,});
+                    success:function(data) {
+                        if (data == "0") {
+                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'监测点添加成功', ok:true,});
                         }
                     }
                 });
@@ -122,17 +136,22 @@
                 <tr>
                     <td class="ui_text_lt">区域</td>
                     <td class="ui_text_lt">
-                        <select name="province" id="province" class="ui_select01" onchange="getSonArea(this.value,city)">
+                        <select name="province" id="province" class="ui_select01" onchange="getSonArea(this.value,'city')">
                             @if(!isEmpty(provinces)){
                             @for(province in provinces){
-                            <option value=${province.id}>${province.areaName}</option>
+                            <option value=${province.id}>${province.name}</option>
                             @}
                             @}
                         </select>
                     </td>
-                    <td class="ui_text_lt">
-                        <select name="city" id="city" class="ui_select01" onchange="getSonArea(this.value,district)"/>
-                    </td>
+                        <td class="ui_text_lt">
+                            <select name="city" id="city" class="ui_select01" onchange="getSonArea(this.value,district)"/>
+                            @if(!isEmpty(cities)){
+                            @for(city in cities){
+                            <option value=${city.id}>${city.name}</option>
+                            @}
+                            @}
+                        </td>
                     <td class="ui_text_lt">
                         <select name="district" id="district" class="ui_select01"/>
                     </td>

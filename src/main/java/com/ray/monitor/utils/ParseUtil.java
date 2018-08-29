@@ -1,6 +1,7 @@
 package com.ray.monitor.utils;
 
 import com.ray.monitor.core.Constants;
+import com.ray.monitor.model.Area;
 import com.ray.monitor.model.MonitorPoint;
 import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TempInfo;
@@ -92,4 +93,12 @@ public class ParseUtil {
 
     }
 
+
+    public static List<AreaVO> getAreaVOS(List<Area> areaList){
+        List<AreaVO> areaVOS = new ArrayList<>();
+        for(Area elem: areaList){
+            areaVOS.add(new AreaVO(elem.getId(),elem.getAreaName()));
+        }
+        return areaVOS;
+    }
 }
