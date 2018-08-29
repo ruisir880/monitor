@@ -23,7 +23,5 @@ public interface UserInfoRepository extends CrudRepository<UserInfo, Long> {
 
     Page<UserInfo> findAll(Specification<UserInfo> spec, Pageable pageable);
 
-    @Query(value = "select u from UserInfo u left join fetch u.monitorPointList where u.uid=:userId ")
-    UserInfo findWithMonitorPoint(@Param(value="userId") long userId);
 
 }

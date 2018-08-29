@@ -3347,10 +3347,10 @@ insert into monitor_point(name,client_company,area_id) values('监测点1','clie
 insert into monitor_point(name,client_company,area_id) values('监测点2','clientcompany 上海交大',311200);
 insert into monitor_point(name,client_company,area_id) values('监测点3','clientcompany 南京大学',320102);
 
-insert into user_monitor_map(user_id,monitor_point_id) values(1,1);
+/*insert into user_monitor_map(user_id,monitor_point_id) values(1,1);
 insert into user_monitor_map(user_id,monitor_point_id) values(1,2);
 insert into user_monitor_map(user_id,monitor_point_id) values(2,2);
-insert into user_monitor_map(user_id,monitor_point_id) values(2,3);
+insert into user_monitor_map(user_id,monitor_point_id) values(2,3);*/
 
 insert into sensor_info(monitor_point_id,sensor_id) values(1,10);
 insert into sensor_info(monitor_point_id,sensor_id) values(1,8);

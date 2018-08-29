@@ -43,10 +43,10 @@ public class UserInfo implements Serializable {
             @JoinColumn(name = "roleId") })
     private List<RoleInfo> roleList;// 一个用户具有多个角色
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "UserMonitorMap", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
-            @JoinColumn(name = "monitorPointId  ") })
-    private List<MonitorPoint> monitorPointList;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "UserAreaMap", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
+            @JoinColumn(name = "areaId  ") })
+    private Area area;
 
     public long getUid() {
         return uid;
@@ -125,11 +125,12 @@ public class UserInfo implements Serializable {
         return this.username + this.salt;
     }
 
-    public List<MonitorPoint> getMonitorPointList() {
-        return monitorPointList;
+    public Area getArea() {
+        return area;
     }
 
-    public void setMonitorPointList(List<MonitorPoint> monitorPointList) {
-        this.monitorPointList = monitorPointList;
+    public void setArea(Area area) {
+        this.area = area;
     }
+
 }

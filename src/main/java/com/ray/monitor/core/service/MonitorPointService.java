@@ -14,4 +14,6 @@ public interface MonitorPointService {
     List<MonitorPoint> findAll();
 
     void save(MonitorPoint monitorPoint);
+
+    List<MonitorPoint> findByAreaId(long areaId);
 }

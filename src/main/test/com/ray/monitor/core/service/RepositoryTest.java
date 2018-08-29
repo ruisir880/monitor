@@ -71,8 +71,8 @@ public class RepositoryTest {
 
     @Test
     public void test_area() throws Exception {
-        Area area  =  areaRepository.findOne(0L);
-        System.out.println("========================"+area.getSonAreas().size());
+        Area area  =  areaRepository.findOne(110100L);
+        System.out.println("========================"+area.getParentArea().getAreaName());
     }
 
     @Test
@@ -159,11 +159,6 @@ public class RepositoryTest {
        // sensorInfoService.deleteSensor(1L,"7");
     }
 
-    @Test
-    public void test_Queryuser() throws Exception {
-       UserInfo userInfo = userInfoRepository.findWithMonitorPoint(3L);
-        System.out.println("========================================="+userInfo.getMonitorPointList().size());
-    }
 
     @Autowired
     private MonitorCache monitorCache;

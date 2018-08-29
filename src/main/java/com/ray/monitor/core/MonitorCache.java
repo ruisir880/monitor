@@ -3,6 +3,7 @@ package com.ray.monitor.core;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.ray.monitor.core.repository.MonitorRepository;
 import com.ray.monitor.core.repository.UserInfoRepository;
 import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.model.MonitorPoint;
@@ -21,22 +22,22 @@ import java.util.concurrent.ExecutionException;
  */
 @Service
 public class MonitorCache implements MonitorCacheListener {
-    private Cache<Long,List<MonitorPoint>> cache = CacheBuilder.newBuilder().softValues().build();
+    private Cache<Long,List<MonitorPoint>> AREAMONITORCACHE = CacheBuilder.newBuilder().softValues().build();
+
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
+    private MonitorRepository monitorRepository;
 
     @Override
-    public void reset(long userId) {
-        cache.invalidate(userId);
+    public void reset(long areaId) {
+        AREAMONITORCACHE.invalidate(areaId);
     }
 
-    public List<MonitorPoint> get(long userId) throws ExecutionException {
-       return cache.get(userId, new Callable<List<MonitorPoint>>() {
+    public List<MonitorPoint> get(long areaId) throws ExecutionException {
+        return AREAMONITORCACHE.get(areaId, new Callable<List<MonitorPoint>>() {
             @Override
             public List<MonitorPoint> call() throws Exception {
-                UserInfo userInfo = userInfoRepository.findWithMonitorPoint(userId);
-                return userInfo.getMonitorPointList();
+                return monitorRepository.findByAreaId(areaId);
             }
         });
     }

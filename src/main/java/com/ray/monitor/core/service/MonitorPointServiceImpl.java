@@ -31,4 +31,8 @@ public class MonitorPointServiceImpl implements MonitorPointService{
         monitorRepository.save(monitorPoint);
     }
 
+    @Override
+    public List<MonitorPoint> findByAreaId(long areaId) {
+        return monitorRepository.findByAreaId(areaId);
+    }
 }

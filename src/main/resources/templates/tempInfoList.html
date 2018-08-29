@@ -52,7 +52,7 @@
                             item = "<tr><td>"+sensorname
                                     +"</td> <td>"+elem.genTime
                                     +"</td> <td>"+elem.temp
-                                    +"</td> <td>"+elem.state
+                                    +"</td> <td>"+result.tempVO.sensorVOList[i].threshold
                                     +"</td> </tr>";
                             $('.table').append(item);
                         }
@@ -143,7 +143,7 @@
                         <th>传感器名</th>
                         <th>时间</th>
                         <th>温度</th>
-                        <th>状态</th>
+                        <th>传感器阈值</th>
                     </tr>
                 </table>
             </div>

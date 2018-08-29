@@ -10,6 +10,7 @@
     <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
     <script  src="${ctxPath}/scripts/My97DatePicker/WdatePicker.js" type="text/javascript" defer="defer"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/area.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -32,37 +33,6 @@
             }
         });
 
-        function getSonArea(areaId, nextSelect){
-            var controll
-            if (nextSelect == 'city') {
-                controll= $('#city')
-            }else {
-                controll= $('#district')
-            }
-            controll.empty()
-
-            var firstId
-            $.ajax({
-                type:"GET",
-                url:"/getSonAreas",
-                data:{"areaId":areaId},
-                dataType : "text",
-                success:function(data){
-                    var elem
-                    var result = eval(data);
-                    firstId = result[0].id
-                    for (var i in result) {
-                        elem = result[i]
-                        controll.append("<option value=" + elem.id + ">" + elem.name + "</option>");
-                    }
-
-                    if (nextSelect == 'city') {
-                        getSonArea(firstId,'district')
-                    }
-                }
-            });
-
-        }
 
         function checkSubmit(){
             var name = $('#name').val();
@@ -139,6 +109,7 @@
                     </td>
                 </tr>
 
+                    @if(!isEmpty(monitorPoint)){
                 <tr>
                     <td class="ui_text_lt">区域</td>
                     <td class="ui_text_lt">
@@ -151,17 +122,22 @@
                         </select>
                     </td>
                         <td class="ui_text_lt">
-                            <select name="city" id="city" class="ui_select01" onchange="getSonArea(this.value,district)"/>
+                            <select name="city" id="city" class="ui_select01" onchange="getSonArea(this.value,district)">
+                                <option value="">--请选择--</option>
                             @if(!isEmpty(cities)){
                             @for(city in cities){
                             <option value=${city.id}>${city.name}</option>
                             @}
                             @}
+                            </select>
                         </td>
                     <td class="ui_text_lt">
-                        <select name="district" id="district" class="ui_select01"/>
+                        <select name="district" id="district" class="ui_select01">
+                            <option value="">--请选择--</option>
+                        </select>
                     </td>
                 </tr>
+                    @}
 
                 <tr>
                     <td class="ui_text_lt" width="80">地址</td>

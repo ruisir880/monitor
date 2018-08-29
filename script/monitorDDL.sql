@@ -61,6 +61,14 @@ create table area(
   primary key (id)
 );
 
+create table user_area_map(
+  user_id bigint,
+  area_id bigint
+);
+alter table user_area_map add constraint uq_user_area unique (user_id,area_id);
+alter table user_area_map add constraint fk_user_area_u foreign key (user_id)  references user_info (uid);
+alter table user_area_map add constraint fk_user_area_a foreign key (area_id)  references area (id);
+
 create table monitor_point(
   id bigint not null auto_increment,
   name varchar(50) not null,
@@ -73,6 +81,7 @@ create table monitor_point(
 alter table monitor_point add constraint fk_monitor_point foreign key (area_id)  references area (id);
 
 
+/*
 create table user_monitor_map(
   user_id bigint,
   monitor_point_id bigint
@@ -80,6 +89,7 @@ create table user_monitor_map(
 alter table user_monitor_map add constraint uq_user_monitor unique (user_id,monitor_point_id);
 alter table user_monitor_map add constraint fk_user_monitor_u foreign key (user_id)  references user_info (uid);
 alter table user_monitor_map add constraint fk_user_monitor_m foreign key (monitor_point_id)  references monitor_point (id);
+*/
 
 
 create table sensor_info(

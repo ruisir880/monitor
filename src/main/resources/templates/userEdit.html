@@ -10,6 +10,8 @@
     <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
     <script  src="${ctxPath}/scripts/My97DatePicker/WdatePicker.js" type="text/javascript" defer="defer"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/area.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/user.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             /*
@@ -47,21 +49,20 @@
             var mobile = $("#mobile").val();
             var address = $("#address").val();
             var email = $("#email").val();
+            var areaId
+            if($('#district').val()){
+                areaId = $('#district').val()
+            }else {
+                areaId = $('#city').val()
+            }
             if(realName!="" && mobile!="" && email!=""){
                 $.ajax({
                     type:"POST",
                     url:"/updateUser",
-                    data:{"uid":userId,"password":password,"realName":realName, "mobile":mobile, "address":address, "email":email},
+                    data:{"uid":userId,"password":password,"realName":realName, "mobile":mobile, "address":address, "email":email,"areaId":areaId},
                     dataType : "text",
                     success:function(data){
-// 					alert(data);
-                        // 如果返回数据不为空，更改“房源信息”
-                        if(data=="1"){
-                            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'用户名已存在', ok:true,});
-                            $("#username").css("background", "#EEE");
-                            $("#username").focus();
-                            return false;
-                        }else if(data=="0"){
+                       if(data=="0"){
                             art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'修改成功', ok:true,});
                         }
                     }
@@ -70,34 +71,6 @@
             return true;
         }
 
-        /** 表单验证  **/
-        function validateForm(){
-            if($("#username").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'用户名', ok:true,});
-                return false;
-            }
-            if($("#password").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'密码', ok:true,});
-                return false;
-            }
-            if($("#realName").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'真实姓名', ok:true,});
-                return false;
-            }
-            if($("#mobile").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'电话号码', ok:true,});
-                return false;
-            }
-            if($("#eamil").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'邮件地址', ok:true,});
-                return false;
-            }
-            if($("#role").val()==""){
-                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'用户角色', ok:true,});
-                return false;
-            }
-            return true;
-        }
     </script>
 </head>
 <body>
@@ -145,6 +118,38 @@
                     <td class="ui_text_lt" width="80">邮件地址</td>
                     <td class="ui_text_lt">
                         <input type="text" id="email" name="email" value="${userInfo.email}"  class="ui_input_txt02"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="ui_text_lt">所属区域</td>
+                    <td class="ui_text_lt">
+                        <select name="province" id="province" class="ui_select01" onchange="getSonArea(this.value,'city')">
+                            @if(!isEmpty(provinces)){
+                            @for(province in provinces){
+                            <option value=${province.id}
+                                    @if(province.id == provinceId){
+                                    selected="true"
+                                    @}
+                            >${province.name}</option>
+                            @}
+                            @}
+                        </select>
+                    </td>
+                    <td class="ui_text_lt">
+                        <select name="city" id="city" class="ui_select01" onchange="getSonArea(this.value,'district')">
+                            <option value="">--请选择--</option>
+                            @if(!isEmpty(cities)){
+                            @for(city in cities){
+                            <option value=${city.id}>${city.name}</option>
+                            @}
+                            @}
+                        </select>
+                    </td>
+                    <td class="ui_text_lt">
+                        <select name="district" id="district" class="ui_select01">
+                            <option value="">--请选择--</option>
+                        </select>
                     </td>
                 </tr>
 

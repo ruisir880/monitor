@@ -53,7 +53,7 @@ public class TempController {
         modelAndView.setViewName("currentTempChart");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getUid());
+            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -68,7 +68,7 @@ public class TempController {
         modelAndView.setViewName("tempInfoList");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getUid());
+            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -83,7 +83,7 @@ public class TempController {
         modelAndView.setViewName("tempInfoChart");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getUid());
+            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
