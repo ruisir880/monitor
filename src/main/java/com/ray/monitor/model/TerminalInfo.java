@@ -3,6 +3,7 @@ package com.ray.monitor.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Ray Rui on 8/30/2018.
@@ -22,6 +23,9 @@ public class TerminalInfo implements Serializable {
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
     @JoinColumn(name="monitor_point_id")
     private MonitorPoint monitorPoint;
+
+    @OneToMany(mappedBy="terminalInfo",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    private List<SensorInfo> sensorInfoList;
 
     public long getId() {
         return id;
@@ -53,5 +57,13 @@ public class TerminalInfo implements Serializable {
 
     public void setMonitorPoint(MonitorPoint monitorPoint) {
         this.monitorPoint = monitorPoint;
+    }
+
+    public List<SensorInfo> getSensorInfoList() {
+        return sensorInfoList;
+    }
+
+    public void setSensorInfoList(List<SensorInfo> sensorInfoList) {
+        this.sensorInfoList = sensorInfoList;
     }
 }

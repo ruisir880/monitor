@@ -40,16 +40,18 @@
                     var item;
                     var elem;
                     var  sensorname;
+                    var terminalName;
                     currentPage= result.page + 1
                     totalPage = result.totalPage
                     $("#totalCount").append(result.totalCount)
                     $("#page").append(currentPage)
                     for (var i in result.tempVO.sensorVOList) {
                         sensorname = result.tempVO.sensorVOList[i].sensorName
-
+                        terminalName = result.tempVO.sensorVOList[i].terminalName
                         for(var j in result.tempVO.sensorVOList[i].tempHistoryVOList) {
                             elem = result.tempVO.sensorVOList[i].tempHistoryVOList[j]
                             item = "<tr><td>"+sensorname
+                                +"</td> <td>"+terminalName
                                     +"</td> <td>"+elem.genTime
                                     +"</td> <td>"+elem.temp
                                     +"</td> <td>"+result.tempVO.sensorVOList[i].threshold
@@ -141,6 +143,7 @@
                     <tr>
                         </th>
                         <th>传感器名</th>
+                        <th>终端名</th>
                         <th>时间</th>
                         <th>温度</th>
                         <th>传感器阈值</th>

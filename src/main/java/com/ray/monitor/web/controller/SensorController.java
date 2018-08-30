@@ -1,10 +1,12 @@
 package com.ray.monitor.web.controller;
 
 import com.ray.monitor.core.MonitorCache;
+import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.core.service.SensorInfoService;
-import com.ray.monitor.model.MonitorPoint;
-import com.ray.monitor.model.SensorInfo;
-import com.ray.monitor.model.UserInfo;
+import com.ray.monitor.model.*;
+import com.ray.monitor.utils.ParseUtil;
+import com.ray.monitor.web.vo.CurrentTempVO;
+import com.ray.monitor.web.vo.MonitorSensorVO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -30,6 +33,9 @@ public class SensorController {
 
     @Autowired
     private SensorInfoService sensorInfoService;
+
+    @Autowired
+    private MonitorPointService monitorPointService;
 
     @Autowired
     private MonitorCache monitorCache;
@@ -116,6 +122,14 @@ public class SensorController {
             return 1;
         }
         return 0;
+    }
+
+
+    @RequestMapping("/checkSensorInfo")
+    @ResponseBody
+    public MonitorSensorVO checkSensorInfo(long monitorPointId) {
+        MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(monitorPointId);
+        return  ParseUtil.getMonitorSensorVO(monitorPoint);
     }
 
 

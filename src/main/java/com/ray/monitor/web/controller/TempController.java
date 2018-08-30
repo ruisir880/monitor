@@ -3,11 +3,10 @@ package com.ray.monitor.web.controller;
 import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.core.service.TempInfoService;
-import com.ray.monitor.model.MonitorPoint;
-import com.ray.monitor.model.SensorInfo;
-import com.ray.monitor.model.TempInfo;
-import com.ray.monitor.model.UserInfo;
+import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
+import com.ray.monitor.web.vo.CurrentTempVO;
+import com.ray.monitor.web.vo.MonitorSensorVO;
 import com.ray.monitor.web.vo.PageTempVO;
 import com.ray.monitor.web.vo.TempVO;
 import org.apache.shiro.SecurityUtils;
@@ -94,14 +93,15 @@ public class TempController {
 
     @RequestMapping("/checkCurrentTempInfo")
     @ResponseBody
-    public TempVO checkCurrentTempInfo(long monitorPointId) {
+    public CurrentTempVO checkCurrentTempInfo(long monitorPointId) {
         MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(monitorPointId);
         List<Long> sensorIdList = new ArrayList<>();
-        for(SensorInfo sensorInfo : monitorPoint.getSensorInfoList()){
-            sensorIdList.add(sensorInfo.getId());
+        for(TerminalInfo terminalInfo : monitorPoint.getTerminalInfoList()){
+            for(SensorInfo sensorInfo : terminalInfo.getSensorInfoList())
+                sensorIdList.add(sensorInfo.getId());
         }
         List<TempInfo> tempInfoList = tempInfoService.findBySensorIds(sensorIdList);
-        return  ParseUtil.setTempIntoSensor(monitorPoint.getSensorInfoList(),tempInfoList);
+        return  ParseUtil.getCurrentTempVO(tempInfoList);
     }
 
     @RequestMapping("/checkTempInfoChart")
@@ -142,17 +142,7 @@ public class TempController {
         modelAndView.setViewName("tempInfoList");
         Page<TempInfo> tempInfoPage =  tempInfoService.pageUserQuery(monitorPointId, page, startDate, endDate, null);
         return ParseUtil.getPageTempVO(tempInfoPage);
-       /* modelAndView.addObject("tempPage", tempInfoPage);
 
-        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        try {
-            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getUid());
-            modelAndView.addObject("monitorPointList",monitorPointList);
-        } catch (ExecutionException e) {
-            logger.error(LOG_GETMONITOR_ERROR,e);
-        }
-
-        return modelAndView;*/
     }
 
 

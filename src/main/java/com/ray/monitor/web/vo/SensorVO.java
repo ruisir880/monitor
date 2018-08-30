@@ -14,28 +14,17 @@ public class SensorVO implements Serializable{
 
     private String sensorName;
 
-    private double crruentTemp;
-
-    private Date currentTempTime;
-
-    private String state;
+    private String terminalName;
 
     private double threshold;
 
     private List<TempHistoryVO> tempHistoryVOList;
 
-    public SensorVO(long sensorId, double crruentTemp, String sensorName,String state,double threshold) {
-        this.sensorId = sensorId;
-        this.crruentTemp = crruentTemp;
-        this.sensorName = sensorName;
-        this.state = state;
-        this.threshold = threshold;
-    }
 
-
-    public SensorVO(long sensorId, String sensorName, double threshold) {
+    public SensorVO(long sensorId, String sensorName,String terminalName,double threshold) {
         this.sensorId = sensorId;
         this.sensorName = sensorName;
+        this.terminalName = terminalName;
         this.threshold = threshold;
     }
 
@@ -47,12 +36,12 @@ public class SensorVO implements Serializable{
         this.sensorId = sensorId;
     }
 
-    public double getCrruentTemp() {
-        return crruentTemp;
+    public String getTerminalName() {
+        return terminalName;
     }
 
-    public void setCrruentTemp(double crruentTemp) {
-        this.crruentTemp = crruentTemp;
+    public void setTerminalName(String terminalName) {
+        this.terminalName = terminalName;
     }
 
     public String getSensorName() {
@@ -61,22 +50,6 @@ public class SensorVO implements Serializable{
 
     public void setSensorName(String sensorName) {
         this.sensorName = sensorName;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public Date getCurrentTempTime() {
-        return currentTempTime;
-    }
-
-    public void setCurrentTempTime(Date currentTempTime) {
-        this.currentTempTime = currentTempTime;
     }
 
     public List<TempHistoryVO> getTempHistoryVOList() {

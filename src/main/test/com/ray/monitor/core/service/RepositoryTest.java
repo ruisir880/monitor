@@ -80,9 +80,9 @@ public class RepositoryTest {
 
     @Test
     public void test_sensor() throws Exception {
-        SensorInfo sensor  =  sensorRepository.findOne(1L);
+        SensorInfo sensor  =  sensorRepository.findOne(2L);
         System.out.println("========================"+sensor.getGenTime());
-        System.out.println("========================"+sensor.getMonitorPoint().getName());
+        System.out.println("========================"+sensor.getTerminalInfo().getMonitorPoint().getName());
         System.out.println("========================" + sensor.getCommentInfoList().size());
 
         Set<SensorInfo> sensorInfos = sensorRepository.findSensorInfoByMonitorIdWithTemp(1L);

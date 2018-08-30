@@ -1,13 +1,14 @@
 package com.ray.monitor.web.vo;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 /**
- * Created by Ray Rui on 8/30/2018.
+ * Created by rui on 2018/8/19.
  */
-public class TerminalVO implements Serializable {
-    private static final long serialVersionUID = -3753348935742250557L;
+public class TerminalVO implements Serializable{
+
+    private static final long serialVersionUID = -1388657357077787189L;
 
     private long id;
 
@@ -15,10 +16,19 @@ public class TerminalVO implements Serializable {
 
     private String genTime;
 
+    private List<SensorVO> sensorVOList;
+
     public TerminalVO(long id, String name, String genTime) {
         this.id = id;
         this.name = name;
         this.genTime = genTime;
+    }
+
+    public TerminalVO(long id, String name, String genTime, List<SensorVO> sensorVOList) {
+        this.id = id;
+        this.name = name;
+        this.genTime = genTime;
+        this.sensorVOList = sensorVOList;
     }
 
     public long getId() {
@@ -43,5 +53,13 @@ public class TerminalVO implements Serializable {
 
     public void setGenTime(String genTime) {
         this.genTime = genTime;
+    }
+
+    public List<SensorVO> getSensorVOList() {
+        return sensorVOList;
+    }
+
+    public void setSensorVOList(List<SensorVO> sensorVOList) {
+        this.sensorVOList = sensorVOList;
     }
 }

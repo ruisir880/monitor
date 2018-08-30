@@ -18,34 +18,6 @@ public class ParseUtil {
 
     public static final String DATETIME_PARTTERN = "yyyyMMddhhmmss";
 
-    public static TempVO setTempIntoSensor(Set<SensorInfo> sensorInfoList, List<TempInfo> tempInfoList){
-        Map<Long,TempInfo> tempInfoMap = new HashMap<>();
-        List<SensorVO> sensorVOlist = new ArrayList<>();
-        TempVO tempVO = new TempVO();
-
-        for(TempInfo tempInfo : tempInfoList){
-            tempInfoMap.put(tempInfo.getSensorInfo().getId(),tempInfo);
-        }
-        for(SensorInfo sensor : sensorInfoList){
-            TempInfo temp = tempInfoMap.get(sensor.getId());
-            tempVO.setMonitorPointName(sensor.getMonitorPoint().getName());
-            if(temp!=null){
-                sensorVOlist.add(new SensorVO(sensor.getId(),temp.getTemperature(),sensor.getSensorId(),temp.getState(),sensor.getThresholdValue()));
-            }else {
-                sensorVOlist.add(new SensorVO(sensor.getId(),0,sensor.getSensorId(), Constants.TEMP_STATE_NORMAL,sensor.getThresholdValue()));
-            }
-
-        }
-        tempVO.setSensorVOList(sensorVOlist);
-        Collections.sort(sensorVOlist, new Comparator<SensorVO>() {
-            @Override
-            public int compare(SensorVO o1, SensorVO o2) {
-                return o1.getSensorName().compareTo(o2.getSensorName());
-            }
-
-        });
-        return tempVO;
-    }
 
     public static TempVO getTempInto( List<TempInfo> tempInfoList){
         Map<Long,SensorVO> tempInfoMap = new LinkedHashMap<>();
@@ -54,8 +26,12 @@ public class ParseUtil {
         for(TempInfo tempInfo : tempInfoList){
             List<TempHistoryVO> tempHistoryVOs;
             if(!tempInfoMap.containsKey(tempInfo.getSensorInfo().getId())) {
-                tempVO.setMonitorPointName(tempInfo.getSensorInfo().getMonitorPoint().getName());
-                SensorVO sensorVO = new SensorVO(tempInfo.getSensorInfo().getId(),tempInfo.getSensorInfo().getSensorId(),tempInfo.getSensorInfo().getThresholdValue());
+                tempVO.setMonitorPointName(tempInfo.getSensorInfo().getTerminalInfo().getMonitorPoint().getName());
+                SensorVO sensorVO = new SensorVO(
+                        tempInfo.getSensorInfo().getId(),
+                        tempInfo.getSensorInfo().getSensorId(),
+                        tempInfo.getSensorInfo().getTerminalInfo().getTerminalId(),
+                        tempInfo.getSensorInfo().getThresholdValue());
                 tempInfoMap.put(tempInfo.getSensorInfo().getId(), sensorVO);
                 tempHistoryVOs = new ArrayList<>();
                 sensorVO.setTempHistoryVOList(tempHistoryVOs);
@@ -112,5 +88,52 @@ public class ParseUtil {
                     DateUtil.formatDate(terminalInfo.getGenTime())));
         }
         return terminalVOList;
+    }
+
+
+    public static CurrentTempVO getCurrentTempVO(List<TempInfo> tempInfoList ){
+        CurrentTempVO vo = new CurrentTempVO();
+        if(tempInfoList == null || tempInfoList.size() == 0){
+            return vo;
+        }
+
+        List<TemperatureVO> temperatureVOList = new ArrayList<>();
+        vo.setTemperatureVOList(temperatureVOList);
+        vo.setMonitorPointName(tempInfoList.get(0).getSensorInfo().getTerminalInfo().getMonitorPoint().getName());
+        for(TempInfo tempInfo: tempInfoList){
+            TemperatureVO temperatureVO = new TemperatureVO();
+            temperatureVO.setSensorName(tempInfo.getSensorInfo().getSensorId());
+            temperatureVO.setTerminalName(tempInfo.getSensorInfo().getTerminalInfo().getTerminalId());
+            temperatureVO.setCurrentTemp(tempInfo.getTemperature());
+            temperatureVO.setCurrentTempTime(DateUtil.formatDate(tempInfo.getGenTime()));
+            temperatureVO.setThreshold(tempInfo.getSensorInfo().getThresholdValue());
+            temperatureVOList.add(temperatureVO);
+        }
+        return vo;
+    }
+
+    public static MonitorSensorVO getMonitorSensorVO(MonitorPoint monitorPoint ){
+        MonitorSensorVO vo = new MonitorSensorVO();
+        if(monitorPoint == null){
+            return vo;
+        }
+        vo.setMonitorPointName(monitorPoint.getName());
+        if(monitorPoint.getTerminalInfoList() == null || monitorPoint.getTerminalInfoList().size() == 0){
+            return vo;
+        }
+
+        List<TerminalVO> terminalVOList = new ArrayList<>();
+        vo.setTerminalVOList(terminalVOList);
+        for(TerminalInfo terminalInfo : monitorPoint.getTerminalInfoList()){
+            List<SensorVO> sensorVOList = new ArrayList<>();
+            for(SensorInfo sensorInfo : terminalInfo.getSensorInfoList()){
+                sensorVOList.add(new SensorVO(sensorInfo.getId(),sensorInfo.getSensorId(),terminalInfo.getTerminalId(),sensorInfo.getThresholdValue()));
+            }
+            terminalVOList.add(new TerminalVO(terminalInfo.getId(),
+                    terminalInfo.getTerminalId(),
+                    DateUtil.formatDate(terminalInfo.getGenTime()),
+                    sensorVOList));
+        }
+        return vo;
     }
 }

@@ -23,15 +23,15 @@ public interface TempRepository extends CrudRepository<TempInfo, Long> {
     @Query(value = "select * from (SELECT * FROM temp_info where sensor_id in(:sensorIds) order by gen_time desc ) T group by T.sensor_id",nativeQuery = true)
     List<TempInfo> findBySensorId(@Param(value="sensorIds") List<Long> sensorIds);
 
-    @Query("select t from TempInfo t where t.sensorInfo.monitorPoint.id=:monitorPointId and t.genTime between :startDate and :endDate order by t.sensorInfo.id,t.genTime")
+    @Query("select t from TempInfo t where t.sensorInfo.terminalInfo.monitorPoint.id=:monitorPointId and t.genTime between :startDate and :endDate order by t.sensorInfo.id,t.genTime")
     List<TempInfo> findTempByCondition(@Param(value="monitorPointId") long monitorPointId,@Param(value="startDate")Date startDate,@Param(value="endDate")Date endDate);
 
 
     Page<TempInfo> findAll(Specification<TempInfo> spec, Pageable pageable);
 
 
-    @Query(value = "SELECT t FROM TempInfo t where t.sensorInfo.monitorPoint.id=:monitorPointId and genTime between :startDate and :endDate",
-            countQuery = "SELECT count(t) FROM TempInfo t where  t.sensorInfo.monitorPoint.id=:monitorPointId and genTime between :startDate and :endDate")
+    @Query(value = "SELECT t FROM TempInfo t where t.sensorInfo.terminalInfo.monitorPoint.id=:monitorPointId and genTime between :startDate and :endDate",
+            countQuery = "SELECT count(t) FROM TempInfo t where  t.sensorInfo.terminalInfo.monitorPoint.id=:monitorPointId and genTime between :startDate and :endDate")
     Page<TempInfo> findByPage(
             @Param(value="monitorPointId") long monitorPointId,
             @Param(value="startDate") Date startDate,

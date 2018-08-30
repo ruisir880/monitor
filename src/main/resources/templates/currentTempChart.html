@@ -26,10 +26,12 @@
             data: {"monitorPointId":$("#monitorPoint").val()},
             success: function (result) {
                 initChart()
-                for (var i in result.sensorVOList) {
+                var termp;
+                for (var i in result.temperatureVOList) {
+                    termp = result.temperatureVOList[i];
                     option.title.text = result.monitorPointName
-                    option.series[0].data[i] = result.sensorVOList[i].crruentTemp
-                    option.xAxis[0].data[i] = '传感器'+ result.sensorVOList[i].sensorName +"  阈值："+result.sensorVOList[i].threshold
+                    option.series[0].data[i] = termp.currentTemp
+                    option.xAxis[0].data[i] = '传感器'+ termp.sensorName +"  阈值："+termp.threshold
                 }
                 myChart.setOption(option)
             }

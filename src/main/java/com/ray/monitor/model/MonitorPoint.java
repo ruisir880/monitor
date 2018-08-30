@@ -30,7 +30,7 @@ public class MonitorPoint implements Serializable {
     private Area area;
 
     @OneToMany(mappedBy="monitorPoint",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    private Set<SensorInfo> sensorInfoList;
+    private Set<TerminalInfo> terminalInfoList;
 
     public long getId() {
         return id;
@@ -72,12 +72,12 @@ public class MonitorPoint implements Serializable {
         this.area = area;
     }
 
-    public Set<SensorInfo> getSensorInfoList() {
-        return sensorInfoList;
+    public Set<TerminalInfo> getTerminalInfoList() {
+        return terminalInfoList;
     }
 
-    public void setSensorInfoList(Set<SensorInfo> sensorInfoList) {
-        this.sensorInfoList = sensorInfoList;
+    public void setTerminalInfoList(Set<TerminalInfo> terminalInfoList) {
+        this.terminalInfoList = terminalInfoList;
     }
 
     public String getAddress() {

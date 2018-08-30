@@ -28,8 +28,8 @@ public class SensorInfo implements Serializable {
     private double thresholdValue;
 
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示company不能为空
-    @JoinColumn(name="monitor_point_id")//设置在employee表中的关联字段(外键)
-    private MonitorPoint monitorPoint;
+    @JoinColumn(name="terminal_id")//设置在employee表中的关联字段(外键)
+    private TerminalInfo terminalInfo;
 
     @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private Set<CommentInfo> commentInfoList;
@@ -62,14 +62,6 @@ public class SensorInfo implements Serializable {
         this.genTime = genTime;
     }
 
-    public MonitorPoint getMonitorPoint() {
-        return monitorPoint;
-    }
-
-    public void setMonitorPoint(MonitorPoint monitorPoint) {
-        this.monitorPoint = monitorPoint;
-    }
-
     public Set<CommentInfo> getCommentInfoList() {
         return commentInfoList;
     }
@@ -92,5 +84,13 @@ public class SensorInfo implements Serializable {
 
     public void setThresholdValue(double thresholdValue) {
         this.thresholdValue = thresholdValue;
+    }
+
+    public TerminalInfo getTerminalInfo() {
+        return terminalInfo;
+    }
+
+    public void setTerminalInfo(TerminalInfo terminalInfo) {
+        this.terminalInfo = terminalInfo;
     }
 }

@@ -15,12 +15,12 @@ import java.util.Set;
  */
 public interface SensorRepository extends CrudRepository<SensorInfo, Long> {
 
-    @Query(value = "select s  from SensorInfo s where s.monitorPoint.id=:monitorPointId order by s.id")
+    @Query(value = "select s  from SensorInfo s where s.terminalInfo.monitorPoint.id=:monitorPointId order by s.id")
     Set<SensorInfo> findSensorInfoByMonitorIdWithTemp(@Param(value="monitorPointId") long monitorPointId);
 
 
 
-    @Query(value = "select s  from SensorInfo s where monitorPoint.id=:monitorPointId and s.sensorId=:sensorName")
+    @Query(value = "select s  from SensorInfo s where s.terminalInfo.monitorPoint.id=:monitorPointId and s.sensorId=:sensorName")
     SensorInfo findBySensorName(
             @Param(value="monitorPointId") long monitorPointId,
             @Param(value="sensorName") String sensorName
@@ -31,7 +31,7 @@ public interface SensorRepository extends CrudRepository<SensorInfo, Long> {
     void delete(@Param(value="id") long id);
 
     @Modifying
-    @Query(value = "update SensorInfo set thresholdValue=:thresholdValue where monitorPoint.id=:monitorPointId and sensorId=:sensorName")
+    @Query(value = "update SensorInfo set thresholdValue=:thresholdValue where terminalInfo.monitorPoint.id=:monitorPointId and sensorId=:sensorName")
     void setThresholdValue(
             @Param(value="thresholdValue") double thresholdValue,
             @Param(value="monitorPointId") long monitorPointId,

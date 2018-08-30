@@ -5,6 +5,7 @@ import com.ray.monitor.core.repository.SensorRepository;
 import com.ray.monitor.core.repository.TempRepository;
 import com.ray.monitor.model.MonitorPoint;
 import com.ray.monitor.model.SensorInfo;
+import com.ray.monitor.model.TerminalInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,13 +35,13 @@ public class SensorInfoServiceImpl implements SensorInfoService{
 
 
     @Override
-    public SensorInfo addSensor(long monitorPointId,String sensorName) {
+    public SensorInfo addSensor(long terminalId,String sensorName) {
         SensorInfo sensorInfo = new SensorInfo();
         sensorInfo.setSensorId(sensorName);
         sensorInfo.setGenTime(new Date());
-        MonitorPoint monitorPoint = new MonitorPoint();
-        monitorPoint.setId(monitorPointId);
-        sensorInfo.setMonitorPoint(monitorPoint);
+        TerminalInfo terminalInfo = new TerminalInfo();
+        terminalInfo.setId(terminalId);
+        sensorInfo.setTerminalInfo(terminalInfo);
         return sensorRepository.save(sensorInfo);
     }
 
