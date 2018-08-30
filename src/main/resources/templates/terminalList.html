@@ -27,14 +27,29 @@
             });
         });
 
-        /** 模糊查询来电用户  **/
         function search(){
-            var username = $("#username").val();
-            var realName = $("#realName").val();
-            var mobile = $("#mobile").val();
-            var targetUrl = "/queryUserPage?username="+username+"&realName="+realName+"&mobile="+mobile;
-            window.location.href=targetUrl;
+            var monitorPoint = $("#monitorPoint").val();
+            $.ajax({
+                type: "GET",
+                url: "queryTerminalList",
+                data: {"monitorPointId":monitorPoint
+                },
+                success: function (result) {
+                    $("#terminalList tr:not(:first)").empty("");
+                    var elem
+                    for (var i in result) {
+                        elem = result[i]
+                        item = '<tr><td>'+elem.name
+                            +'</td> <td>'+elem.genTime
+                            +'</td><td> <a href="/terminalEdit.html?id=' +elem.id
+                            +'" class="edit">编辑</a> </td></tr>';
+                        $('.table').append(item);
+
+                    }
+                }
+            })
         }
+
 
     </script>
     <style>
@@ -42,17 +57,20 @@
     </style>
 </head>
 <body>
-<form id="submitForm" name="submitForm" action="/queryUserPage" method="get">
     <div id="container">
         <div class="ui_content">
             <div class="ui_text_indent">
                 <div id="box_border">
                     <div id="box_top">搜索</div>
                     <div id="box_center">
-                        用户名&nbsp;&nbsp;<input type="text" id="username" name="username" class="ui_input_txt02" />
-                        真实姓名&nbsp;&nbsp;<input type="text" id="realName" name="realName" class="ui_input_txt02" />
-                        电话号码&nbsp;&nbsp;<input type="text" id="mobile" name="mobile" class="ui_input_txt02" />
-
+                        检测点：&nbsp;&nbsp;
+                        <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
+                            @if(!isEmpty(monitorPointList)){
+                            @for(monitorPoint in monitorPointList){
+                            <option value="${monitorPoint.id}">监测点:${monitorPoint.name}</option>
+                            @}
+                            @}
+                        </select>
                     </div>
                     <div id="box_bottom">
                         <input type="button" value="查询" class="ui_input_btn01" onclick="search();" />
@@ -60,42 +78,20 @@
                 </div>
             </div>
         </div>
+
+
         <div class="ui_content">
             <div class="ui_tb">
-                <table class="table" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                <table class="table" id="terminalList" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
                     <tr>
-
                         </th>
-                        <th>选择</th>
-                        <th>用户ID</th>
-                        <th>用户名</th>
-                        <th>真实姓名</th>
-                        <th>电话号码</th>
-                        <th>邮件</th>
+                        <th>名称</th>
+                        <th>建立时间</th>
                         <th>操作</th>
                     </tr>
-                    @if(!isEmpty(userPage)){
-                    @for(user in userPage){
-                    <tr>
-                        <td width="30"><input type="checkbox" value=${user.uid}/>
-                        </td>
-                        <td>${user.uid}</td>
-                        <td>${user.username}</td>
-                        <td>${user.realName}</td>
-                        <td>${user.mobile}</td>
-                        <td>${user.email}</td>
-                        <td>
-                            <a href="/userEdit.html?userId=${user.uid}" class="edit">编辑</a>
-                            <a href="javascript:del(${user.uid});">删除</a>
-                        </td>
-                    </tr>
-                    @}
-                    @}
                 </table>
             </div>
         </div>
     </div>
-</form>
-
 </body>
 </html>

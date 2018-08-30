@@ -1,10 +1,7 @@
 package com.ray.monitor.utils;
 
 import com.ray.monitor.core.Constants;
-import com.ray.monitor.model.Area;
-import com.ray.monitor.model.MonitorPoint;
-import com.ray.monitor.model.SensorInfo;
-import com.ray.monitor.model.TempInfo;
+import com.ray.monitor.model.*;
 import com.ray.monitor.web.vo.*;
 import org.springframework.data.domain.Page;
 
@@ -65,7 +62,10 @@ public class ParseUtil {
             }else {
                 tempHistoryVOs = tempInfoMap.get(tempInfo.getSensorInfo().getId()).getTempHistoryVOList();
             }
-            tempHistoryVOs.add(new TempHistoryVO(tempInfo.getTemperature(),tempInfo.getGenTime(),tempInfo.getState()));
+            tempHistoryVOs.add(new TempHistoryVO(
+                    tempInfo.getTemperature(),
+                    DateUtil.formatDate(tempInfo.getGenTime()),
+                    tempInfo.getState()));
         }
 
         tempVO.setSensorVOList(new ArrayList<SensorVO>(tempInfoMap.values()));
@@ -100,5 +100,17 @@ public class ParseUtil {
             areaVOS.add(new AreaVO(elem.getId(),elem.getAreaName()));
         }
         return areaVOS;
+    }
+
+    public static List<TerminalVO> getTerminalVOS(List<TerminalInfo> terminalInfoList){
+        List<TerminalVO> terminalVOList = new ArrayList<>();
+
+        for(TerminalInfo terminalInfo : terminalInfoList){
+            terminalVOList.add(new TerminalVO(
+                    terminalInfo.getId(),
+                    terminalInfo.getTerminalId(),
+                    DateUtil.formatDate(terminalInfo.getGenTime())));
+        }
+        return terminalVOList;
     }
 }

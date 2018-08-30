@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>电力测温智能化管理</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript"  src="${ctxPath}/scripts/authority/commonAll.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
+    <script  src="${ctxPath}/scripts/My97DatePicker/WdatePicker.js" type="text/javascript" defer="defer"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $("#submitbutton").click(function() {
+                if(validateForm()){
+                    checkSubmit();
+                }
+            });
+
+            $("#cancelbutton").click(function() {
+                $('#name').val('');
+                $('#monitorPoint').val();
+            });
+
+            var result = 'null';
+            if(result =='success'){
+                /**  关闭弹出iframe  **/
+                window.parent.$.fancybox.close();
+            }
+        });
+
+
+        function checkSubmit(){
+            var name = $('#name').val();
+            var monitorPoint = $('#monitorPoint').val();
+            var terminalId = $('#terminalId').text().trim();
+            if(name!="" && monitorPoint!="" ){
+                $.ajax({
+                    type:"POST",
+                    url:"/editTerminal",
+                    data:{
+                        "name":name,
+                        "monitorPointId":monitorPoint,
+                        "terminalId":terminalId
+                    },
+                    dataType : "text",
+                    success:function(data) {
+                        if (data == "0") {
+                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'添加成功', ok:true,});
+                        }else if (data == "1") {
+                            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'终端已存在', ok:true,});
+                        }
+                    }
+                });
+            }
+            return true;
+        }
+
+        /** 表单验证  **/
+        function validateForm(){
+            if($("#name").val()==""){
+                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'名称', ok:true,});
+                return false;
+            }
+            if($("#monitorPoint").val()==""){
+                art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'监测点', ok:true,});
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+<form id="submitForm" name="submitForm" method="post">
+    <p hidden id="terminalId" >
+        @if(!isEmpty(terminal)){
+        ${terminal.terminalId}
+        @}
+    </p>
+    <div id="container">
+        <div id="nav_links">
+            当前位置：基础数据&nbsp;>&nbsp;<span style="color: #1A5CC6;">终端</span>
+            <div id="page_close">
+                <a href="javascript:parent.$.fancybox.close();">
+                    <img  src="${ctxPath}/images/common/page_close.png" width="20" height="20" style="vertical-align: text-top;"/>
+                </a>
+            </div>
+        </div>
+        <td class="ui_content">
+            <form id="eidtMonitorpoint" action="">
+                <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
+                <tr>
+                    <td class="ui_text_lt" width="80">名称</td>
+                    <td class="ui_text_lt">
+                        @if(!isEmpty(terminal)){}
+                        <input type="text" id="name" name="name"
+                               @if(!isEmpty(terminal)){
+                               value="${terminal.terminalId}"
+                               @}
+                               class="ui_input_txt02"/>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="ui_text_lt">所属监测点</td>
+                    <td class="ui_text_lt">
+                        <select name="monitorPoint" id="monitorPoint" class="ui_select01">
+                            @if(!isEmpty(monitorPointList)){
+                            @for(monitorPoint in monitorPointList){
+                            <option value=${monitorPoint.id}
+                                    @if(!isEmpty(monitorpointId) && monitorPoint.id==monitorpointId){
+                                    selected="true"
+                                    @}
+                            >${monitorPoint.name}</option>
+                            @}
+                            @}
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td>
+                    <td class="ui_text_lt">
+                        &nbsp;<input id="submitbutton" type="button" value="提交" class="ui_input_btn01"/>
+                        &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                    </td>
+                </tr>
+            </table>
+            </form>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

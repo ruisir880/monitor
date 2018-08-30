@@ -4,13 +4,7 @@ import com.ray.monitor.StartApplication;
 import com.ray.monitor.core.Constants;
 import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.repository.*;
-import com.ray.monitor.model.Area;
-import com.ray.monitor.model.CommentInfo;
-import com.ray.monitor.model.MonitorPoint;
-import com.ray.monitor.model.RoleInfo;
-import com.ray.monitor.model.SensorInfo;
-import com.ray.monitor.model.TempInfo;
-import com.ray.monitor.model.UserInfo;
+import com.ray.monitor.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,6 +166,14 @@ public class RepositoryTest {
     public void test_QueryMonitor() throws Exception {
         List<MonitorPoint> monitorPoints =  monitorRepository.findAll();
         System.out.println("==============================="+monitorPoints.size());
+    }
+
+    @Autowired
+    private TerminalRepository terminalRepository;
+    @Test
+    public void test_QueryTerminal() throws Exception {
+        List<TerminalInfo> terminalInfos = (List<TerminalInfo>) terminalRepository.findAll();
+        System.out.println("==============================="+terminalInfos.size());
     }
 
 }
