@@ -130,7 +130,7 @@
                             @if(!isEmpty(provinces)){
                             @for(province in provinces){
                             <option value=${province.id}
-                                    @if(province.id == provinceId){
+                                    @if(!isEmpty(provinceId) && province.id == provinceId){
                                     selected="true"
                                     @}
                             >${province.name}</option>
@@ -144,7 +144,7 @@
                             @if(!isEmpty(cities)){
                             @for(city in cities){
                             <option value=${city.id}
-                                    @if(city.id == cityId){
+                                    @if(!isEmpty(cityId) && city.id == cityId){
                                     selected="true"
                                     @}
                             >${city.name}</option>
@@ -164,10 +164,26 @@
                     <td class="ui_text_lt">
                         <select name="role" id="role" class="ui_select01">
                             <option value="">--请选择--</option>
-                            <option value="admin">管理员</option>
-                            <option value="projectManager">项目负责人</option>
-                            <option value="cooperation">协作单位</option>
-                            <option value="technician">技术专家</option>
+                            <option value="admin"
+                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="admin"){
+                                    selected="true"
+                                    @}
+                            >管理员</option>
+                            <option value="projectManager"
+                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="projectManager"){
+                                    selected="true"
+                                    @}
+                            >项目负责人</option>
+                            <option value="cooperation"
+                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="cooperation"){
+                                    selected="true"
+                                    @}
+                            >协作单位</option>
+                            <option value="technician"
+                                    @if(!isEmpty(userInfo.roleInfo) && userInfo.roleInfo.roleName=="technician"){
+                                    selected="true"
+                                    @}
+                            >技术专家</option>
                         </select>
                     </td>
                 </tr>

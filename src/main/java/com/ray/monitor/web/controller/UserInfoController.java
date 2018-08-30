@@ -127,7 +127,7 @@ public class UserInfoController {
         return 0;
     }
 
-    private void  setSelectedArea(ModelAndView modelAndView,UserInfo userInfo){
+    private void  setSelectedArea(ModelAndView modelAndView,UserInfo userInfo) throws ExecutionException {
         Area area = userInfo.getArea();
         if(area == null){
             return ;
@@ -135,7 +135,7 @@ public class UserInfoController {
         long provinceId;
         long cityId;
         long districtId;
-        if(area.getParentArea() !=null && area.getParentArea().getParentArea()!=null){
+        if(area.getParentArea() !=null && area.getParentArea().getParentArea()!=null && area.getParentArea().getParentArea().getId()!=0){
             provinceId = area.getParentArea().getParentArea().getId();
             cityId = area.getParentArea().getId();
             districtId = area.getId();
@@ -147,6 +147,8 @@ public class UserInfoController {
         modelAndView.addObject("provinceId",provinceId);
         modelAndView.addObject("cityId",cityId);
         modelAndView.addObject("districtId",districtId);
+        //用户编辑时,需要选定到用户所在的城市区域
+        modelAndView.addObject("cities",areaCache.getSonArea(provinceId));
     }
 
     public void setAreaInfo(ModelAndView modelAndView) throws ExecutionException {
