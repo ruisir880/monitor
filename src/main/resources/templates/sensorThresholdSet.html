@@ -6,6 +6,7 @@
     <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
     <link href="${ctxPath}/style/authority/sensor.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript"  src="${ctxPath}/scripts/sensorChart.js"></script>
     <title>电力测温智能化管理</title>
 </head>
 <script type="text/javascript">
@@ -52,118 +53,6 @@
         });
     }
 
-
-    function showData() {
-        event.stopPropagation();
-        myChart.refresh()
-        $.ajax({
-            type: "GET",
-            url: "checkCurrentTempInfo",
-            data: {"monitorPointId":$("#monitorPoint").val()},
-            success: function (result) {
-                initChart()
-                option.series[0].data[0].name = result.monitorPointName
-                for (var i in result.sensorVOList) {
-                    var color;
-                    if('normal'==result.sensorVOList[i].state){
-                        color=green;
-                    }else{
-                        color=red;
-                    }
-                    var a= {
-                        name: '传感器'+result.sensorVOList[i].sensorName + ' 阈值：'+result.sensorVOList[i].threshold,
-                        symbol: 'circle',
-                        symbolSize: 20,
-                        value: result.sensorVOList[i].crruentTemp,
-                        itemStyle: {
-                            normal: {
-
-                                color: color,
-                                label: {
-                                    show: true,
-                                    position: 'right'
-                                },
-
-                            },
-                            emphasis: {
-                                label: {
-                                    show: false
-                                },
-                                borderWidth: 0
-                            }
-                        }
-                    }
-                    option.series[0].data[0].children[i]=a
-                }
-                myChart.setOption(option)
-            }
-        });
-    }
-
-    function initChart() {
-        option = {
-            title : {
-                text: '传感器信息',
-            },
-            tooltip : {
-                trigger: 'item',
-                formatter: "{b}: {c}"
-            },
-            toolbox: {
-                show : true,
-                feature : {
-                    saveAsImage : {show: true}
-                }
-            },
-            calculable : false,
-
-            series : [
-                {
-                    name:'树图',
-                    type:'tree',
-                    orient: 'horizontal',  // vertical horizontal
-                    rootLocation: {x: 100, y: '50%'}, // 根节点位置  {x: 'center',y: 10}
-                    nodePadding: 20,
-                    symbol: 'circle',
-                    symbolSize: 40,
-                    itemStyle: {
-                        normal: {
-                            label: {
-                                show: true,
-                                position: 'inside',
-                                textStyle: {
-                                    color: '#cc9999',
-                                    fontSize: 15,
-                                    fontWeight:  'bolder'
-                                }
-                            },
-                            lineStyle: {
-                                color: '#000',
-                                width: 1,
-                                type: 'broken' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
-                            }
-                        },
-                        emphasis: {
-                            label: {
-                                show: true
-                            }
-                        }
-                    },
-                    data: [
-                        {
-                            name: 'xx变电站',
-                            value: 6,
-                            symbolSize: [90, 70],
-                            children: [
-                            ]
-                        }
-                    ]
-                }
-            ]
-        };
-
-    }
-
 </script>
 <body>
 <h1 style="text-align: center">传感器信息页面</h1>
@@ -193,7 +82,7 @@
 
     <div class="ui_content">
         <a href="javascript:void(0)" onclick="showData()" style="text-decoration: none;margin-left: 140px">传感器信息页面</a>
-        <div id="main" style="height:460px;width: 85%;margin: 20px auto 0"></div>
+        <div id="main" style="height:760px;width: 85%;margin: 20px auto 0"></div>
     </div>
 </div>
 

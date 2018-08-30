@@ -133,7 +133,19 @@ public class ParseUtil {
                     terminalInfo.getTerminalId(),
                     DateUtil.formatDate(terminalInfo.getGenTime()),
                     sensorVOList));
+            sensorVOList.sort(new Comparator<SensorVO>() {
+                @Override
+                public int compare(SensorVO o1, SensorVO o2) {
+                    return o1.getSensorName().compareTo(o2.getSensorName());
+                }
+            });
         }
+        terminalVOList.sort(new Comparator<TerminalVO>() {
+            @Override
+            public int compare(TerminalVO o1, TerminalVO o2) {
+                return o1.getGenTime().compareTo(o2.getGenTime());
+            }
+        });
         return vo;
     }
 }

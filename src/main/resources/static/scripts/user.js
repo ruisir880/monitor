@@ -16,7 +16,7 @@ function validateForm(){
         art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'电话号码', ok:true,});
         return false;
     }
-    if($("#eamil").val()==""){
+    if($("#email").val()==""){
         art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'邮件地址', ok:true,});
         return false;
     }
