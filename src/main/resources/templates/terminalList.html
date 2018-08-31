@@ -10,6 +10,7 @@
     <script type="text/javascript"  src="${ctxPath}/scripts/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
     <link rel="stylesheet" type="text/css" href="style/authority/jquery.fancybox-1.3.4.css" media="screen"></link>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/sensor.js"></script>
     <title>电力测温智能化管理</title>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -63,7 +64,7 @@
                 <div id="box_border">
                     <div id="box_top">搜索</div>
                     <div id="box_center">
-                        检测点：&nbsp;&nbsp;
+                        监测点：&nbsp;&nbsp;
                         <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
                             @if(!isEmpty(monitorPointList)){
                             @for(monitorPoint in monitorPointList){

@@ -6,6 +6,7 @@
     <script type="text/javascript" src="/webjars/echarts/4.0.4/dist/echarts.js"></script>
     <script type="text/javascript" src="/webjars/echarts/4.0.4/dist/echarts.common.min.js"></script>
     <script type="text/javascript" src="/webjars/echarts/4.0.4/theme/vintage.js"></script>
+    <script type="text/javascript" src="${ctxPath}/scripts/sensor.js"></script>
     <title>电力测温智能化管理</title>
 </head>
 <script type="text/javascript">
@@ -23,7 +24,9 @@
         $.ajax({
             type: "GET",
             url: "checkCurrentTempInfo",
-            data: {"monitorPointId":$("#monitorPoint").val()},
+            data: {"monitorPointId":$("#monitorPoint").val(),
+                "terminalId":$("#terminal").val()
+            },
             success: function (result) {
                 initChart()
                 var termp;
@@ -91,9 +94,8 @@
                 }
             ]
         };
-
-
     }
+
 
 </script>
 <body>
@@ -103,14 +105,25 @@
     <div class="ui_content">
         <div id="box_border">
             <div id="box_center">
-                检测点：&nbsp;&nbsp;
-                <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
+                监测点：&nbsp;&nbsp;
+                <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;" onchange="monitorPointSelect();">
                     @if(!isEmpty(monitorPointList)){
                     @for(monitorPoint in monitorPointList){
                     <option value=${monitorPoint.id}>监测点:${monitorPoint.name}</option>
                     @}
                     @}
                 </select>
+                &nbsp;&nbsp;
+                终端：&nbsp;&nbsp;
+                <select name="terminal" id="terminal" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
+                    <option value="">--请选择--</option>
+                    @if(!isEmpty(monitorPointList)){
+                    @for(terminal in monitorPointList[0].terminalInfoList){
+                    <option value=${terminal.id}>终端:${terminal.terminalId}</option>
+                    @}
+                    @}
+                </select>
+
             </div>
         </div>
     </div>

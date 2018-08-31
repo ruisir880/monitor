@@ -7,6 +7,7 @@
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
     <link href="${ctxPath}/style/authority/sensor.css" rel="stylesheet" type="text/css">
     <script type="text/javascript"  src="${ctxPath}/scripts/sensorChart.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/sensor.js"></script>
     <title>电力测温智能化管理</title>
 </head>
 <script type="text/javascript">
@@ -14,6 +15,7 @@
     var myChart
     var flt
     var sensorName
+    var terminal
 
     var red="#900"
     var yellow="#96992a"
@@ -32,7 +34,7 @@
         event.stopPropagation();
         sensorName = param.name;
         $("#sensorSpan").empty()
-        $("#sensorSpan").append(sensorName)
+        $("#sensorSpan").append(sensorName.substring(3,4))
     }
     
     function setThreshold() {
@@ -40,7 +42,7 @@
             type: "POST",
             url: "/setThreshold",
             data: {"monitorPointId":$("#monitorPoint").val(),
-                "sensorName":sensorName.substring(3),
+                "sensorName":sensorName.substring(3,4),
                 "threshold": $("#threshold").val()
             },
             success: function (result) {
@@ -69,10 +71,20 @@
         <div id="box_border">
             <div id="box_center">
                 检测点：&nbsp;&nbsp;
-                <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
+                <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;" onchange="monitorPointSelect();">
                     @if(!isEmpty(monitorPointList)){
                     @for(monitorPoint in monitorPointList){
                     <option value=${monitorPoint.id}>监测点:${monitorPoint.name}</option>
+                    @}
+                    @}
+                </select>
+                &nbsp;&nbsp;
+                终端：&nbsp;&nbsp;
+                <select name="terminal" id="terminal" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
+                    <option value="">--请选择--</option>
+                    @if(!isEmpty(monitorPointList)){
+                    @for(terminal in monitorPointList[0].terminalInfoList){
+                    <option value=${terminal.id}>终端:${terminal.terminalId}</option>
                     @}
                     @}
                 </select>

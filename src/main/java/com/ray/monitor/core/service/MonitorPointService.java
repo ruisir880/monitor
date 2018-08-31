@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface MonitorPointService {
 
-    MonitorPoint findMonitorPoint(long monitorPointId);
+    MonitorPoint findMonitorPoint(long monitorPointId,String... terminalId);
 
     List<MonitorPoint> findAll();
 

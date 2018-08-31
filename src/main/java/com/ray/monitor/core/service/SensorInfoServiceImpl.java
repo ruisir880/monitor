@@ -71,4 +71,9 @@ public class SensorInfoServiceImpl implements SensorInfoService{
     public void setThreshold(long monitorPointId, String sensorName, double threshold) {
         sensorRepository.setThresholdValue(threshold, monitorPointId, sensorName);
     }
+
+    @Override
+    public Set<SensorInfo> findByMPIdTerminalId(long monitorPointId, long terminalId) {
+        return sensorRepository.findByMPIdTerminalId(monitorPointId,terminalId);
+    }
 }

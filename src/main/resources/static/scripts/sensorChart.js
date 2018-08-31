@@ -2,7 +2,8 @@ function showData() {
     $.ajax({
         type: "GET",
         url: "checkSensorInfo",
-        data: {"monitorPointId":$("#monitorPoint").val()},
+        data: {"monitorPointId":$("#monitorPoint").val(),
+            "terminalId":$("#terminal").val()},
         success: function (result) {
             initChart()
             option.series[0].data[0].name = result.monitorPointName

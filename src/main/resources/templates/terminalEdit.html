@@ -10,6 +10,7 @@
     <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
     <script  src="${ctxPath}/scripts/My97DatePicker/WdatePicker.js" type="text/javascript" defer="defer"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/sensor.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -77,7 +78,7 @@
 <form id="submitForm" name="submitForm" method="post">
     <p hidden id="terminalId" >
         @if(!isEmpty(terminal)){
-        ${terminal.terminalId}
+        ${terminal.id}
         @}
     </p>
     <div id="container">

@@ -87,6 +87,12 @@ public class ParseUtil {
                     terminalInfo.getTerminalId(),
                     DateUtil.formatDate(terminalInfo.getGenTime())));
         }
+         Collections.sort(terminalVOList, new Comparator<TerminalVO>() {
+            @Override
+            public int compare(TerminalVO o1, TerminalVO o2) {
+                return o1.getId()> o2.getId() ? 1:-1;
+            }
+        });
         return terminalVOList;
     }
 

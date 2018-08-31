@@ -22,4 +22,11 @@ public interface TerminalRepository extends CrudRepository<TerminalInfo, Long> {
 
     @Query(value = "select t from TerminalInfo t where t.monitorPoint.id=:monitorpointId")
     List<TerminalInfo> findByMonitorpointId(@Param(value="monitorpointId") long monitorpointId);
+
+
+    @Query(value = "select t from TerminalInfo t where t.id=:id and t.monitorPoint.id=:monitorpointId")
+    TerminalInfo findByIdAndMonitorPoint(
+            @Param(value="id") long id,
+            @Param(value="monitorpointId") long monitorpointId
+    );
 }

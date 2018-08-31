@@ -97,11 +97,14 @@ public class TerminalController {
     @PostMapping("/editTerminal")
     @ResponseBody
     public int editTerminal(String name,long monitorPointId,String terminalId){
+        int result;
        if(StringUtils.isEmpty(terminalId)){
-           return addTerminal(name,monitorPointId);
+           result = addTerminal(name,monitorPointId);
        }else {
-           return updateTerminal(name,monitorPointId,Long.parseLong(terminalId));
+           result = updateTerminal(name,monitorPointId,Long.parseLong(terminalId));
        }
+        monitorCache.resetTerminal(monitorPointId);
+       return result;
     }
 
     private int updateTerminal(String name,long monitorPointId,long termianId){

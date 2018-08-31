@@ -2,19 +2,19 @@ package com.ray.monitor.web.controller;
 
 import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.service.MonitorPointService;
+import com.ray.monitor.core.service.SensorInfoService;
 import com.ray.monitor.core.service.TempInfoService;
 import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
-import com.ray.monitor.web.vo.CurrentTempVO;
-import com.ray.monitor.web.vo.MonitorSensorVO;
-import com.ray.monitor.web.vo.PageTempVO;
-import com.ray.monitor.web.vo.TempVO;
+import com.ray.monitor.web.vo.*;
+import org.apache.commons.collections.ArrayStack;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import static com.ray.monitor.core.Constants.LOG_GETMONITOR_ERROR;
@@ -39,6 +36,9 @@ public class TempController {
 
     @Autowired
     private MonitorPointService monitorPointService;
+
+    @Autowired
+    private SensorInfoService sensorInfoService;
 
     @Autowired
     private TempInfoService tempInfoService;
@@ -93,12 +93,20 @@ public class TempController {
 
     @RequestMapping("/checkCurrentTempInfo")
     @ResponseBody
-    public CurrentTempVO checkCurrentTempInfo(long monitorPointId) {
-        MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(monitorPointId);
+    public CurrentTempVO checkCurrentTempInfo(long monitorPointId,String terminalId) {
+        Set<SensorInfo> sensorInfoSet;
+        if(StringUtils.isEmpty(terminalId)){
+            sensorInfoSet = sensorInfoService.findSensorByMonitorPointId(monitorPointId);
+        }else {
+             sensorInfoSet = sensorInfoService.findByMPIdTerminalId(monitorPointId,Long.parseLong(terminalId));
+        }
+
         List<Long> sensorIdList = new ArrayList<>();
-        for(TerminalInfo terminalInfo : monitorPoint.getTerminalInfoList()){
-            for(SensorInfo sensorInfo : terminalInfo.getSensorInfoList())
-                sensorIdList.add(sensorInfo.getId());
+        for(SensorInfo sensorInfo : sensorInfoSet){
+            sensorIdList.add(sensorInfo.getId());
+        }
+        if(CollectionUtils.isEmpty(sensorIdList)){
+            return null;
         }
         List<TempInfo> tempInfoList = tempInfoService.findBySensorIds(sensorIdList);
         return  ParseUtil.getCurrentTempVO(tempInfoList);
@@ -143,6 +151,13 @@ public class TempController {
         Page<TempInfo> tempInfoPage =  tempInfoService.pageUserQuery(monitorPointId, page, startDate, endDate, null);
         return ParseUtil.getPageTempVO(tempInfoPage);
 
+    }
+
+
+    @RequestMapping("/getTerminal")
+    @ResponseBody
+    public List<TerminalVO> getTerminal(long monitorPointId) throws ExecutionException {
+        return monitorCache.gettTerminal(monitorPointId);
     }
 
 
