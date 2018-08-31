@@ -112,20 +112,7 @@
                     symbolSize: function (value){
                         return Math.round(value[2]/10) + 2;
                     },
-                    data: (function () {
-                        var d = [];
-                        var len = 0;
-                        var now = new Date();
-                        var value;
-                        while (len++ < 200) {
-                            d.push([
-                                new Date(2014, 9, 1, 0, len * 10000),
-                                (Math.random()*30).toFixed(2) - 0,
-                                (Math.random()*100).toFixed(2) - 0
-                            ]);
-                        }
-                        return d;
-                    })()
+                    data: []
                 }
 
             ]
@@ -144,7 +131,7 @@
                 <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;" onchange="monitorPointSelect();">
                     @if(!isEmpty(monitorPointList)){
                         @for(monitorPoint in monitorPointList){
-                    <option value=${monitorPoint.id}>监测点:${monitorPoint.name}</option>
+                    <option value=${monitorPoint.id}>监测点:${monitorPoint.monitorPointName}</option>
                         @}
                     @}
                 </select>
@@ -153,8 +140,8 @@
                 <select name="terminal" id="terminal" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
                     <option value="">--请选择--</option>
                     @if(!isEmpty(monitorPointList)){
-                    @for(terminal in monitorPointList[0].terminalInfoList){
-                    <option value=${terminal.id}>终端:${terminal.terminalId}</option>
+                    @for(terminal in monitorPointList[0].terminalVOList){
+                    <option value=${terminal.id}>终端:${terminal.name}</option>
                     @}
                     @}
                 </select>

@@ -5,6 +5,7 @@ import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.core.service.TerminalService;
 import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
+import com.ray.monitor.web.vo.MonitorSensorVO;
 import com.ray.monitor.web.vo.TerminalVO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class TerminalController {
         modelAndView.setViewName("terminalList");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorPoint> monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO> monitorPointList = monitorCache.get(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -67,7 +68,7 @@ public class TerminalController {
 
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorPoint> monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO> monitorPointList = monitorCache.get(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -85,7 +86,7 @@ public class TerminalController {
         modelAndView.addObject("monitorpointId",terminalInfo.getMonitorPoint().getId());
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorPoint> monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO> monitorPointList = monitorCache.get(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);

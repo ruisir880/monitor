@@ -11,6 +11,7 @@ import com.ray.monitor.model.MonitorPoint;
 import com.ray.monitor.model.TerminalInfo;
 import com.ray.monitor.model.UserInfo;
 import com.ray.monitor.utils.ParseUtil;
+import com.ray.monitor.web.vo.MonitorSensorVO;
 import com.ray.monitor.web.vo.TerminalVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ import java.util.concurrent.ExecutionException;
  */
 @Service
 public class MonitorCache implements MonitorCacheListener {
-    private Cache<Long,List<MonitorPoint>> AREAMONITORCACHE = CacheBuilder.newBuilder().softValues().build();
+    private Cache<Long,List<MonitorSensorVO>> AREAMONITORCACHE = CacheBuilder.newBuilder().softValues().build();
     private Cache<Long,List<TerminalVO>> MONITOR_TERMINAL_CACHE = CacheBuilder.newBuilder().softValues().build();
 
 
@@ -46,11 +47,11 @@ public class MonitorCache implements MonitorCacheListener {
         MONITOR_TERMINAL_CACHE.invalidate(monitorPointId);
     }
 
-    public List<MonitorPoint> get(long areaId) throws ExecutionException {
-        return AREAMONITORCACHE.get(areaId, new Callable<List<MonitorPoint>>() {
+    public List<MonitorSensorVO> get(long areaId) throws ExecutionException {
+        return AREAMONITORCACHE.get(areaId, new Callable<List<MonitorSensorVO>>() {
             @Override
-            public List<MonitorPoint> call() throws Exception {
-                return monitorRepository.findByAreaId(areaId);
+            public List<MonitorSensorVO> call() throws Exception {
+                return ParseUtil.getMonitorSensorVOList(monitorRepository.findByAreaId(areaId));
             }
         });
     }

@@ -47,7 +47,7 @@ public class SensorController {
         modelAndView.setViewName("transducerInfoChart");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -61,7 +61,7 @@ public class SensorController {
         modelAndView.setViewName("sensorInfoSet");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -76,7 +76,7 @@ public class SensorController {
         ModelAndView modelAndView = new ModelAndView();
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorPoint>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);

@@ -68,7 +68,7 @@
                         <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
                             @if(!isEmpty(monitorPointList)){
                             @for(monitorPoint in monitorPointList){
-                            <option value="${monitorPoint.id}">监测点:${monitorPoint.name}</option>
+                            <option value="${monitorPoint.id}">监测点:${monitorPoint.monitorPointName}</option>
                             @}
                             @}
                         </select>

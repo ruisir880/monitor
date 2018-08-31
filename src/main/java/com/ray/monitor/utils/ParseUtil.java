@@ -118,11 +118,20 @@ public class ParseUtil {
         return vo;
     }
 
+    public static List<MonitorSensorVO> getMonitorSensorVOList(List<MonitorPoint> monitorPointList){
+        List<MonitorSensorVO> voList = new ArrayList<>();
+        for(MonitorPoint monitorPoint : monitorPointList){
+            voList.add(getMonitorSensorVO(monitorPoint));
+        }
+        return voList;
+    }
+
     public static MonitorSensorVO getMonitorSensorVO(MonitorPoint monitorPoint ){
         MonitorSensorVO vo = new MonitorSensorVO();
         if(monitorPoint == null){
             return vo;
         }
+        vo.setId(monitorPoint.getId());
         vo.setMonitorPointName(monitorPoint.getName());
         if(monitorPoint.getTerminalInfoList() == null || monitorPoint.getTerminalInfoList().size() == 0){
             return vo;

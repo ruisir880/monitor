@@ -5,6 +5,7 @@ import com.ray.monitor.core.Constants;
 import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.repository.*;
 import com.ray.monitor.model.*;
+import com.ray.monitor.web.vo.MonitorSensorVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,7 +159,7 @@ public class RepositoryTest {
     private MonitorCache monitorCache;
     @Test
     public void test_Cache() throws Exception {
-        List<MonitorPoint> monitorPoints =  monitorCache.get(3L);
+        List<MonitorSensorVO> monitorPoints =  monitorCache.get(3L);
         System.out.println("==============================="+monitorPoints.size());
     }
 

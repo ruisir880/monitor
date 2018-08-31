@@ -9,10 +9,19 @@ import java.util.List;
 public class MonitorSensorVO implements Serializable {
     private static final long serialVersionUID = 2326851459488688471L;
 
+    private long id;
+
     private String monitorPointName;
 
     private List<TerminalVO> terminalVOList;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getMonitorPointName() {
         return monitorPointName;
