@@ -59,10 +59,16 @@
     }
 
     function deleteSensor(){
+        if($("#terminal").val() ==""){
+            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'请选择终端', ok:true,});
+            return;
+        }
+
+        var terminalId = $("#terminal").val()
         $.ajax({
             type:"POST",
             url:"/deleteSensor",
-            data:{"sensorname":deleteSensorName,"monitorPointId":$("#monitorPoint").val()},
+            data:{"sensorname":deleteSensorName,"monitorPointId":$("#monitorPoint").val(),"terminalId":terminalId},
             dataType : "text",
             success:function(data){
                  if(data=="0"){
@@ -81,10 +87,11 @@
         }
 
         var sensorname = $('#sensorname').val();
+        var terminalId = $("#terminal").val()
         $.ajax({
             type:"POST",
             url:"/addSensor",
-            data:{"sensorname":sensorname,"monitorPointId":$("#monitorPoint").val()},
+            data:{"sensorname":sensorname,"monitorPointId":$("#monitorPoint").val(),"terminalId":terminalId},
             dataType : "text",
             success:function(data){
                 if(data=="1"){

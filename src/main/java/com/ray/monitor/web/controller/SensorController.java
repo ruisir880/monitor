@@ -88,21 +88,21 @@ public class SensorController {
     @RequestMapping(value = "/addSensor", method = RequestMethod.POST )
     //@RequiresPermissions("userInfo:save")//权限管理;
     @ResponseBody
-    public int addSensor(long monitorPointId,String sensorname){
-        SensorInfo sensorInfo = sensorInfoService.findBySensorName(monitorPointId, sensorname);
+    public int addSensor(long terminalId,String sensorname){
+        SensorInfo sensorInfo = sensorInfoService.findBySensorName(terminalId, sensorname);
         if(sensorInfo !=null){
             return 1;
         }
-        sensorInfoService.addSensor(1L, sensorname);
+        sensorInfoService.addSensor(terminalId, sensorname);
         return 0;
     }
 
     @RequestMapping(value = "/deleteSensor", method = RequestMethod.POST )
     //@RequiresPermissions("userInfo:save")//权限管理;
     @ResponseBody
-    public int deleteSensor(long monitorPointId,String sensorname){
+    public int deleteSensor(long terminalId,String sensorname){
         try {
-            sensorInfoService.deleteSensor(monitorPointId, sensorname);
+            sensorInfoService.deleteSensor(terminalId, sensorname);
         }catch (Exception e){
             logger.error("Error occurs when delete sensor:",e);
             return 1;
@@ -112,9 +112,9 @@ public class SensorController {
 
     @RequestMapping(value = "/setThreshold", method = RequestMethod.POST )
     @ResponseBody
-    public int setThreshold(long monitorPointId,String sensorName,double threshold){
+    public int setThreshold(long terminalId,String sensorName,double threshold){
         try {
-            sensorInfoService.setThreshold(monitorPointId, sensorName, threshold);
+            sensorInfoService.setThreshold(terminalId, sensorName, threshold);
         }catch (Exception e){
             logger.error("Error occurs when set threshold:",e);
             return 1;

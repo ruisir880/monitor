@@ -41,7 +41,7 @@
         $.ajax({
             type: "POST",
             url: "/setThreshold",
-            data: {"monitorPointId":$("#monitorPoint").val(),
+            data: {"terminalId":$("#terminal").val(),
                 "sensorName":sensorName.substring(3,4),
                 "threshold": $("#threshold").val()
             },

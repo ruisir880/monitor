@@ -9,15 +9,15 @@ import java.util.Set;
  */
 public interface SensorInfoService {
 
-    SensorInfo addSensor(long monitorId,String sensorName);
+    SensorInfo addSensor(long terminalId,String sensorName);
 
-    void deleteSensor(long monitorId,String sensorName);
+    void deleteSensor(long terminalId,String sensorName);
 
-    SensorInfo findBySensorName(long monitorId,String sensorName);
+    SensorInfo findBySensorName(long terminalId,String sensorName);
 
     Set<SensorInfo> findSensorByMonitorPointId(long monitorPointId);
 
-    void setThreshold(long monitorPointId,String sensorName,double threshold);
+    void setThreshold(long terminalId,String sensorName,double threshold);
 
     Set<SensorInfo> findByMPIdTerminalId(long monitorPointId, long terminalId);
 }

@@ -39,15 +39,17 @@ public class SensorInfoServiceImpl implements SensorInfoService{
         SensorInfo sensorInfo = new SensorInfo();
         sensorInfo.setSensorId(sensorName);
         sensorInfo.setGenTime(new Date());
+
         TerminalInfo terminalInfo = new TerminalInfo();
         terminalInfo.setId(terminalId);
+
         sensorInfo.setTerminalInfo(terminalInfo);
         return sensorRepository.save(sensorInfo);
     }
 
     @Override
-    public SensorInfo findBySensorName(long monitorPointId,String sensorName) {
-        return sensorRepository.findBySensorName(monitorPointId, sensorName);
+    public SensorInfo findBySensorName(long terminalId,String sensorName) {
+        return sensorRepository.findBySensorName(terminalId, sensorName);
     }
 
     @Override
@@ -57,8 +59,8 @@ public class SensorInfoServiceImpl implements SensorInfoService{
 
     @Override
     @Transactional
-    public void deleteSensor(long monitorId, String sensorName) {
-        SensorInfo  sensorInfo = sensorRepository.findBySensorName(monitorId, sensorName);
+    public void deleteSensor(long terminalId, String sensorName) {
+        SensorInfo  sensorInfo = sensorRepository.findBySensorName(terminalId, sensorName);
         tempRepository.deleteBySensorId(sensorInfo.getId());
         commentRepository.deleteBySensorId(sensorInfo.getId());
         System.out.println(sensorInfo.getId());
@@ -68,8 +70,8 @@ public class SensorInfoServiceImpl implements SensorInfoService{
 
     @Override
     @Transactional
-    public void setThreshold(long monitorPointId, String sensorName, double threshold) {
-        sensorRepository.setThresholdValue(threshold, monitorPointId, sensorName);
+    public void setThreshold(long terminalId, String sensorName, double threshold) {
+        sensorRepository.setThresholdValue(threshold, terminalId, sensorName);
     }
 
     @Override
