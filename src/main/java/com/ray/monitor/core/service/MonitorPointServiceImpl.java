@@ -53,4 +53,9 @@ public class MonitorPointServiceImpl implements MonitorPointService{
     public List<MonitorPoint> findByAreaId(long areaId) {
         return monitorRepository.findByAreaId(areaId);
     }
+
+    @Override
+    public int findCount(long areaId, String name) {
+        return monitorRepository.findCount(areaId,name);
+    }
 }

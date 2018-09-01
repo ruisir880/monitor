@@ -16,4 +16,6 @@ public interface MonitorPointService {
     void save(MonitorPoint monitorPoint);
 
     List<MonitorPoint> findByAreaId(long areaId);
+
+    int findCount(long areaId,String name);
 }

@@ -1,4 +1,5 @@
 function showData() {
+    myChart.refresh()
     $.ajax({
         type: "GET",
         url: "checkSensorInfo",
@@ -51,6 +52,7 @@ function showData() {
                     }
                     option.series[0].data[0].children[index].children[i] = a
                 }
+                myChart.clear();
                 myChart.setOption(option)
             }
         }
@@ -109,7 +111,7 @@ function initChart() {
                 },
                 data: [
                     {
-                        name: 'xx变电站',
+                        name: '',
                         value: 6,
                         symbolSize: [90, 70],
                         children: [

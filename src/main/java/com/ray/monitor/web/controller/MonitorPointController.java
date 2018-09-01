@@ -8,6 +8,7 @@ import com.ray.monitor.model.MonitorPoint;
 import com.ray.monitor.web.vo.AreaVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -67,10 +68,26 @@ public class MonitorPointController {
     }
 
 
-    //@RequiresPermissions("userInfo:save")//权限管理;
-    @PostMapping("/addMonitorpoint")
+    @PostMapping("/editMonitorpoint")
     @ResponseBody
-    public int addMonitorpoint(String name,String address, String clientCompany, long areaId){
+    public int editMonitorpoint(String monitorPointId,String name,String address, String clientCompany, String areaId){
+        if(StringUtils.isEmpty(monitorPointId) ){
+            return addMonitorpoint(name,address,clientCompany,Long.parseLong(areaId));
+        }else {
+            MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(Long.parseLong(monitorPointId));
+            monitorPoint.setAddress(address);
+            monitorPoint.setClientCompany(clientCompany);
+            monitorPointService.save(monitorPoint);
+            return 0;
+        }
+    }
+
+
+    private int addMonitorpoint(String name,String address, String clientCompany, long areaId){
+        int count = monitorPointService.findCount(areaId,name);
+        if(count > 0){
+            return 1;
+        }
         Area area = areaService.findById(areaId);
         MonitorPoint monitorPoint = new MonitorPoint();
         monitorPoint.setName(name);

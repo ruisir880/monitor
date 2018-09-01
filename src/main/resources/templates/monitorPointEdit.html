@@ -38,6 +38,7 @@
             var name = $('#name').val();
             var address = $('#address').val();
             var clientCompany = $("#clientCompany").val();
+            var monitorPointId = $('#monitorPoint').text().trim();
             var areaId
             if($('#district').val()){
                 areaId = $('#district').val()
@@ -47,12 +48,14 @@
             if(name!="" && address!="" && clientCompany!="" && areaId!=""){
                 $.ajax({
                     type:"POST",
-                    url:"/addMonitorpoint",
-                    data:{"name":name,"address":address,"clientCompany":clientCompany, "areaId":areaId,},
+                    url:"/editMonitorpoint",
+                    data:{"name":name,"address":address,"clientCompany":clientCompany, "areaId":areaId,"monitorPointId":monitorPointId},
                     dataType : "text",
                     success:function(data) {
                         if (data == "0") {
-                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'监测点添加成功', ok:true,});
+                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'监测点编辑成功', ok:true,});
+                        }else if(data == "1"){
+                            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'监测点已存在', ok:true,});
                         }
                     }
                 });
@@ -84,6 +87,11 @@
 </head>
 <body>
 <form id="submitForm" name="submitForm" method="post">
+    <p hidden id="monitorPoint" >
+        @if(!isEmpty(monitorPoint)){
+        ${monitorPoint.id}
+        @}
+    </p>
     <div id="container">
         <div id="nav_links">
             当前位置：基础数据&nbsp;>&nbsp;<span style="color: #1A5CC6;">监测点</span>
@@ -103,6 +111,7 @@
                         <input type="text" id="name" name="name"
                                @if(!isEmpty(monitorPoint)){
                                value="${monitorPoint.name}"
+                               disabled="disabled"
                                @}
                                class="ui_input_txt02"/>
 
