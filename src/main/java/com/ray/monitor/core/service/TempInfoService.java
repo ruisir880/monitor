@@ -1,5 +1,6 @@
 package com.ray.monitor.core.service;
 
+import com.ray.monitor.core.constant.TempState;
 import com.ray.monitor.model.TempInfo;
 import org.springframework.data.domain.Page;
 
@@ -13,10 +14,7 @@ public interface TempInfoService {
 
     List<TempInfo> findBySensorIds(List<Long> sensorIdList);
 
+    List<TempInfo> findTempByCondition(long monitorPointId,Date startDate,Date endDate,String ... terminalId);
 
-
-
-    List<TempInfo> findTempByCondition(long monitorPointId,Date startDate,Date endDate);
-
-    Page<TempInfo> pageUserQuery(long monitorPointId,int page ,Date startDate,Date endDate,String state);
+    Page<TempInfo> pageQuery(long monitorPointId, int page , Date startDate, Date endDate, TempState state, String... terminalId);
 }

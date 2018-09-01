@@ -1,4 +1,4 @@
-package com.ray.monitor.core;
+package com.ray.monitor.core.constant;
 
 public class Constants {
 

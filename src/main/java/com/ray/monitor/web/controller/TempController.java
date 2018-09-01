@@ -1,13 +1,13 @@
 package com.ray.monitor.web.controller;
 
 import com.ray.monitor.core.MonitorCache;
+import com.ray.monitor.core.constant.TempState;
 import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.core.service.SensorInfoService;
 import com.ray.monitor.core.service.TempInfoService;
 import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.*;
-import org.apache.commons.collections.ArrayStack;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-import static com.ray.monitor.core.Constants.LOG_GETMONITOR_ERROR;
+import static com.ray.monitor.core.constant.Constants.LOG_GETMONITOR_ERROR;
 
 /**
  * Created by rui on 2018/8/19.
@@ -124,13 +124,13 @@ public class TempController {
         if(endDate == null){
             endDate = new Date();
         }
-        List<TempInfo> tempInfoList= tempInfoService.findTempByCondition(monitorPointId, startDate, endDate);
+        List<TempInfo> tempInfoList= tempInfoService.findTempByCondition(monitorPointId, startDate, endDate,terminalId);
         return  ParseUtil.getTempInto(tempInfoList);
     }
 
     @RequestMapping("/checkTempInfo")
     @ResponseBody
-    public PageTempVO checkTempInfo(String state, String startTime, String endTime, long monitorPointId,int page) throws ParseException {
+    public PageTempVO checkTempInfo(String state, String startTime, String endTime, long monitorPointId,int page,String terminalId) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         Calendar calendar = Calendar.getInstance();
 
@@ -149,9 +149,8 @@ public class TempController {
         }
 
         modelAndView.setViewName("tempInfoList");
-        Page<TempInfo> tempInfoPage =  tempInfoService.pageUserQuery(monitorPointId, page, startDate, endDate, null);
+        Page<TempInfo> tempInfoPage =  tempInfoService.pageQuery(monitorPointId, page, startDate, endDate, TempState.parseToStempSate(state),terminalId);
         return ParseUtil.getPageTempVO(tempInfoPage);
-
     }
 
 

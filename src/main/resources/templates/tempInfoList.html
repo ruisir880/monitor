@@ -17,10 +17,7 @@
         var totalPage;
 
         /** 模糊查询来电用户  **/
-        function search(){
-            var jumpNumTxt = 1;
-            if($("#jumpNumTxt").val())
-                jumpNumTxt=$("#jumpNumTxt").val();
+        function search(jumpPage) {
             var startTime = $("#startTime").val();
             var endTime = $("#endTime").val();
             var state = $("#state").val();
@@ -34,7 +31,7 @@
                     "startTime":startTime,
                     "endTime":endTime,
                     "state":state,
-                    page:jumpNumTxt
+                    page:jumpPage
                 },
                 success: function (result) {
                     initHtml()
@@ -62,6 +59,7 @@
                     }
                 }
                 })
+            $("#jumpNumTxt").val(jumpPage)
         }
         function initHtml() {
             $("#temoInfoTable tr:not(:first)").empty("");
@@ -71,15 +69,13 @@
 
         function jumpNextPage(){
             if(currentPage < totalPage){
-                $("#jumpNumTxt").val(currentPage+1)
-                search();
+                search(currentPage+1);
             }
         }
 
         function jumpLastPage(){
             if(currentPage>1){
-                $("#jumpNumTxt").val(currentPage-1)
-                search();
+                search(currentPage-1);
             }
         }
 
@@ -135,16 +131,16 @@
                         &nbsp;&nbsp;
                        状态
                         <select name="state" id="state" class="ui_select01">
-                            <option value="all">全部</option>
-                            <option value="noWarn">无告警</option>
-                            <option value="warn">告警</option>
+                            <option value="">全部</option>
+                            <option value="TRUE">无告警</option>
+                            <option value="FALSE">告警</option>
                         </select>
 
                         时间段：&nbsp;&nbsp;<input type="datetime-local" id="startTime" name="startTime" class="ui_input_txt02_date" />
                         到&nbsp;&nbsp;<input type="datetime-local" id="endTime" name="endTime" class="ui_input_txt02_date" />
                     </div>
                     <div id="box_bottom">
-                        <input type="button" value="查询" class="ui_input_btn01" onclick="search();" />
+                        <input type="button" value="查询" class="ui_input_btn01" onclick="search(1);" />
                     </div>
                 </div>
             </div>

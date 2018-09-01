@@ -44,9 +44,7 @@
                         name: option.legend.data[i],
                         type: 'line',
                         showAllSymbol: true,
-                        symbolSize: function (value){
-                            return Math.round(value[2]/10) + 2;
-                        },
+                        symbolSize: 30,
                         data: a
                     }
                 }
@@ -88,7 +86,7 @@
                 start : 70
             },
             legend : {
-                data : ['series1']
+                data : []
             },
             grid: {
                 y2: 80
@@ -106,13 +104,6 @@
             ],
             series : [
                 {
-                    name: 'series1',
-                    type: 'line',
-                    showAllSymbol: true,
-                    symbolSize: function (value){
-                        return Math.round(value[2]/10) + 2;
-                    },
-                    data: []
                 }
 
             ]

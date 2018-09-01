@@ -26,7 +26,7 @@ public class MonitorPointServiceImpl implements MonitorPointService{
     @Override
     public MonitorPoint findMonitorPoint(long monitorPointId,String... terminalId) {
         MonitorPoint monitorPoint = monitorRepository.findOne(monitorPointId);
-        if(terminalId==null || StringUtils.isEmpty(terminalId[0])) {
+        if(terminalId==null || terminalId.length == 0 || StringUtils.isEmpty(terminalId[0])) {
             return monitorPoint;
         }else {
             Iterator<TerminalInfo> iterator = monitorPoint.getTerminalInfoList().iterator();

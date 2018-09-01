@@ -1,10 +1,11 @@
 package com.ray.monitor.core.service;
 
 import com.ray.monitor.StartApplication;
-import com.ray.monitor.core.Constants;
+import com.ray.monitor.core.constant.Constants;
 import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.repository.*;
 import com.ray.monitor.model.*;
+import com.ray.monitor.utils.DateUtil;
 import com.ray.monitor.web.vo.MonitorSensorVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -128,17 +129,6 @@ public class RepositoryTest {
         calendar2.set(2018, 7, 20);
         List<TempInfo> tempInfoSet = tempRepository.findTempByCondition(1L,calendar.getTime(),calendar2.getTime());
         System.out.println("========================"+tempInfoSet.size());
-    }
-
-    @Test
-    public void test_PageQueryTemp() throws Exception {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2000,1,1);
-        Date  startDate = calendar.getTime();
-        Pageable pageable = new PageRequest(0, Constants.PAGE_SIZE); //页码：前端从1开始，jpa从0开始，做个转换
-
-        Page<TempInfo> tempInfoSet  = tempRepository.findByPage(1L, startDate, new Date(), pageable);
-        System.out.println("========================"+tempInfoSet.getTotalElements());
     }
 
 

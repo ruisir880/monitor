@@ -1,6 +1,6 @@
 package com.ray.monitor.core.shrio;
 
-import com.ray.monitor.core.Constants;
+import com.ray.monitor.core.constant.Constants;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;

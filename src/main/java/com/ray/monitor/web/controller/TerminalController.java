@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static com.ray.monitor.core.Constants.LOG_GETMONITOR_ERROR;
+import static com.ray.monitor.core.constant.Constants.LOG_GETMONITOR_ERROR;
 
 /**
  * Created by Ray Rui on 8/30/2018.

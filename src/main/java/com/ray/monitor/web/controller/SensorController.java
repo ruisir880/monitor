@@ -5,25 +5,22 @@ import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.core.service.SensorInfoService;
 import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
-import com.ray.monitor.web.vo.CurrentTempVO;
 import com.ray.monitor.web.vo.MonitorSensorVO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static com.ray.monitor.core.Constants.LOG_GETMONITOR_ERROR;
+import static com.ray.monitor.core.constant.Constants.LOG_GETMONITOR_ERROR;
 
 /**
  * Created by rui on 2018/8/19.

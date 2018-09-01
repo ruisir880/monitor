@@ -1,6 +1,6 @@
 package com.ray.monitor.utils;
 
-import com.ray.monitor.core.Constants;
+import com.ray.monitor.core.constant.Constants;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.util.DigestUtils;
 

@@ -1,6 +1,6 @@
 package com.ray.monitor.core.service;
 
-import com.ray.monitor.core.Constants;
+import com.ray.monitor.core.constant.Constants;
 import com.ray.monitor.core.repository.PageQueryRepository;
 import com.ray.monitor.core.repository.UserInfoRepository;
 import com.ray.monitor.model.UserInfo;
@@ -24,7 +24,7 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ray.monitor.core.Constants.PAGE_SIZE;
+import static com.ray.monitor.core.constant.Constants.PAGE_SIZE;
 
 /**
  * Created by rui on 2018/8/12.
