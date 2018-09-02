@@ -17,4 +17,6 @@ public interface TerminalService {
     List<TerminalInfo> findByMonitorpointId(long monitorpointId);
 
     TerminalInfo findById(long id);
+
+    TerminalInfo getTerminal(long areaId, String mpName, String terminalName);
 }

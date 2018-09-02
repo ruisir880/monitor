@@ -64,11 +64,11 @@
                 <div id="box_border">
                     <div id="box_top">搜索</div>
                     <div id="box_center">
-                        监测点：&nbsp;&nbsp;
-                        <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
+                        监测点：
+                        <select name="monitorPoint" id="monitorPoint" style="width: 120px;height: 30px;margin: 2px 2px 2px 5px;">
                             @if(!isEmpty(monitorPointList)){
                             @for(monitorPoint in monitorPointList){
-                            <option value="${monitorPoint.id}">监测点:${monitorPoint.monitorPointName}</option>
+                            <option value="${monitorPoint.id}">${monitorPoint.monitorPointName}</option>
                             @}
                             @}
                         </select>

@@ -115,14 +115,21 @@ public class TempController {
     @RequestMapping("/checkTempInfoChart")
     @ResponseBody
     //TODO add time in ui
-    public TempVO checkTempInfoChart(long monitorPointId,Date startDate,Date endDate,String terminalId) {
+    public TempVO checkTempInfoChart(long monitorPointId, String startTime, String endTime,String terminalId) throws ParseException {
         Calendar calendar = Calendar.getInstance();
-        if(startDate == null){
+        Date startDate = null;
+        Date endDate = null;
+        if(StringUtils.isEmpty(startTime) ){
             calendar.set(2000,1,1);
             startDate = calendar.getTime();
+        }else {
+            startDate= ParseUtil.parseDate(startTime);
         }
-        if(endDate == null){
+
+        if(StringUtils.isEmpty(endTime)){
             endDate = new Date();
+        }else {
+            endDate= ParseUtil.parseDate(endTime);
         }
         List<TempInfo> tempInfoList= tempInfoService.findTempByCondition(monitorPointId, startDate, endDate,terminalId);
         return  ParseUtil.getTempInto(tempInfoList);

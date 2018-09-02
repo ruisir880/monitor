@@ -41,4 +41,8 @@ public class TerminalServcieImpl implements TerminalService {
     public TerminalInfo findById(long id) {
         return terminalRepository.findOne(id);
     }
+
+    public TerminalInfo getTerminal(long areaId, String mpName, String terminalName){
+        return terminalRepository.findTerminal(terminalName,mpName,areaId);
+    }
 }

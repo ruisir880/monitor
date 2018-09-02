@@ -105,21 +105,21 @@
     <div class="ui_content">
         <div id="box_border">
             <div id="box_center">
-                监测点：&nbsp;&nbsp;
-                <select name="monitorPoint" id="monitorPoint" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;" onchange="monitorPointSelect();">
+                监测点：
+                <select name="monitorPoint" id="monitorPoint" style="width: 120px;height: 30px;margin: 2px 2px 2px 5px;" onchange="monitorPointSelect();">
                     @if(!isEmpty(monitorPointList)){
                     @for(monitorPoint in monitorPointList){
-                    <option value=${monitorPoint.id}>监测点:${monitorPoint.monitorPointName}</option>
+                    <option value=${monitorPoint.id}>${monitorPoint.monitorPointName}</option>
                     @}
                     @}
                 </select>
                 &nbsp;&nbsp;
-                终端：&nbsp;&nbsp;
-                <select name="terminal" id="terminal" style="width: 200px;height: 30px;margin: 2px 2px 2px 5px;">
+                终端：
+                <select name="terminal" id="terminal" style="width: 120px;height: 30px;margin: 2px 2px 2px 5px;">
                     <option value="">--请选择--</option>
                     @if(!isEmpty(monitorPointList)){
                     @for(terminal in monitorPointList[0].terminalVOList){
-                    <option value=${terminal.id}>终端:${terminal.name}</option>
+                    <option value=${terminal.id}>${terminal.name}</option>
                     @}
                     @}
                 </select>
