@@ -78,6 +78,9 @@ public class MonitorCache implements MonitorCacheListener {
             public SensorInfo call() throws Exception {
                 TerminalInfo terminalInfo = terminalRepository.findTerminal(terminalName,mpName,areaId);
                 SensorInfo result = null;
+                if(terminalInfo == null){
+                    return null;
+                }
                 for(SensorInfo sensorInfo : terminalInfo.getSensorInfoList()){
                     if (sensorInfo.getSensorId().equals(sensorName)) {
                         result = sensorInfo;

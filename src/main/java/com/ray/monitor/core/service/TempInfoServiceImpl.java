@@ -76,4 +76,9 @@ public class TempInfoServiceImpl implements TempInfoService {
         };
         return this.tempRepository.findAll(specification,pageable);
     }
+
+    @Override
+    public void deleteData(long monitorPointId, int page, Date startDate, Date endDate, TempState state, String... terminalId) {
+
+    }
 }

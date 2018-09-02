@@ -168,4 +168,30 @@ public class TempController {
     }
 
 
+
+    @RequestMapping("/deleteTempInfo")
+    @ResponseBody
+    public int deleteTempInfo(String state, String startTime, String endTime, long monitorPointId,int page,String terminalId) throws ParseException {
+        ModelAndView modelAndView = new ModelAndView();
+        Calendar calendar = Calendar.getInstance();
+
+        Date startDate = null;
+        Date endDate = null;
+        if(StringUtils.isEmpty(startTime)){
+            calendar.set(2000,1,1);
+            startDate = calendar.getTime();
+        }else {
+            startDate= ParseUtil.parseDate(startTime);
+        }
+        if(StringUtils.isEmpty(endTime)){
+            endDate = new Date();
+        }else {
+            endDate= ParseUtil.parseDate(endTime);
+        }
+
+        modelAndView.setViewName("tempInfoList");
+        tempInfoService.deleteData(monitorPointId, page, startDate, endDate, TempState.parseToStempSate(state),terminalId);
+       return 0;
+    }
+
 }

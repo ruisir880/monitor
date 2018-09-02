@@ -17,4 +17,6 @@ public interface TempInfoService {
     List<TempInfo> findTempByCondition(long monitorPointId,Date startDate,Date endDate,String ... terminalId);
 
     Page<TempInfo> pageQuery(long monitorPointId, int page , Date startDate, Date endDate, TempState state, String... terminalId);
+
+    void deleteData(long monitorPointId, int page , Date startDate, Date endDate, TempState state, String... terminalId);
 }

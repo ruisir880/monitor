@@ -10,10 +10,19 @@ import com.ray.monitor.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,35 +37,75 @@ import java.util.regex.Pattern;
 public class QuartzService {
     private static Logger log = LoggerFactory.getLogger(QuartzService.class);
 
+    private static String PROPERTIES_NAME  = "path.properties";
+
     private static final int BUFFER_SIZE = 1024;
     private static final String CONTENT_PATTERN =
             "\\w+\\n+\\w+\\n+\\w+\\n+(\\d{4}/\\d{2}/\\d{2} \\d{1,2}:\\d{1,2}:\\d{1,2}){1}\\n+(\\d+,\\w*,\\d+(.\\d)*\\n*){1,}";
 
     private static Pattern pattern = Pattern.compile(CONTENT_PATTERN,Pattern.DOTALL);
 
+   // @Value("${syn.file.path}")
+    private static String FILE_PATH ;
+   // @Value("${syn.file.failed.path}")
+    private static String FAILED_PATH ;
+    //@Value("${syn.file.successed.path}")
+    private static String SUCCESSED_PATH ;
+
+    @Autowired
+    private Environment env;
+
     @Autowired
     private MonitorCache monitorCache;
 
     @Autowired
     private TempRepository tempRepository;
+    @PostConstruct
+    public void init(){
+        FILE_PATH = env.getProperty("syn.file.path");
+        FAILED_PATH = env.getProperty("syn.file.failed.path");
+        SUCCESSED_PATH = env.getProperty("syn.file.successed.path");
+    }
 
-   // @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0/10 * * * * ?")
     public void synData(){
-        log.info("=====================deal with txt file.");
+        File rootDir = new File(FILE_PATH);
+        if(!rootDir.exists()){
+            log.warn("file not exist:" + FILE_PATH);
+        }
+        for(File file : rootDir.listFiles()){
+            if(file.isDirectory()){
+                continue;
+            }
+            dealWithData(file);
+        }
+
+    }
+
+    private void dealWithData(File file){
         boolean hasError = false;
+        log.info("=====================deal with txt file:"+file.getPath());
+        long areaId = 0;
+        String mpName = null;
+        String terminalName = null;
+        String sensorName = null;
         try {
-            String result = readToString("D:/date.txt");
+            String result = readToString(file);
+            if(!pattern.matcher(result).matches()){
+                throw new FileReadException(String.format("File %s content is not legal.",file.getPath()));
+            }
             List<String> stringList = Splitter.on("\n").splitToList(result);
 
-            long areaId = Long.parseLong(stringList.get(0));
-            String mpName = stringList.get(1);
-            String terminalName = stringList.get(2);
+            areaId = Long.parseLong(stringList.get(0));
+            mpName = stringList.get(1);
+            terminalName = stringList.get(2);
             Date date = DateUtil.getDate(stringList.get(3));
 
             List<TempInfo> tempInfoList = new ArrayList<>();
             for(int i=4; i<stringList.size(); i++){
                 List<String> tempList = Splitter.on(",").splitToList(stringList.get(i));
-                SensorInfo sensorInfo = monitorCache.getSnesor(areaId,mpName,terminalName,tempList.get(0));
+                sensorName = tempList.get(0);
+                SensorInfo sensorInfo = monitorCache.getSnesor(areaId,mpName,terminalName,sensorName);
 
                 TempInfo tempInfo = new TempInfo();
                 tempInfo.setTemperature(Double.valueOf(tempList.get(2)));
@@ -74,18 +123,25 @@ public class QuartzService {
             log.error("Error occurs when read date:",e);
             hasError = true;
         } catch (ExecutionException e) {
-            log.error("Error occurs when deal with date:",e);
+            log.error(String.format("Can not get sensor, areaId:%s, siteId:%s, terminalId:%s ,sensorId:%s",
+                    areaId,mpName,terminalName, sensorName),e);
             hasError = true;
-        } finally {
-            //todo
+        }catch (Exception e) {
+            log.error("upexpected error:",e);
+            hasError = true;
+        }finally {
+            String targetPath = hasError? FAILED_PATH : SUCCESSED_PATH;
+            try {
+                Files.move(Paths.get(file.getPath()),Paths.get(targetPath,file.getName()));
+            } catch (IOException e) {
+                log.error("Error occurs when move file:"+ file.getPath(),e);
+            }
         }
-
-
     }
 
-    public static String readToString(String fileName) throws FileReadException {
+
+    private String readToString(File file) throws FileReadException {
         String encoding = "UTF-8";
-        File file = new File(fileName);
         byte[] filecontent = new byte[BUFFER_SIZE];
         try {
             FileInputStream in = new FileInputStream(file);
