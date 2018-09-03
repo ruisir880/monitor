@@ -9,4 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface RoleRepository extends CrudRepository<RoleInfo, Long> {
 
     RoleInfo findByRoleName(String roleName);
+
+
+    RoleInfo findById(long  roleId);
 }

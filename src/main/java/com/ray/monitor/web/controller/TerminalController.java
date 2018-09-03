@@ -8,12 +8,14 @@ import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.MonitorSensorVO;
 import com.ray.monitor.web.vo.TerminalVO;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
@@ -40,6 +42,7 @@ public class TerminalController {
     private MonitorPointService monitorPointService;
 
     @GetMapping("/terminalList")
+    @RequiresPermissions("terminal.list")
     public ModelAndView terminalList(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("terminalList");
@@ -53,14 +56,23 @@ public class TerminalController {
         return modelAndView;
     }
 
+
+    @RequestMapping("/getTerminal")
+    @ResponseBody
+    public List<TerminalVO> getTerminal(long monitorPointId) throws ExecutionException {
+        return monitorCache.gettTerminal(monitorPointId);
+    }
+
     @GetMapping("/queryTerminalList")
     @ResponseBody
+    @RequiresPermissions("terminal.list")
     public List<TerminalVO> terminalList(long monitorPointId){
         return ParseUtil.getTerminalVOS(terminalService.findByMonitorpointId(monitorPointId));
     }
 
 
     @GetMapping("/terminalAdd")
+    @RequiresPermissions("terminal.edit")
     public ModelAndView terminalAdd(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("terminalEdit");
@@ -76,6 +88,7 @@ public class TerminalController {
     }
 
     @GetMapping("/terminalEdit")
+    @RequiresPermissions("terminal.edit")
     public ModelAndView terminalEdit(long id){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("terminalEdit");
@@ -96,6 +109,7 @@ public class TerminalController {
 
     @PostMapping("/editTerminal")
     @ResponseBody
+    @RequiresPermissions("terminal.edit")
     public int editTerminal(String name,long monitorPointId,String terminalId){
         int result;
        if(StringUtils.isEmpty(terminalId)){

@@ -162,4 +162,21 @@ public class ParseUtil {
         });
         return vo;
     }
+
+
+    public static List<PrivilegeVO> getPrivilegeVOS(List<PrivilegeInfo> privilegeInfos){
+        List<PrivilegeVO> voList = new ArrayList<>();
+        for(PrivilegeInfo info : privilegeInfos){
+            voList.add(new PrivilegeVO(info.getId(),info.getDescription()));
+        }
+        return voList;
+    }
+
+    public static List<RoleVO> getRoleVOS(List<RoleInfo> roleInfos){
+        List<RoleVO> voList = new ArrayList<>();
+        for(RoleInfo info : roleInfos){
+            voList.add(new RoleVO(info.getId(),info.getDescription()));
+        }
+        return voList;
+    }
 }

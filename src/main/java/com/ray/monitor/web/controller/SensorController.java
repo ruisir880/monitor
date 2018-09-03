@@ -7,6 +7,7 @@ import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.MonitorSensorVO;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class SensorController {
     private MonitorCache monitorCache;
 
     @GetMapping("/transducerInfoChart")
+    @RequiresPermissions("sensor.list")
     public ModelAndView transducerInfo() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("transducerInfoChart");
@@ -53,6 +55,7 @@ public class SensorController {
     }
 
     @GetMapping("/sensorInfoSet")
+    @RequiresPermissions("sensor.edit")
     public ModelAndView sensorInfoSet() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("sensorInfoSet");
@@ -66,8 +69,36 @@ public class SensorController {
         return modelAndView;
     }
 
+    /**
+     * 传感器添加;
+     */
+    @RequestMapping(value = "/addSensor", method = RequestMethod.POST )
+    @RequiresPermissions("sensor.edit")
+    @ResponseBody
+    public int addSensor(long terminalId,String sensorname){
+        SensorInfo sensorInfo = sensorInfoService.findBySensorName(terminalId, sensorname);
+        if(sensorInfo !=null){
+            return 1;
+        }
+        sensorInfoService.addSensor(terminalId, sensorname);
+        return 0;
+    }
+
+    @RequestMapping(value = "/deleteSensor", method = RequestMethod.POST )
+    @RequiresPermissions("sensor.edit")
+    @ResponseBody
+    public int deleteSensor(long terminalId,String sensorname){
+        try {
+            sensorInfoService.deleteSensor(terminalId, sensorname);
+        }catch (Exception e){
+            logger.error("Error occurs when delete sensor:",e);
+            return 1;
+        }
+        return 0;
+    }
+
     @RequestMapping(value = "/sensorThresholdSet")
-    //@RequiresPermissions("userInfo:save")//权限管理;
+    @RequiresPermissions("sensorThreshold.edit")
     @ResponseBody
     public ModelAndView sensorThresholdSet(){
         ModelAndView modelAndView = new ModelAndView();
@@ -82,35 +113,8 @@ public class SensorController {
         return modelAndView;
     }
 
-    /**
-     * 传感器添加;
-     */
-    @RequestMapping(value = "/addSensor", method = RequestMethod.POST )
-    //@RequiresPermissions("userInfo:save")//权限管理;
-    @ResponseBody
-    public int addSensor(long terminalId,String sensorname){
-        SensorInfo sensorInfo = sensorInfoService.findBySensorName(terminalId, sensorname);
-        if(sensorInfo !=null){
-            return 1;
-        }
-        sensorInfoService.addSensor(terminalId, sensorname);
-        return 0;
-    }
-
-    @RequestMapping(value = "/deleteSensor", method = RequestMethod.POST )
-    //@RequiresPermissions("userInfo:save")//权限管理;
-    @ResponseBody
-    public int deleteSensor(long terminalId,String sensorname){
-        try {
-            sensorInfoService.deleteSensor(terminalId, sensorname);
-        }catch (Exception e){
-            logger.error("Error occurs when delete sensor:",e);
-            return 1;
-        }
-        return 0;
-    }
-
     @RequestMapping(value = "/setThreshold", method = RequestMethod.POST )
+    @RequiresPermissions("sensorThreshold.edit")
     @ResponseBody
     public int setThreshold(long terminalId,String sensorName,double threshold){
         try {
@@ -124,6 +128,7 @@ public class SensorController {
 
 
     @RequestMapping("/checkSensorInfo")
+    @RequiresPermissions("sensor.list")
     @ResponseBody
     public MonitorSensorVO checkSensorInfo(long monitorPointId,String terminalId) {
         MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(monitorPointId,terminalId);

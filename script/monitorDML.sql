@@ -1,3 +1,22 @@
+insert into privilege_info (privilege_name,description) values('privilege.management','权限管理');
+
+insert into privilege_info (privilege_name,description) values('user.list','用户查询');
+insert into privilege_info (privilege_name,description) values('user.edit','用户编辑');
+
+insert into privilege_info (privilege_name,description) values('monitorPoint.list','监测点查询');
+insert into privilege_info (privilege_name,description) values('monitorPoint.edit','监测点编辑');
+
+
+insert into privilege_info (privilege_name,description) values('terminal.list','终端查询');
+insert into privilege_info (privilege_name,description) values('terminal.edit','终端编辑');
+
+insert into privilege_info (privilege_name,description) values('sensor.list','传感器查询');
+insert into privilege_info (privilege_name,description) values('sensor.edit','传感器编辑');
+insert into privilege_info (privilege_name,description) values('sensorThreshold.edit','传感器阈值设置');
+insert into privilege_info (privilege_name,description) values('tempInfo.List','温度信息查询');
+insert into privilege_info (privilege_name,description) values('tempInfo.edit','温度信息编辑');
+
+
 
 insert into user_info(username,password,real_name,mobile,address,salt) value ('admin','4da85196d96808f7d69e5ac6f5354cda','???','123456789','??????','f319cd5b392d16c68e3abd8af3fde536');
 
@@ -5,10 +24,10 @@ insert into user_info(username,password,real_name,mobile,address,salt) value ('t
 
 insert into user_info(username,password,real_name,mobile,address,salt) value ('test2','20e00a1a2332ca406bb0c46b99d9a68d','??','123456789','??????','f319cd5b392d16c68e3abd8af3fde536');
 
-insert into role_info(role_name) values('admin');
-insert into role_info(role_name) values('projectManager');
-insert into role_info(role_name) values('cooperation');
-insert into role_info(role_name) values('technician');
+insert into role_info(role_name,description) values('admin','管理员');
+insert into role_info(role_name,description) values('projectManager','项目负责人');
+insert into role_info(role_name,description) values('cooperation','协作单位');
+insert into role_info(role_name,description) values('technician','技术专家');
 
 
 INSERT INTO area VALUES ('0', '中国', '0');

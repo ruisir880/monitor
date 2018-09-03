@@ -72,6 +72,7 @@ public class QuartzService {
         File rootDir = new File(FILE_PATH);
         if(!rootDir.exists()){
             log.warn("file not exist:" + FILE_PATH);
+            return;
         }
         for(File file : rootDir.listFiles()){
             if(file.isDirectory()){

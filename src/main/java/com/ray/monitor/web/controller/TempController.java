@@ -9,6 +9,7 @@ import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.*;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class TempController {
     private MonitorCache monitorCache;
 
     @GetMapping("/currentTemp")
+    @RequiresPermissions("tempInfo.List")
     public ModelAndView currentTemp(Integer id) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("currentTempChart");
@@ -62,6 +64,7 @@ public class TempController {
 
     @GetMapping("/tempInfoList")
     @ResponseBody
+    @RequiresPermissions("tempInfo.List")
     public ModelAndView tempInfoList(Integer id) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("tempInfoList");
@@ -77,6 +80,7 @@ public class TempController {
 
     @GetMapping("/tempInfoChart")
     @ResponseBody
+    @RequiresPermissions("tempInfo.List")
     public ModelAndView tempInfoChart() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("tempInfoChart");
@@ -93,6 +97,7 @@ public class TempController {
 
     @RequestMapping("/checkCurrentTempInfo")
     @ResponseBody
+    @RequiresPermissions("tempInfo.List")
     public CurrentTempVO checkCurrentTempInfo(long monitorPointId,String terminalId) {
         Set<SensorInfo> sensorInfoSet;
         if(StringUtils.isEmpty(terminalId)){
@@ -114,7 +119,7 @@ public class TempController {
 
     @RequestMapping("/checkTempInfoChart")
     @ResponseBody
-    //TODO add time in ui
+    @RequiresPermissions("tempInfo.List")
     public TempVO checkTempInfoChart(long monitorPointId, String startTime, String endTime,String terminalId) throws ParseException {
         Calendar calendar = Calendar.getInstance();
         Date startDate = null;
@@ -137,6 +142,7 @@ public class TempController {
 
     @RequestMapping("/checkTempInfo")
     @ResponseBody
+    @RequiresPermissions("tempInfo.List")
     public PageTempVO checkTempInfo(String state, String startTime, String endTime, long monitorPointId,int page,String terminalId) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         Calendar calendar = Calendar.getInstance();
@@ -161,16 +167,12 @@ public class TempController {
     }
 
 
-    @RequestMapping("/getTerminal")
-    @ResponseBody
-    public List<TerminalVO> getTerminal(long monitorPointId) throws ExecutionException {
-        return monitorCache.gettTerminal(monitorPointId);
-    }
 
 
 
     @RequestMapping("/deleteTempInfo")
     @ResponseBody
+    @RequiresPermissions("tempInfo.edit")
     public int deleteTempInfo(String state, String startTime, String endTime, long monitorPointId,int page,String terminalId) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         Calendar calendar = Calendar.getInstance();

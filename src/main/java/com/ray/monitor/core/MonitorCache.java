@@ -6,22 +6,18 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.ray.monitor.core.repository.MonitorRepository;
 import com.ray.monitor.core.repository.TerminalRepository;
-import com.ray.monitor.core.repository.UserInfoRepository;
-import com.ray.monitor.core.service.MonitorPointService;
-import com.ray.monitor.model.MonitorPoint;
-import com.ray.monitor.model.SensorInfo;
-import com.ray.monitor.model.TerminalInfo;
-import com.ray.monitor.model.UserInfo;
+import com.ray.monitor.core.service.PermissionService;
+import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.MonitorSensorVO;
+import com.ray.monitor.web.vo.PrivilegeVO;
+import com.ray.monitor.web.vo.RoleVO;
 import com.ray.monitor.web.vo.TerminalVO;
-import jdk.nashorn.internal.ir.Terminal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import sun.management.Sensor;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -29,12 +25,16 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by rui on 2018/8/25.
  */
-@Service
+@Component
 public class MonitorCache implements MonitorCacheListener {
     private Cache<Long,List<MonitorSensorVO>> AREAMONITORCACHE = CacheBuilder.newBuilder().softValues().build();
     private Cache<Long,List<TerminalVO>> MONITOR_TERMINAL_CACHE = CacheBuilder.newBuilder().softValues().build();
 
     private Cache<String, SensorInfo> SENSOR_CACHE = CacheBuilder.newBuilder().softValues().build();
+
+    private List<PrivilegeVO> privilegeVOListList = new ArrayList<>();
+    private List<RoleVO> roleVOList  = new ArrayList<>();
+    private List<RoleInfo> roleInfoList  = new ArrayList<>();
 
 
     @Autowired
@@ -42,6 +42,16 @@ public class MonitorCache implements MonitorCacheListener {
 
     @Autowired
     private TerminalRepository terminalRepository;
+
+    @Autowired
+    private PermissionService permissionService;
+
+    @PostConstruct
+    private void init(){
+        roleInfoList = permissionService.findAllRoles();
+        privilegeVOListList = ParseUtil.getPrivilegeVOS(permissionService.findAll());
+        roleVOList = ParseUtil.getRoleVOS(roleInfoList);
+    }
 
     @Override
     public void reset(long areaId) {
@@ -90,5 +100,17 @@ public class MonitorCache implements MonitorCacheListener {
                 return result;
             }
         });
+    }
+
+    public List<PrivilegeVO> getPrivilegeVOList() {
+        return privilegeVOListList;
+    }
+
+    public List<RoleVO> getRoleVOList() {
+        return roleVOList;
+    }
+
+    public List<RoleInfo> getRoleInfoList() {
+        return roleInfoList;
     }
 }

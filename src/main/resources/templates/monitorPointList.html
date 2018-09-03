@@ -26,17 +26,6 @@
                 }
             });
         });
-        /** 用户角色   **/
-        var userRole = '';
-
-        /** 模糊查询来电用户  **/
-        function search(){
-            var username = $("#username").val();
-            var realName = $("#realName").val();
-            var mobile = $("#mobile").val();
-            var targetUrl = "/queryUserPage?username="+username+"&realName="+realName+"&mobile="+mobile;
-            window.location.href=targetUrl;
-        }
 
     </script>
     <style>
@@ -44,7 +33,7 @@
     </style>
 </head>
 <body>
-<form id="submitForm" name="submitForm" action="/queryUserPage" method="get">
+<form id="submitForm" name="submitForm" action="" method="get">
     <div id="container">
         <div class="ui_content">
             <div class="ui_tb">

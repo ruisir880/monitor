@@ -6,6 +6,7 @@ import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.model.Area;
 import com.ray.monitor.model.MonitorPoint;
 import com.ray.monitor.web.vo.AreaVO;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -34,6 +35,7 @@ public class MonitorPointController {
     private AreaCache areaCache;
 
     @GetMapping(value = "/monitorPointList" )
+    @RequiresPermissions("monitorPoint.list")
     public ModelAndView monitorPointList(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("monitorPointList");
@@ -43,6 +45,7 @@ public class MonitorPointController {
     }
 
     @GetMapping(value = "/monitorPointEdit" )
+    @RequiresPermissions("monitorPoint.edit")
     public ModelAndView monitorPointEdit(long id){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("monitorPointEdit");
@@ -52,6 +55,7 @@ public class MonitorPointController {
     }
 
     @GetMapping(value = "/monitorPointAdd" )
+    @RequiresPermissions("monitorPoint.edit")
     public ModelAndView monitorPointAdd() throws ExecutionException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("monitorPointEdit");
@@ -70,6 +74,7 @@ public class MonitorPointController {
 
     @PostMapping("/editMonitorpoint")
     @ResponseBody
+    @RequiresPermissions("monitorPoint.edit")
     public int editMonitorpoint(String monitorPointId,String name,String address, String clientCompany, String areaId){
         if(StringUtils.isEmpty(monitorPointId) ){
             return addMonitorpoint(name,address,clientCompany,Long.parseLong(areaId));

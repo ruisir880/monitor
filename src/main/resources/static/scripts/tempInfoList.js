@@ -35,6 +35,7 @@ function search(jumpPage) {
                         +"</td> <td>"+terminalName
                         +"</td> <td>"+elem.genTime
                         +"</td> <td>"+elem.temp
+                        +"</td> <td>"+elem.state
                         +"</td> <td>"+result.tempVO.sensorVOList[i].threshold
                         +"</td> </tr>";
                     $('.table').append(item);

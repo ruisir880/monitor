@@ -31,11 +31,13 @@ public class UserInfoController {
     private RoleCache roleCache;
 
     @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
+    @RequiresPermissions("user.list")
     public String userInfo() {
         return "/userInfo";
     }
 
     @RequestMapping(value = "/userAdd", method = RequestMethod.GET)
+    @RequiresPermissions("user.edit")
     public ModelAndView userInfoAdd() throws ExecutionException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("userAdd");
@@ -46,6 +48,7 @@ public class UserInfoController {
 
 
     @RequestMapping("/userList")
+    @RequiresPermissions("user.list")
     public ModelAndView userList() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("userList");
@@ -57,7 +60,7 @@ public class UserInfoController {
      * @return
      */
     @RequestMapping(value = "/addUser", method =RequestMethod.POST )
-    //@RequiresPermissions("userInfo:save")//权限管理;
+    @RequiresPermissions("user.edit")
     @ResponseBody
     public int userInfoAdd(UserInfo user,long areaId,String role) throws ExecutionException {
         ModelAndView modelAndView = new ModelAndView();
@@ -85,12 +88,13 @@ public class UserInfoController {
      * @return
      */
     @RequestMapping("/delUser")
-    @RequiresPermissions("userInfo:del")//权限管理;
+    @RequiresPermissions("user.edit")
     public String userDel(){
         return "userInfoDel";
     }
 
     @RequestMapping(value = "/queryUserPage",method = RequestMethod.GET)
+    @RequiresPermissions("user.list")
     @ResponseBody
     public ModelAndView queryUserPage(String username,String realName,String mobile){
         ModelAndView modelAndView = new ModelAndView();
@@ -101,6 +105,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/userEdit")
+    @RequiresPermissions("user.edit")
     public ModelAndView userEdit(long userId) throws ExecutionException {
         ModelAndView modelAndView = new ModelAndView();
         UserInfo userInfo = userInfoService.findById(userId);
@@ -116,6 +121,14 @@ public class UserInfoController {
     @ResponseBody
     public int updateUser(UserInfo userInfo,long areaId,String role) throws ExecutionException {
         UserInfo userInDB = userInfoService.findById(userInfo.getUid());
+
+        if(!userInDB.getPassword().equals(userInfo.getPassword())){
+            String salt = UserUtil.generateSalt(userInfo.getPassword());
+            String encryptedPwd = UserUtil.encryptPassword(userInDB.getUsername(),userInfo.getPassword(),salt);
+            userInDB.setSalt(salt);
+            userInDB.setPassword(encryptedPwd);
+        }
+
         userInDB.setRealName(userInfo.getRealName());
         userInDB.setEmail(userInfo.getEmail());
         userInDB.setMobile(userInfo.getMobile());
