@@ -53,7 +53,8 @@
         event.stopPropagation();
         var x=param.event.pageX;
         var y=param.event.pageY;
-        deleteSensorName = param.data.name.substring(3)
+        deleteSensorName = param.data.name
+        deleteSensorName = deleteSensorName.substring(3,deleteSensorName.indexOf(" "))
         flt.css({"top":y,"left":x});
         flt.show();
     }
@@ -68,7 +69,9 @@
         $.ajax({
             type:"POST",
             url:"/deleteSensor",
-            data:{"sensorname":deleteSensorName,"monitorPointId":$("#monitorPoint").val(),"terminalId":terminalId},
+            data:{"sensorname":deleteSensorName,
+                "monitorPointId":$("#monitorPoint").val(),
+                "terminalId":terminalId},
             dataType : "text",
             success:function(data){
                  if(data=="0"){

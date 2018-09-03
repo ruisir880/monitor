@@ -38,7 +38,7 @@
             $("input[type='checkbox']").attr("checked", false);
             $.ajax({
                 type:"GET",
-                url:"/getPrivilege",
+                url:"/getPrivilegeByRole",
                 data:{"roleId":$("#role").val()},
                 dataType : "text",
                 success:function(data) {

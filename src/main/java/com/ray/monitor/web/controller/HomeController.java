@@ -1,6 +1,13 @@
 package com.ray.monitor.web.controller;
 
+import com.ray.monitor.model.PrivilegeInfo;
+import com.ray.monitor.model.RoleInfo;
 import com.ray.monitor.model.SensorInfo;
+import com.ray.monitor.model.UserInfo;
+import com.ray.monitor.web.vo.PrivilegeVO;
+import com.ray.monitor.web.vo.RoleVO;
+import netscape.security.Privilege;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.stereotype.Controller;
@@ -11,10 +18,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.management.relation.Role;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by rui on 2018/8/12.
@@ -55,15 +66,27 @@ public class HomeController {
             modelAndView.setViewName("/login");
         }
         modelAndView.addObject("msg",msg);
-        // 此方法不处理登录成功,由shiro进行处理.
+
         modelAndView.setViewName("/index");
         return modelAndView;
     }
 
 
+    @GetMapping(value = "/getPrivilege")
+    @ResponseBody
+    public RoleVO getPrivilege() {
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        return getRoleVO(userInfo.getRoleInfo());
 
+    }
 
-
+    private RoleVO getRoleVO(RoleInfo roleInfo){
+        RoleVO vo = new RoleVO(0, "index");
+        for(PrivilegeInfo privilege : roleInfo.getPermissions()){
+            vo.getPrivilegeNameList().add( privilege.getDescription());
+        }
+        return vo;
+    }
 
 
 

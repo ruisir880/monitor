@@ -14,7 +14,7 @@
     var option
     var myChart
     var flt
-    var sensorName
+    var sensorName =""
     var terminal
 
     var red="#900"
@@ -33,16 +33,25 @@
     function showHover(param) {
         event.stopPropagation();
         sensorName = param.name;
+        sensorName = sensorName.substring(3,sensorName.indexOf(" "))
         $("#sensorSpan").empty()
-        $("#sensorSpan").append(sensorName.substring(3,4))
+        $("#sensorSpan").append(sensorName)
     }
     
     function setThreshold() {
+        if($("#terminal").val() ==""){
+            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'请选择终端', ok:true,});
+            return;
+        }
+        if(sensorName ==""){
+            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'请选择传感器', ok:true,});
+            return;
+        }
         $.ajax({
             type: "POST",
             url: "/setThreshold",
             data: {"terminalId":$("#terminal").val(),
-                "sensorName":sensorName.substring(3,4),
+                "sensorName":sensorName,
                 "threshold": $("#threshold").val()
             },
             success: function (result) {

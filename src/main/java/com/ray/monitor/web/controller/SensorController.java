@@ -80,6 +80,7 @@ public class SensorController {
         if(sensorInfo !=null){
             return 1;
         }
+        sensorname = sensorname.replaceAll("\\s*", "");
         sensorInfoService.addSensor(terminalId, sensorname);
         return 0;
     }

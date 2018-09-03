@@ -61,7 +61,7 @@ public class PermissionController {
     }
 
 
-    @GetMapping(value = "/getPrivilege" )
+    @GetMapping(value = "/getPrivilegeByRole" )
     @RequiresPermissions("privilege.management")//权限管理;
     @ResponseBody
     public String getRolePrivileges(long roleId){

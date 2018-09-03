@@ -1,6 +1,8 @@
 package com.ray.monitor.web.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ray Rui on 9/3/2018.
@@ -11,6 +13,8 @@ public class RoleVO implements Serializable{
     private long id;
 
     private String name;
+
+    private List<String> privilegeNameList = new ArrayList<>();
 
     public RoleVO(long id, String name) {
         this.id = id;
@@ -31,5 +35,13 @@ public class RoleVO implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<String> getPrivilegeNameList() {
+        return privilegeNameList;
+    }
+
+    public void setPrivilegeNameList(List<String> privilegeNameList) {
+        this.privilegeNameList = privilegeNameList;
     }
 }
