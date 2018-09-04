@@ -18,4 +18,6 @@ public interface MonitorPointService {
     List<MonitorPoint> findByAreaId(long areaId);
 
     int findCount(long areaId,String name);
+
+    void deleteMP(long id);
 }

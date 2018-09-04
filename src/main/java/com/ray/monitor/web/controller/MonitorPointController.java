@@ -103,4 +103,12 @@ public class MonitorPointController {
         monitorPointService.save(monitorPoint);
         return 0;
     }
+
+    @PostMapping("/deleteMP")
+    @ResponseBody
+    @RequiresPermissions("monitorPoint.edit")
+    public int deleteMonitorpoint(long mpId){
+        monitorPointService.deleteMP(mpId);
+        return 0;
+    }
 }

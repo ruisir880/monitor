@@ -13,12 +13,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,8 +31,9 @@ public class TempInfoServiceImpl implements TempInfoService {
     @Autowired
     private TempRepository tempRepository;
 
+
     @Autowired
-    private SensorRepository sensorRepository;
+    private EntityManager entityManager;
 
     @Override
     public List<TempInfo> findBySensorIds(List<Long> sensorIdList) {
@@ -52,11 +53,45 @@ public class TempInfoServiceImpl implements TempInfoService {
 
     //需要保证startDate和endDate不为空
     public Page<TempInfo> pageQuery(long monitorPointId, int page , Date startTime, Date endTime, TempState state, String... terminalId){
+        Pageable pageable = new PageRequest(page-1, Constants.PAGE_SIZE); //页码：前端从1开始，jpa从0开始，做个转换
+        Specification<TempInfo> tempInfoSpecification = getSpecification(monitorPointId,startTime,endTime,state,terminalId);
+        return this.tempRepository.findAll(tempInfoSpecification,pageable);
+    }
 
-        //分页信息
+    /*@Override
+    @Transactional
+    public int deleteData(long monitorPointId, Date startTime, Date endTime, TempState state, String... terminalId) {
+        StringBuilder sqlBuilder =new StringBuilder(" select t from temp_info t left join sensor_info sf left join terminal_info tf" +
+                " where tf.monitor_point_id =:mpId and gen_time between :startDate and :endDate");
+        if(state != null){
+            sqlBuilder.append(" and t.state=:state");
+        }
+        boolean terminalCondition = (terminalId == null || terminalId.length == 0 || StringUtils.isEmpty(terminalId[0]));
+        if(!terminalCondition){
+            sqlBuilder.append(" and tf.id =:terminalId");
+        }
+
+        Query query = entityManager.createNativeQuery(sqlBuilder.toString())
+                .setParameter("mpId",monitorPointId)
+                .setParameter("startDate",startTime)
+                .setParameter("endDate",endTime);
+        if(state != null){
+            query.setParameter("state",state);
+        }
+        if(!terminalCondition){
+            query.setParameter("terminalId",terminalId);
+        }
+
+        List result = query.getResultList();
+        tempRepository.delete(result);
+        return result.size();
+    }
+*/
+
+
+    private Specification<TempInfo> getSpecification(long monitorPointId, Date startTime, Date endTime, TempState state, String... terminalId){
         String startDate = DateUtil.formatDate(startTime);
         String endDate = DateUtil.formatDate(endTime);
-        Pageable pageable = new PageRequest(page-1, Constants.PAGE_SIZE); //页码：前端从1开始，jpa从0开始，做个转换
         Specification<TempInfo> specification = new Specification<TempInfo>() {
             @Override
             public Predicate toPredicate(Root<TempInfo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -71,14 +106,36 @@ public class TempInfoServiceImpl implements TempInfoService {
                 }
                 predicates.add(cb.greaterThanOrEqualTo(root.get("genTime").as(String.class), startDate));
                 predicates.add(cb.lessThanOrEqualTo(root.get("genTime").as(String.class), endDate));
+
+                query.orderBy(cb.asc(root.get("genTime")));
                 return cb.and(predicates.toArray(new Predicate[0]));
             }
         };
-        return this.tempRepository.findAll(specification,pageable);
+        return specification;
     }
-
     @Override
-    public void deleteData(long monitorPointId, int page, Date startDate, Date endDate, TempState state, String... terminalId) {
+    @Transactional
+    public int deleteData(long monitorPointId, Date startDate, Date endDate, TempState state, String... terminalId) {
+        StringBuilder sqlBuilder =new StringBuilder(
+                "delete temp_info from temp_info  left join sensor_info  on temp_info.sensor_id = sensor_info.id  " +
+                        "left join terminal_info  on sensor_info.terminal_id=terminal_info.id  " +
+                        "where terminal_info.monitor_point_id =:mpId ");
+        if(state != null){
+            sqlBuilder.append(" and temp_info.state=:state");
+        }
+        boolean terminalCondition = (terminalId == null || terminalId.length == 0 || StringUtils.isEmpty(terminalId[0]));
+        if(!terminalCondition){
+            sqlBuilder.append(" and terminal_info.id =:terminalId");
+        }
 
+        Query query = entityManager.createNativeQuery(sqlBuilder.toString())
+                .setParameter("mpId",monitorPointId);
+        if(state != null){
+            query.setParameter("state",state.toString());
+        }
+        if(!terminalCondition){
+            query.setParameter("terminalId",terminalId);
+        }
+        return query.executeUpdate();
     }
 }

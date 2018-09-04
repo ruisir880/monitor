@@ -36,7 +36,7 @@ public interface TempRepository extends CrudRepository<TempInfo, Long> {
     Page<TempInfo> findAll(Specification<TempInfo> spec, Pageable pageable);
 
 
-    @Query(value = "SELECT t FROM TempInfo t where t.sensorInfo.terminalInfo.monitorPoint.id=:monitorPointId and genTime between :startDate and :endDate order by id",
+    @Query(value = "SELECT t FROM TempInfo t where t.sensorInfo.terminalInfo.monitorPoint.id=:monitorPointId and genTime between :startDate and :endDate order by genTime",
             countQuery = "SELECT count(t) FROM TempInfo t where  t.sensorInfo.terminalInfo.monitorPoint.id=:monitorPointId and genTime between :startDate and :endDate")
     Page<TempInfo> findPageByMPId(
             @Param(value="monitorPointId") long monitorPointId,

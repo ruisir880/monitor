@@ -18,5 +18,5 @@ public interface TempInfoService {
 
     Page<TempInfo> pageQuery(long monitorPointId, int page , Date startDate, Date endDate, TempState state, String... terminalId);
 
-    void deleteData(long monitorPointId, int page , Date startDate, Date endDate, TempState state, String... terminalId);
+    int deleteData(long monitorPointId, Date startDate, Date endDate, TempState state, String... terminalId);
 }

@@ -22,4 +22,6 @@ public interface UserInfoService {
 
     Page<UserInfo> pageUserQuery(int page ,String username,String realName,String mobile);
 
+    void deleteUser(long userId);
+
 }

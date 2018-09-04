@@ -58,4 +58,9 @@ public class MonitorPointServiceImpl implements MonitorPointService{
     public int findCount(long areaId, String name) {
         return monitorRepository.findCount(areaId,name);
     }
+
+    @Override
+    public void deleteMP(long id) {
+        monitorRepository.delete(id);
+    }
 }

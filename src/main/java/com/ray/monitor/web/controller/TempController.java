@@ -94,6 +94,22 @@ public class TempController {
         return modelAndView;
     }
 
+    @GetMapping("/tempInfoListDel")
+    @ResponseBody
+    @RequiresPermissions("tempInfo.edit")
+    public ModelAndView tempInfoListDel() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("tempInfoListDel");
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        try {
+            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            modelAndView.addObject("monitorPointList",monitorPointList);
+        } catch (ExecutionException e) {
+            logger.error(LOG_GETMONITOR_ERROR,e);
+        }
+        return modelAndView;
+    }
+
 
     @RequestMapping("/checkCurrentTempInfo")
     @ResponseBody
@@ -173,7 +189,7 @@ public class TempController {
     @RequestMapping("/deleteTempInfo")
     @ResponseBody
     @RequiresPermissions("tempInfo.edit")
-    public int deleteTempInfo(String state, String startTime, String endTime, long monitorPointId,int page,String terminalId) throws ParseException {
+    public int deleteTempInfo(String state, String startTime, String endTime, long monitorPointId,String terminalId) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         Calendar calendar = Calendar.getInstance();
 
@@ -192,8 +208,8 @@ public class TempController {
         }
 
         modelAndView.setViewName("tempInfoList");
-        tempInfoService.deleteData(monitorPointId, page, startDate, endDate, TempState.parseToStempSate(state),terminalId);
-       return 0;
+        return tempInfoService.deleteData(monitorPointId, startDate, endDate, TempState.parseToStempSate(state),terminalId);
+
     }
 
 }

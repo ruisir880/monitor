@@ -110,4 +110,10 @@ public class UserInfoServiceImpl implements UserInfoService{
     public UserInfo findById(long userId) {
         return userInfoRepository.findOne(userId);
     }
+
+    @Override
+    @Transactional
+    public void deleteUser(long userId) {
+        userInfoRepository.delete(userId);
+    }
 }

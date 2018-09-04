@@ -87,10 +87,11 @@ public class UserInfoController {
      * 用户删除;
      * @return
      */
-    @RequestMapping("/delUser")
+    @PostMapping("/deleteUser")
     @RequiresPermissions("user.edit")
-    public String userDel(){
-        return "userInfoDel";
+    public int userDel(long userId){
+        userInfoService.deleteUser(userId);
+        return 0;
     }
 
     @RequestMapping(value = "/queryUserPage",method = RequestMethod.GET)

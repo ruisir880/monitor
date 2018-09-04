@@ -63,7 +63,6 @@ public class SensorInfoServiceImpl implements SensorInfoService{
         SensorInfo  sensorInfo = sensorRepository.findBySensorName(terminalId, sensorName);
         tempRepository.deleteBySensorId(sensorInfo.getId());
         commentRepository.deleteBySensorId(sensorInfo.getId());
-        System.out.println(sensorInfo.getId());
         sensorRepository.delete(sensorInfo.getId());
 
     }
