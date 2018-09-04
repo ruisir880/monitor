@@ -27,9 +27,14 @@ import java.util.concurrent.ExecutionException;
  */
 @Component
 public class MonitorCache implements MonitorCacheListener {
+
+    //areaId->List<MonitorSensorVO>
     private Cache<Long,List<MonitorSensorVO>> AREAMONITORCACHE = CacheBuilder.newBuilder().softValues().build();
+
+    //monitorPointId ->listTerminalVO>
     private Cache<Long,List<TerminalVO>> MONITOR_TERMINAL_CACHE = CacheBuilder.newBuilder().softValues().build();
 
+    //areaId,mpName,terminalName,sensorName->SensorInfo
     private Cache<String, SensorInfo> SENSOR_CACHE = CacheBuilder.newBuilder().softValues().build();
 
     private List<PrivilegeVO> privilegeVOListList = new ArrayList<>();
@@ -54,13 +59,17 @@ public class MonitorCache implements MonitorCacheListener {
     }
 
     @Override
-    public void reset(long areaId) {
+    public void resetAreaMP(long areaId) {
         AREAMONITORCACHE.invalidate(areaId);
     }
 
     @Override
     public void resetTerminal(long monitorPointId) {
         MONITOR_TERMINAL_CACHE.invalidate(monitorPointId);
+    }
+
+    public void resetSensorCache(){
+        SENSOR_CACHE.invalidateAll();
     }
 
     public List<MonitorSensorVO> get(long areaId) throws ExecutionException {

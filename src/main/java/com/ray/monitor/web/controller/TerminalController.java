@@ -123,8 +123,7 @@ public class TerminalController {
 
     private int updateTerminal(String name,long monitorPointId,long termianId){
         MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(monitorPointId);
-
-        TerminalInfo terminalInfoDB = terminalService.findByNameAndMonitorpointId(name,monitorPointId);
+        TerminalInfo terminalInfoDB = terminalService.findById(termianId);;
         if(terminalInfoDB!=null && terminalInfoDB.getId() != termianId){
             return 1;
         }
@@ -148,7 +147,19 @@ public class TerminalController {
         terminalInfo.setMonitorPoint(monitorPoint);
         terminalInfo.setGenTime(new Date());
         terminalService.save(terminalInfo);
+
+        monitorCache.resetTerminal(monitorPointId);
         return 0;
     }
 
+
+    @PostMapping("/deleteTerminal")
+    @ResponseBody
+    @RequiresPermissions("terminal.edit")
+    public int deleteTerminal(long terminalId){
+        TerminalInfo terminalInfo = terminalService.findById(terminalId);
+        terminalService.delete(terminalId);
+        monitorCache.resetTerminal(terminalInfo.getMonitorPoint().getId());
+        return 0;
+    }
 }

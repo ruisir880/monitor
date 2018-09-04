@@ -12,7 +12,7 @@ public interface TerminalService {
 
     TerminalInfo findByNameAndMonitorpointId(String name,long monitorPointId);
 
-    void delete(TerminalInfo terminalInfo);
+    void delete(long id);
 
     List<TerminalInfo> findByMonitorpointId(long monitorpointId);
 

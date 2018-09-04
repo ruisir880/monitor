@@ -36,6 +36,23 @@
             window.location.href=targetUrl;
         }
 
+        /** 模糊查询来电用户  **/
+        function deleteUser(userId){
+            $.ajax({
+                type:"POST",
+                url:"/deleteUser",
+                data:{"userId":userId},
+                dataType : "text",
+                success:function(data){
+                    if(data=="0"){
+                        art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'删除成功', ok:true,});
+                    }else{
+                        art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'删除失败', ok:true,});
+                    }
+                }
+            });
+        }
+
     </script>
     <style>
         .alt td{ background:black !important;}
@@ -84,7 +101,7 @@
                         <td>${user.email}</td>
                         <td>
                             <a href="/userEdit.html?userId=${user.uid}" class="edit">编辑</a>
-                            <a href="javascript:del(${user.uid});">删除</a>
+                            <a href="javascript:deleteUser(${user.uid});">删除</a>
                         </td>
                     </tr>
                     @}

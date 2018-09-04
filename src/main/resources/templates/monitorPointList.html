@@ -27,6 +27,21 @@
             });
         });
 
+        function deleteMP(mpId) {
+            $.ajax({
+                type: "POST",
+                url: "deleteMP",
+                data: {"mpId":mpId
+                },
+                success: function (result) {
+                    if(result == 0){
+                        art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'删除成功', ok:true,});
+                    }
+                }
+
+            })
+        }
+
     </script>
     <style>
         .alt td{ background:black !important;}
@@ -58,7 +73,7 @@
                         <td>${elem.genTime}</td>
                         <td>
                             <a href="/monitorPointEdit.html?id=${elem.id}" class="edit">编辑</a>
-                            <a href="javascript:del(${elem.id});">删除</a>
+                            <a href="javascript:deleteMP(${elem.id});">删除</a>
                         </td>
                     </tr>
                     @}

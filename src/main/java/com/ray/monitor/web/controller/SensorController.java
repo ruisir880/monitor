@@ -82,6 +82,8 @@ public class SensorController {
         }
         sensorname = sensorname.replaceAll("\\s*", "");
         sensorInfoService.addSensor(terminalId, sensorname);
+
+        monitorCache.resetSensorCache();
         return 0;
     }
 
@@ -91,6 +93,7 @@ public class SensorController {
     public int deleteSensor(long terminalId,String sensorname){
         try {
             sensorInfoService.deleteSensor(terminalId, sensorname);
+            monitorCache.resetSensorCache();
         }catch (Exception e){
             logger.error("Error occurs when delete sensor:",e);
             return 1;

@@ -1,6 +1,7 @@
 package com.ray.monitor.web.controller;
 
 import com.ray.monitor.core.AreaCache;
+import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.service.AreaService;
 import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.model.Area;
@@ -33,6 +34,9 @@ public class MonitorPointController {
 
     @Autowired
     private AreaCache areaCache;
+
+    @Autowired
+    private MonitorCache monitorCache;
 
     @GetMapping(value = "/monitorPointList" )
     @RequiresPermissions("monitorPoint.list")
@@ -101,6 +105,8 @@ public class MonitorPointController {
         monitorPoint.setGenTime(new Date());
         monitorPoint.setArea(area);
         monitorPointService.save(monitorPoint);
+
+        monitorCache.resetAreaMP(areaId);
         return 0;
     }
 
@@ -108,7 +114,10 @@ public class MonitorPointController {
     @ResponseBody
     @RequiresPermissions("monitorPoint.edit")
     public int deleteMonitorpoint(long mpId){
+        MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(mpId);
         monitorPointService.deleteMP(mpId);
+
+        monitorCache.resetAreaMP(monitorPoint.getArea().getId());
         return 0;
     }
 }

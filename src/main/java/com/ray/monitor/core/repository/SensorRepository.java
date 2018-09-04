@@ -44,4 +44,9 @@ public interface SensorRepository extends CrudRepository<SensorInfo, Long> {
             @Param(value="terminalId") long terminalId
     );
 
+    @Query(value = "select s  from SensorInfo s where s.terminalInfo.id=:terminalId")
+    Set<SensorInfo> findByTerminalId(
+            @Param(value="terminalId") long terminalId
+    );
+
 }

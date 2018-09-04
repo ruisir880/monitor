@@ -30,11 +30,12 @@
                     "terminalId":$("#terminal").val(),
                     "startTime":startTime,
                     "endTime":endTime,
-                    "state":state,
-                    page:jumpPage
+                    "state":state
                 },
                 success: function (result) {
-
+                    if(result > 0){
+                        art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'成功删除'+result+'条数据', ok:true,});
+                    }
                 }
 
             })
@@ -83,7 +84,7 @@
                     </div>
                     <div id="box_bottom">
                         <input type="button" value="查询" class="ui_input_btn01" onclick="search(1);" />
-                        <input type="delete" value="删除" class="ui_input_btn01" onclick="deleteData();" />
+                        <input type="button" value="删除" class="ui_input_btn01" onclick="deleteData();" />
                     </div>
                 </div>
             </div>
@@ -97,6 +98,7 @@
                         <th>终端名</th>
                         <th>时间</th>
                         <th>温度</th>
+                        <th>状态</th>
                         <th>传感器阈值</th>
                     </tr>
                 </table>

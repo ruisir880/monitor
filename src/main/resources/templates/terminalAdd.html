@@ -10,7 +10,6 @@
     <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
     <script  src="${ctxPath}/scripts/My97DatePicker/WdatePicker.js" type="text/javascript" defer="defer"></script>
     <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
-    <script type="text/javascript"  src="${ctxPath}/scripts/sensor.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -36,20 +35,15 @@
         function checkSubmit(){
             var name = $('#name').val();
             var monitorPoint = $('#monitorPoint').val();
-            var terminalId = $('#terminalId').text().trim();
             if(name!="" && monitorPoint!="" ){
                 $.ajax({
                     type:"POST",
-                    url:"/editTerminal",
-                    data:{
-                        "name":name,
-                        "monitorPointId":monitorPoint,
-                        "terminalId":terminalId
-                    },
+                    url:"/addTerminal",
+                    data:{"name":name,"monitorPointId":monitorPoint},
                     dataType : "text",
                     success:function(data) {
                         if (data == "0") {
-                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'编辑成功', ok:true,});
+                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'添加成功', ok:true,});
                         }else if (data == "1") {
                             art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'终端已存在', ok:true,});
                         }
@@ -76,11 +70,6 @@
 </head>
 <body>
 <form id="submitForm" name="submitForm" method="post">
-    <p hidden id="terminalId" >
-        @if(!isEmpty(terminal)){
-        ${terminal.id}
-        @}
-    </p>
     <div id="container">
         <div id="nav_links">
             当前位置：基础数据&nbsp;>&nbsp;<span style="color: #1A5CC6;">终端</span>
@@ -99,7 +88,7 @@
                         @if(!isEmpty(terminal)){}
                         <input type="text" id="name" name="name"
                                @if(!isEmpty(terminal)){
-                               value="${terminal.terminalId}"
+                               value="${monitorPoint.name}"
                                @}
                                class="ui_input_txt02"/>
 
@@ -112,11 +101,7 @@
                         <select name="monitorPoint" id="monitorPoint" class="ui_select01">
                             @if(!isEmpty(monitorPointList)){
                             @for(monitorPoint in monitorPointList){
-                            <option value=${monitorPoint.id}
-                                    @if(!isEmpty(monitorpointId) && monitorPoint.id==monitorpointId){
-                                    selected="true"
-                                    @}
-                            >${monitorPoint.monitorPointName}</option>
+                            <option value=${monitorPoint.id}>${monitorPoint.name}</option>
                             @}
                             @}
                         </select>
