@@ -27,6 +27,32 @@
             });
         });
 
+        function search() {
+            $.ajax({
+                type: "get",
+                url: "queryMP",
+                data: {},
+                success: function (result) {
+                    $("#mpList tr:not(:first)").empty("");
+                    var elem
+                    for (var i in result) {
+                        elem = result[i]
+                        item = '<tr><td>'+elem.monitorPointName
+                            +'</td> <td>'+elem.area
+                            +'</td> <td>'+elem.address
+                            +'</td> <td>'+elem.clientCompany
+                            +'</td> <td>'+elem.genTime
+                            +'</td><td> <a href="/terminalEdit.html?id=' +elem.id
+                            +'" class="edit">编辑</a> <a href="javascript:deleteTerminal(' +elem.id
+                            +');" class="edit">删除</a> </td></tr>';
+                        $('.table').append(item);
+
+                    }
+                }
+
+            })
+        }
+
         function deleteMP(mpId) {
             $.ajax({
                 type: "POST",
@@ -36,6 +62,10 @@
                 success: function (result) {
                     if(result == 0){
                         art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'删除成功', ok:true,});
+                    }else if (result == "2") {
+                        art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'检测点下有传感器', ok:true,});
+                    }else if (result == "1") {
+                        art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'删除失败', ok:true,});
                     }
                 }
 
@@ -51,8 +81,19 @@
 <form id="submitForm" name="submitForm" action="" method="get">
     <div id="container">
         <div class="ui_content">
+            <div class="ui_text_indent">
+                <div id="box_border">
+                    <div id="box_top">搜索</div>
+                    <div id="box_bottom">
+                        <input type="button" value="查询" class="ui_input_btn01" onclick="search();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui_content">
             <div class="ui_tb">
-                <table class="table" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                <table class="table" id="mpList" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
                     <tr>
                         </th>
                         <th>名称</th>
@@ -62,22 +103,6 @@
                         <th>建立时间</th>
                         <th>操作</th>
                     </tr>
-                    @if(!isEmpty(monitorPointList)){
-                    @for(elem in monitorPointList){
-                    <tr>
-                        </td>
-                        <td>${elem.name}</td>
-                        <td>${elem.area.parentArea.areaName} ${elem.area.areaName}</td>
-                        <td>${elem.address}</td>
-                        <td>${elem.clientCompany}</td>
-                        <td>${elem.genTime}</td>
-                        <td>
-                            <a href="/monitorPointEdit.html?id=${elem.id}" class="edit">编辑</a>
-                            <a href="javascript:deleteMP(${elem.id});">删除</a>
-                        </td>
-                    </tr>
-                    @}
-                    @}
                 </table>
             </div>
         </div>

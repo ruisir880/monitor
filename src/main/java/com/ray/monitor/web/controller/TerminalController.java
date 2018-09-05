@@ -3,6 +3,7 @@ package com.ray.monitor.web.controller;
 import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.core.service.TerminalService;
+import com.ray.monitor.exception.SonRecordFoundException;
 import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.MonitorSensorVO;
@@ -161,7 +162,11 @@ public class TerminalController {
         try {
             terminalService.delete(terminalId);
             monitorCache.terminalOrSensorChanged(terminalId);
-        }catch (Exception e){
+        }catch (SonRecordFoundException e){
+            logger.error("deleteTerminal:",e);
+            return 2;
+        } catch (Exception e){
+            logger.error("deleteTerminal:",e);
             return 1;
         }
 

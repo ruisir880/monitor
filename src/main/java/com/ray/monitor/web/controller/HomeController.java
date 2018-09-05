@@ -10,6 +10,8 @@ import netscape.security.Privilege;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,8 @@ import java.util.stream.Collectors;
  */
 @Controller
 public class HomeController {
+    private static Logger logger = LoggerFactory.getLogger(HomeController.class);
+
     @RequestMapping({ "/", "index" })
     public String index() {
         return "/index";
@@ -52,21 +56,22 @@ public class HomeController {
         // shiroLoginFailure:就是shiro异常类的全类名
         String exception = (String) request.getAttribute("shiroLoginFailure");
         String msg = "";
+        int result = 0;
         if (exception != null) {
             if (UnknownAccountException.class.getName().equals(exception)) {
-                m.addAttribute("name","1");
+                result = 1;
             } else if (IncorrectCredentialsException.class.getName().equals(exception)) {
-                m.addAttribute("name","2");
+                result=2;
             } else if ("kaptchaValidateFailed".equals(exception)) {
-                System.out.println("kaptchaValidateFailed -- > 验证码错误");
-                msg = "kaptchaValidateFailed -- > 验证码错误";
+                result=3;
             } else {
                 msg = "else >> " + exception;
             }
+            logger.warn("Login info:" + exception);
+            modelAndView.addObject("result",result);
             modelAndView.setViewName("/login");
+            return modelAndView;
         }
-        modelAndView.addObject("msg",msg);
-
         modelAndView.setViewName("/index");
         return modelAndView;
     }

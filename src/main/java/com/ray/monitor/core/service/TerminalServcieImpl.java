@@ -2,6 +2,8 @@ package com.ray.monitor.core.service;
 
 import com.ray.monitor.core.repository.SensorRepository;
 import com.ray.monitor.core.repository.TerminalRepository;
+import com.ray.monitor.exception.SonRecordFoundException;
+import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TerminalInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,9 +33,12 @@ public class TerminalServcieImpl implements TerminalService {
 
     @Override
     @Transactional
-    public void delete(long id) {
-        sensorRepository.deleteByTerminalInfo_Id(id);
-        terminalRepository.delete(id);
+    public void delete(long id) throws SonRecordFoundException {
+        Set<SensorInfo> records = sensorRepository.findByTerminalId(id);
+        if(records.size()>0){
+            throw new SonRecordFoundException("There is son records:"+id);
+        }
+        terminalRepository.deleteByTerminalId(id);
     }
 
     @Override

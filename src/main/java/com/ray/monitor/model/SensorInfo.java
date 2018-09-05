@@ -31,10 +31,10 @@ public class SensorInfo implements Serializable {
     @JoinColumn(name="terminal_id")//设置在employee表中的关联字段(外键)
     private TerminalInfo terminalInfo;
 
-    @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,orphanRemoval = true,fetch=FetchType.EAGER)
     private Set<CommentInfo> commentInfoList;
 
-    @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @OneToMany(mappedBy="sensorInfo",cascade=CascadeType.ALL,orphanRemoval = true,fetch=FetchType.LAZY)
     private Set<TempInfo> tempInfoList;
 
 

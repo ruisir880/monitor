@@ -127,6 +127,11 @@ public class ParseUtil {
         }
         vo.setId(monitorPoint.getId());
         vo.setMonitorPointName(monitorPoint.getName());
+        vo.setAddress(monitorPoint.getAddress());
+        vo.setClientCompany(monitorPoint.getClientCompany());
+        vo.setGenTime(DateUtil.formatDate(monitorPoint.getGenTime()));
+        Area area = monitorPoint.getArea();
+        vo.setArea(area.getParentArea().getAreaName() + " "+area.getAreaName());
         if(monitorPoint.getTerminalInfoList() == null || monitorPoint.getTerminalInfoList().size() == 0){
             return vo;
         }

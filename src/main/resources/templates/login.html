@@ -13,7 +13,9 @@
             <div id="login_form">
                 <form id="submitForm" action="" method="post">
                     <div id="login_tip">
-                        <span id="login_err" class="sty_txt2"></span>
+                        @if(!isEmpty(result)){
+                        <span id="login_err1" class="sty_txt2">用户名或者密码不匹配</span>
+                        @}
                     </div>
                     <div>
                         用户名：<input type="text" name="username" class="username" id="name"/>

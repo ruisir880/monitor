@@ -1,5 +1,6 @@
 package com.ray.monitor.core.service;
 
+import com.ray.monitor.exception.SonRecordFoundException;
 import com.ray.monitor.model.TerminalInfo;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface TerminalService {
 
     TerminalInfo findByNameAndMonitorpointId(String name,long monitorPointId);
 
-    void delete(long id);
+    void delete(long id) throws SonRecordFoundException;
 
     List<TerminalInfo> findByMonitorpointId(long monitorpointId);
 

@@ -4,10 +4,16 @@ import com.ray.monitor.core.AreaCache;
 import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.service.AreaService;
 import com.ray.monitor.core.service.MonitorPointService;
+import com.ray.monitor.exception.SonRecordFoundException;
 import com.ray.monitor.model.Area;
 import com.ray.monitor.model.MonitorPoint;
+import com.ray.monitor.model.UserInfo;
 import com.ray.monitor.web.vo.AreaVO;
+import com.ray.monitor.web.vo.MonitorSensorVO;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -16,15 +22,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import static com.ray.monitor.core.constant.Constants.LOG_GETMONITOR_ERROR;
 
 /**
  * Created by Ray Rui on 8/28/2018.
  */
 @Controller
 public class MonitorPointController {
+    private static Logger logger = LoggerFactory.getLogger(MonitorPointController.class);
 
     @Autowired
     private MonitorPointService monitorPointService;
@@ -43,9 +53,22 @@ public class MonitorPointController {
     public ModelAndView monitorPointList(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("monitorPointList");
-        List<MonitorPoint> monitorPoints = monitorPointService.findAll();
-        modelAndView.addObject("monitorPointList",monitorPoints);
         return modelAndView;
+    }
+
+    @GetMapping("/queryMP")
+    @ResponseBody
+    public List<MonitorSensorVO> queryMP(){
+        ModelAndView modelAndView = new ModelAndView();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        try {
+            List<MonitorSensorVO>  monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
+            modelAndView.addObject("monitorPointList",monitorPointList);
+            return monitorPointList;
+        } catch (ExecutionException e) {
+            logger.error(LOG_GETMONITOR_ERROR,e);
+        }
+        return Collections.emptyList();
     }
 
     @GetMapping(value = "/monitorPointEdit" )
@@ -115,9 +138,16 @@ public class MonitorPointController {
     @RequiresPermissions("monitorPoint.edit")
     public int deleteMonitorpoint(long mpId){
         MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(mpId);
-        monitorPointService.deleteMP(mpId);
-
-        monitorCache.mpOrTerminalChanged(monitorPoint.getArea().getId());
+        try {
+            monitorPointService.deleteMP(mpId);
+            monitorCache.mpOrTerminalChanged(monitorPoint.getArea().getId());
+        } catch (SonRecordFoundException e) {
+            logger.error("deleteMonitorpoint:",e);
+            return 2;
+        }catch (Exception e){
+            logger.error("deleteMonitorpoint:",e);
+            return 1;
+        }
         return 0;
     }
 }

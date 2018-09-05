@@ -61,6 +61,10 @@
                 success: function (result) {
                     if(result == 0){
                         art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'删除成功', ok:true,});
+                    }else if (result == "2") {
+                        art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'终端下有传感器', ok:true,});
+                    }else if (result == "1") {
+                        art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'删除失败', ok:true,});
                     }
                 }
 

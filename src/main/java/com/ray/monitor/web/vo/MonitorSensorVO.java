@@ -1,6 +1,7 @@
 package com.ray.monitor.web.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,6 +13,14 @@ public class MonitorSensorVO implements Serializable {
     private long id;
 
     private String monitorPointName;
+
+    private String clientCompany;
+
+    private String genTime;
+
+    private String address;
+
+    private String area;
 
     private List<TerminalVO> terminalVOList;
 
@@ -37,5 +46,38 @@ public class MonitorSensorVO implements Serializable {
 
     public void setTerminalVOList(List<TerminalVO> terminalVOList) {
         this.terminalVOList = terminalVOList;
+    }
+
+
+    public String getClientCompany() {
+        return clientCompany;
+    }
+
+    public void setClientCompany(String clientCompany) {
+        this.clientCompany = clientCompany;
+    }
+
+    public String getGenTime() {
+        return genTime;
+    }
+
+    public void setGenTime(String genTime) {
+        this.genTime = genTime;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

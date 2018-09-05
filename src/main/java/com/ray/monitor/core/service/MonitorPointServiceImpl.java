@@ -2,6 +2,7 @@ package com.ray.monitor.core.service;
 
 import com.ray.monitor.core.repository.MonitorRepository;
 import com.ray.monitor.core.repository.TerminalRepository;
+import com.ray.monitor.exception.SonRecordFoundException;
 import com.ray.monitor.model.MonitorPoint;
 import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TerminalInfo;
@@ -9,10 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
+import static com.ray.monitor.core.constant.Constants.SON_RECORDS_ERROR_MSG;
 
 /**
  * Created by rui on 2018/8/19.
@@ -42,7 +42,7 @@ public class MonitorPointServiceImpl implements MonitorPointService{
                 iterator.remove();
                 continue;
             }
-            List<SensorInfo> sensorInfos = new ArrayList<>(sensorInfoService.findByMPIdTerminalId(terminalInfo.getId()));
+            Set<SensorInfo> sensorInfos = sensorInfoService.findByMPIdTerminalId(terminalInfo.getId());
             terminalInfo.setSensorInfoList(sensorInfos) ;
         }
         return monitorPoint;
@@ -69,7 +69,11 @@ public class MonitorPointServiceImpl implements MonitorPointService{
     }
 
     @Override
-    public void deleteMP(long id) {
+    public void deleteMP(long id) throws SonRecordFoundException {
+        MonitorPoint mp = monitorRepository.findOne(id);
+        if(mp.getTerminalInfoList().size()>0){
+            throw new SonRecordFoundException(SON_RECORDS_ERROR_MSG);
+        }
         monitorRepository.delete(id);
     }
 }

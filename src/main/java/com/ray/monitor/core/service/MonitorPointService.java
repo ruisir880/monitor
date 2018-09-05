@@ -1,5 +1,6 @@
 package com.ray.monitor.core.service;
 
+import com.ray.monitor.exception.SonRecordFoundException;
 import com.ray.monitor.model.MonitorPoint;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public interface MonitorPointService {
 
     int findCount(long areaId,String name);
 
-    void deleteMP(long id);
+    void deleteMP(long id) throws SonRecordFoundException;
 }
