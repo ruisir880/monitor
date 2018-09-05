@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by rui on 2018/8/18.
@@ -43,5 +44,10 @@ public interface TerminalRepository extends CrudRepository<TerminalInfo, Long> {
     @Query(value = "delete temp_info,sensor_info,terminal_info from temp_info  right join sensor_info  on temp_info.sensor_id = sensor_info.id  \n" +
             "right join terminal_info  on sensor_info.terminal_id=terminal_info.id where terminal_info.id=:terminalId",nativeQuery = true)
     void deleteByTerminalId(@Param(value="terminalId") long terminalId);
+
+    void deleteById(long id);
+
+    @Query(value = "select t from TerminalInfo t left join fetch t.sensorInfoList where t.id in :idList ")
+    Set<TerminalInfo> getWithSensor(@Param(value="idList")List<Long> idList);
 
 }

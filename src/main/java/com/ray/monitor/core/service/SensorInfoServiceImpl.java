@@ -74,7 +74,7 @@ public class SensorInfoServiceImpl implements SensorInfoService{
     }
 
     @Override
-    public Set<SensorInfo> findByMPIdTerminalId(long monitorPointId, long terminalId) {
-        return sensorRepository.findByMPIdTerminalId(monitorPointId,terminalId);
+    public Set<SensorInfo> findByMPIdTerminalId(long terminalId) {
+        return sensorRepository.findByMPIdTerminalId(terminalId);
     }
 }

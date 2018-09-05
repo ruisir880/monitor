@@ -3,6 +3,7 @@ package com.ray.monitor.core.service;
 import com.ray.monitor.model.TerminalInfo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Ray Rui on 8/30/2018.
@@ -19,4 +20,6 @@ public interface TerminalService {
     TerminalInfo findById(long id);
 
     TerminalInfo getTerminal(long areaId, String mpName, String terminalName);
+
+    Set<TerminalInfo> findWithSensor(List<Long> idList );
 }

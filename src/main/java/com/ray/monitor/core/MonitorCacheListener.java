@@ -5,10 +5,5 @@ package com.ray.monitor.core;
  */
 public interface MonitorCacheListener {
 
-    void resetAreaMP(long areaId);
-
-
-    void resetTerminal(long monitorPointId);
-
 
 }

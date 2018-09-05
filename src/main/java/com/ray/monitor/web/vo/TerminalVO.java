@@ -18,6 +18,9 @@ public class TerminalVO implements Serializable{
 
     private List<SensorVO> sensorVOList;
 
+    public TerminalVO() {
+    }
+
     public TerminalVO(long id, String name, String genTime) {
         this.id = id;
         this.name = name;

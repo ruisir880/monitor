@@ -5,20 +5,19 @@ import com.google.common.base.Joiner;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.ray.monitor.core.repository.MonitorRepository;
+import com.ray.monitor.core.repository.SensorRepository;
 import com.ray.monitor.core.repository.TerminalRepository;
 import com.ray.monitor.core.service.PermissionService;
 import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
-import com.ray.monitor.web.vo.MonitorSensorVO;
-import com.ray.monitor.web.vo.PrivilegeVO;
-import com.ray.monitor.web.vo.RoleVO;
-import com.ray.monitor.web.vo.TerminalVO;
+import com.ray.monitor.web.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
@@ -29,10 +28,13 @@ import java.util.concurrent.ExecutionException;
 public class MonitorCache implements MonitorCacheListener {
 
     //areaId->List<MonitorSensorVO>
-    private Cache<Long,List<MonitorSensorVO>> AREAMONITORCACHE = CacheBuilder.newBuilder().softValues().build();
+    private Cache<Long,List<MonitorSensorVO>> AREA_MONITOR_CACHE = CacheBuilder.newBuilder().softValues().build();
 
-    //monitorPointId ->listTerminalVO>
-    private Cache<Long,List<TerminalVO>> MONITOR_TERMINAL_CACHE = CacheBuilder.newBuilder().softValues().build();
+    //terminalId ->TerminalVO>
+    private Cache<Long,TerminalVO> TERMINAL_SENSOR_CACHE = CacheBuilder.newBuilder().softValues().build();
+
+    //areaId->MonitorSensorVO
+    private Cache<Long,MonitorSensorVO> MONITOR_POINT_CACHE = CacheBuilder.newBuilder().softValues().build();
 
     //areaId,mpName,terminalName,sensorName->SensorInfo
     private Cache<String, SensorInfo> SENSOR_CACHE = CacheBuilder.newBuilder().softValues().build();
@@ -42,11 +44,16 @@ public class MonitorCache implements MonitorCacheListener {
     private List<RoleInfo> roleInfoList  = new ArrayList<>();
 
 
+
+
     @Autowired
     private MonitorRepository monitorRepository;
 
     @Autowired
     private TerminalRepository terminalRepository;
+
+    @Autowired
+    private SensorRepository sensorRepository;
 
     @Autowired
     private PermissionService permissionService;
@@ -58,22 +65,9 @@ public class MonitorCache implements MonitorCacheListener {
         roleVOList = ParseUtil.getRoleVOS(roleInfoList);
     }
 
-    @Override
-    public void resetAreaMP(long areaId) {
-        AREAMONITORCACHE.invalidate(areaId);
-    }
 
-    @Override
-    public void resetTerminal(long monitorPointId) {
-        MONITOR_TERMINAL_CACHE.invalidate(monitorPointId);
-    }
-
-    public void resetSensorCache(){
-        SENSOR_CACHE.invalidateAll();
-    }
-
-    public List<MonitorSensorVO> get(long areaId) throws ExecutionException {
-        return AREAMONITORCACHE.get(areaId, new Callable<List<MonitorSensorVO>>() {
+    public List<MonitorSensorVO> getMonitorSensorVO(long areaId) throws ExecutionException {
+        return AREA_MONITOR_CACHE.get(areaId, new Callable<List<MonitorSensorVO>>() {
             @Override
             public List<MonitorSensorVO> call() throws Exception {
                 return ParseUtil.getMonitorSensorVOList(monitorRepository.findByAreaId(areaId));
@@ -81,12 +75,13 @@ public class MonitorCache implements MonitorCacheListener {
         });
     }
 
-
-    public List<TerminalVO> gettTerminal(long monitorPointId) throws ExecutionException {
-        return MONITOR_TERMINAL_CACHE.get(monitorPointId, new Callable<List<TerminalVO>>() {
+    public TerminalVO gettTerminal(long terminalId) throws ExecutionException {
+        return TERMINAL_SENSOR_CACHE.get(terminalId, new Callable<TerminalVO>() {
             @Override
-            public List<TerminalVO> call() throws Exception {
-                return ParseUtil.getTerminalVOS(terminalRepository.findByMonitorpointId(monitorPointId));
+            public TerminalVO call() throws Exception {
+
+                Set<SensorInfo> sensorInfoSet =  sensorRepository.findByTerminalId(terminalId);
+                return ParseUtil.getTerminalVO(sensorInfoSet);
             }
         });
     }
@@ -121,5 +116,14 @@ public class MonitorCache implements MonitorCacheListener {
 
     public List<RoleInfo> getRoleInfoList() {
         return roleInfoList;
+    }
+
+
+    public void mpOrTerminalChanged(long areaId){
+        AREA_MONITOR_CACHE.invalidate(areaId);
+    }
+
+    public void terminalOrSensorChanged(long terminalId){
+        TERMINAL_SENSOR_CACHE.invalidate(terminalId);
     }
 }

@@ -48,7 +48,7 @@ public class TerminalController {
         modelAndView.setViewName("terminalList");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorSensorVO> monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO> monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -60,7 +60,7 @@ public class TerminalController {
     @RequestMapping("/getTerminal")
     @ResponseBody
     public List<TerminalVO> getTerminal(long monitorPointId) throws ExecutionException {
-        return monitorCache.gettTerminal(monitorPointId);
+        return ParseUtil.getTerminalVOS(terminalService.findByMonitorpointId(monitorPointId));
     }
 
     @GetMapping("/queryTerminalList")
@@ -79,7 +79,7 @@ public class TerminalController {
 
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorSensorVO> monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO> monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -98,7 +98,7 @@ public class TerminalController {
         modelAndView.addObject("monitorpointId",terminalInfo.getMonitorPoint().getId());
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorSensorVO> monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO> monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -117,7 +117,8 @@ public class TerminalController {
        }else {
            result = updateTerminal(name,monitorPointId,Long.parseLong(terminalId));
        }
-        monitorCache.resetTerminal(monitorPointId);
+       MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(monitorPointId);
+       monitorCache.mpOrTerminalChanged(monitorPoint.getArea().getId());
        return result;
     }
 
@@ -131,6 +132,7 @@ public class TerminalController {
         terminalInfoDB.setTerminalId(name);
         terminalInfoDB.setMonitorPoint(monitorPoint);
         terminalService.save(terminalInfoDB);
+        monitorCache.terminalOrSensorChanged(termianId);
         return 0;
     }
 
@@ -148,7 +150,6 @@ public class TerminalController {
         terminalInfo.setGenTime(new Date());
         terminalService.save(terminalInfo);
 
-        monitorCache.resetTerminal(monitorPointId);
         return 0;
     }
 
@@ -157,9 +158,13 @@ public class TerminalController {
     @ResponseBody
     @RequiresPermissions("terminal.edit")
     public int deleteTerminal(long terminalId){
-        TerminalInfo terminalInfo = terminalService.findById(terminalId);
-        terminalService.delete(terminalId);
-        monitorCache.resetTerminal(terminalInfo.getMonitorPoint().getId());
+        try {
+            terminalService.delete(terminalId);
+            monitorCache.terminalOrSensorChanged(terminalId);
+        }catch (Exception e){
+            return 1;
+        }
+
         return 0;
     }
 }

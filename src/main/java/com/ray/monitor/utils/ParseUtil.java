@@ -52,10 +52,6 @@ public class ParseUtil {
         return sdf.parse(  htmlTime.replace("T"," "));
     }
 
-    public static String formateDate(Date date){
-        SimpleDateFormat sdf= new SimpleDateFormat(DATETIME_PARTTERN);
-        return sdf.format(date);
-    }
 
 
     public static PageTempVO getPageTempVO(Page<TempInfo> tempInfoPage){
@@ -77,21 +73,20 @@ public class ParseUtil {
         return areaVOS;
     }
 
-    public static List<TerminalVO> getTerminalVOS(List<TerminalInfo> terminalInfoList){
+    public static List<TerminalVO> getTerminalVOS(Collection<TerminalInfo> terminalInfoList){
         List<TerminalVO> terminalVOList = new ArrayList<>();
 
+        TerminalVO tempVO = null;
         for(TerminalInfo terminalInfo : terminalInfoList){
-            terminalVOList.add(new TerminalVO(
+            tempVO = new TerminalVO(
                     terminalInfo.getId(),
                     terminalInfo.getTerminalId(),
-                    DateUtil.formatDate(terminalInfo.getGenTime())));
+                    DateUtil.formatDate(terminalInfo.getGenTime()));
+
+            tempVO.setSensorVOList(getSensorVOList(terminalInfo.getSensorInfoList()));
+            terminalVOList.add(tempVO);
         }
-         Collections.sort(terminalVOList, new Comparator<TerminalVO>() {
-            @Override
-            public int compare(TerminalVO o1, TerminalVO o2) {
-                return o1.getId()> o2.getId() ? 1:-1;
-            }
-        });
+         Collections.sort(terminalVOList, (o1, o2) -> o1.getId()> o2.getId() ? 1:-1);
         return terminalVOList;
     }
 
@@ -139,27 +134,13 @@ public class ParseUtil {
         List<TerminalVO> terminalVOList = new ArrayList<>();
         vo.setTerminalVOList(terminalVOList);
         for(TerminalInfo terminalInfo : monitorPoint.getTerminalInfoList()){
-            List<SensorVO> sensorVOList = new ArrayList<>();
-            for(SensorInfo sensorInfo : terminalInfo.getSensorInfoList()){
-                sensorVOList.add(new SensorVO(sensorInfo.getId(),sensorInfo.getSensorId(),terminalInfo.getTerminalId(),sensorInfo.getThresholdValue()));
-            }
-            terminalVOList.add(new TerminalVO(terminalInfo.getId(),
-                    terminalInfo.getTerminalId(),
-                    DateUtil.formatDate(terminalInfo.getGenTime()),
-                    sensorVOList));
-            sensorVOList.sort(new Comparator<SensorVO>() {
-                @Override
-                public int compare(SensorVO o1, SensorVO o2) {
-                    return o1.getSensorName().compareTo(o2.getSensorName());
-                }
-            });
+
+        terminalVOList.add(
+            new TerminalVO(terminalInfo.getId(),
+            terminalInfo.getTerminalId(),
+            DateUtil.formatDate(terminalInfo.getGenTime())));
         }
-        terminalVOList.sort(new Comparator<TerminalVO>() {
-            @Override
-            public int compare(TerminalVO o1, TerminalVO o2) {
-                return o1.getGenTime().compareTo(o2.getGenTime());
-            }
-        });
+        terminalVOList.sort(Comparator.comparing(TerminalVO::getGenTime));
         return vo;
     }
 
@@ -178,5 +159,27 @@ public class ParseUtil {
             voList.add(new RoleVO(info.getId(),info.getDescription()));
         }
         return voList;
+    }
+
+    public static TerminalVO getTerminalVO(Collection<SensorInfo> list){
+        TerminalVO vo = new TerminalVO();
+        if (list.size() > 0) {
+            TerminalInfo info = list.iterator().next().getTerminalInfo();
+            vo.setId(info.getId());
+            vo.setName(info.getTerminalId());
+            vo.setGenTime(DateUtil.formatDate(info.getGenTime()));
+        }
+        vo.setSensorVOList(getSensorVOList(list));
+        return vo;
+    }
+
+    public static List<SensorVO> getSensorVOList(Collection<SensorInfo> list){
+        List<SensorVO> sensorVOList = new ArrayList<>();
+        for(SensorInfo info : list){
+            sensorVOList.add(new SensorVO(info.getId(),info.getSensorId(),info.getTerminalInfo().getTerminalId(),info.getThresholdValue()));
+        }
+        Collections.sort(sensorVOList);
+
+        return sensorVOList;
     }
 }

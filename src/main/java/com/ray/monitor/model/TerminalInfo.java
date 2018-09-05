@@ -24,7 +24,7 @@ public class TerminalInfo implements Serializable {
     @JoinColumn(name="monitor_point_id")
     private MonitorPoint monitorPoint;
 
-    @OneToMany(mappedBy="terminalInfo",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="terminalInfo",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
     private List<SensorInfo> sensorInfoList;
 
     public long getId() {

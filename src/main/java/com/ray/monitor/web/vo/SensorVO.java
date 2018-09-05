@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by rui on 2018/8/19.
  */
-public class SensorVO implements Serializable{
+public class SensorVO implements Serializable,Comparable{
     private static final long serialVersionUID = -7939196527142319354L;
 
     private long sensorId;
@@ -66,5 +66,13 @@ public class SensorVO implements Serializable{
 
     public void setThreshold(double threshold) {
         this.threshold = threshold;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if(o instanceof SensorVO){
+            return this.getSensorName().compareTo(((SensorVO)o).getSensorName());
+        }
+        return 0;
     }
 }

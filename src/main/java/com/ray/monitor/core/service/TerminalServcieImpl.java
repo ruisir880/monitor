@@ -1,5 +1,6 @@
 package com.ray.monitor.core.service;
 
+import com.ray.monitor.core.repository.SensorRepository;
 import com.ray.monitor.core.repository.TerminalRepository;
 import com.ray.monitor.model.TerminalInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Ray Rui on 8/30/2018.
@@ -18,7 +20,7 @@ public class TerminalServcieImpl implements TerminalService {
     private TerminalRepository terminalRepository;
 
     @Autowired
-    private SensorInfoService sensorInfoService;
+    private SensorRepository sensorRepository;
 
     @Override
     @Transactional
@@ -30,7 +32,8 @@ public class TerminalServcieImpl implements TerminalService {
     @Override
     @Transactional
     public void delete(long id) {
-        terminalRepository.deleteByTerminalId(id);
+        sensorRepository.deleteByTerminalInfo_Id(id);
+        terminalRepository.delete(id);
     }
 
     @Override
@@ -50,5 +53,10 @@ public class TerminalServcieImpl implements TerminalService {
 
     public TerminalInfo getTerminal(long areaId, String mpName, String terminalName){
         return terminalRepository.findTerminal(terminalName,mpName,areaId);
+    }
+
+
+    public Set<TerminalInfo> findWithSensor(List<Long> idList ){
+        return terminalRepository.getWithSensor(idList);
     }
 }

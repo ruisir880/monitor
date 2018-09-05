@@ -54,7 +54,7 @@ public class TempController {
         modelAndView.setViewName("currentTempChart");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO>  monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -70,7 +70,7 @@ public class TempController {
         modelAndView.setViewName("tempInfoList");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO>  monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -86,7 +86,7 @@ public class TempController {
         modelAndView.setViewName("tempInfoChart");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO>  monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -102,7 +102,7 @@ public class TempController {
         modelAndView.setViewName("tempInfoListDel");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO>  monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -119,7 +119,7 @@ public class TempController {
         if(StringUtils.isEmpty(terminalId)){
             sensorInfoSet = sensorInfoService.findSensorByMonitorPointId(monitorPointId);
         }else {
-             sensorInfoSet = sensorInfoService.findByMPIdTerminalId(monitorPointId,Long.parseLong(terminalId));
+             sensorInfoSet = sensorInfoService.findByMPIdTerminalId(Long.parseLong(terminalId));
         }
 
         List<Long> sensorIdList = new ArrayList<>();

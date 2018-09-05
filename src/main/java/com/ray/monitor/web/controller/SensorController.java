@@ -3,6 +3,7 @@ package com.ray.monitor.web.controller;
 import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.core.service.SensorInfoService;
+import com.ray.monitor.core.service.TerminalService;
 import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.MonitorSensorVO;
@@ -37,6 +38,9 @@ public class SensorController {
     private MonitorPointService monitorPointService;
 
     @Autowired
+    private TerminalService terminalService;
+
+    @Autowired
     private MonitorCache monitorCache;
 
     @GetMapping("/transducerInfoChart")
@@ -46,7 +50,7 @@ public class SensorController {
         modelAndView.setViewName("transducerInfoChart");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO>  monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -61,7 +65,7 @@ public class SensorController {
         modelAndView.setViewName("sensorInfoSet");
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO>  monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -83,7 +87,7 @@ public class SensorController {
         sensorname = sensorname.replaceAll("\\s*", "");
         sensorInfoService.addSensor(terminalId, sensorname);
 
-        monitorCache.resetSensorCache();
+        monitorCache.terminalOrSensorChanged(terminalId);
         return 0;
     }
 
@@ -93,7 +97,7 @@ public class SensorController {
     public int deleteSensor(long terminalId,String sensorname){
         try {
             sensorInfoService.deleteSensor(terminalId, sensorname);
-            monitorCache.resetSensorCache();
+            monitorCache.terminalOrSensorChanged(terminalId);
         }catch (Exception e){
             logger.error("Error occurs when delete sensor:",e);
             return 1;
@@ -108,7 +112,7 @@ public class SensorController {
         ModelAndView modelAndView = new ModelAndView();
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         try {
-            List<MonitorSensorVO>  monitorPointList = monitorCache.get(userInfo.getArea().getId());
+            List<MonitorSensorVO>  monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
@@ -136,7 +140,18 @@ public class SensorController {
     @ResponseBody
     public MonitorSensorVO checkSensorInfo(long monitorPointId,String terminalId) {
         MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(monitorPointId,terminalId);
-        return  ParseUtil.getMonitorSensorVO(monitorPoint);
+        MonitorSensorVO vo =  ParseUtil.getMonitorSensorVO(monitorPoint);
+//        List<Long> idList = monitorPoint.getTerminalInfoList().stream().map(terminalInfo -> terminalInfo.getId()).collect(Collectors.toList());
+//        vo.setTerminalVOList(ParseUtil.getTerminalVOS(terminalService.findWithSensor(idList)));'
+
+        vo.getTerminalVOList().stream().forEach(terminalVO -> {
+            try {
+                terminalVO.setSensorVOList(monitorCache.gettTerminal(terminalVO.getId()).getSensorVOList());
+            } catch (ExecutionException e) {
+                logger.error("Error occurs when get terminal vo from cache:",e);
+            }
+        });
+        return vo;
     }
 
 

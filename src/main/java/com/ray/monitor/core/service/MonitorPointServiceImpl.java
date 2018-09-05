@@ -3,11 +3,14 @@ package com.ray.monitor.core.service;
 import com.ray.monitor.core.repository.MonitorRepository;
 import com.ray.monitor.core.repository.TerminalRepository;
 import com.ray.monitor.model.MonitorPoint;
+import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TerminalInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,22 +24,28 @@ public class MonitorPointServiceImpl implements MonitorPointService{
     private MonitorRepository monitorRepository;
 
     @Autowired
-    private TerminalRepository terminalRepository;
+    private SensorInfoService sensorInfoService;
 
     @Override
     public MonitorPoint findMonitorPoint(long monitorPointId,String... terminalId) {
         MonitorPoint monitorPoint = monitorRepository.findOne(monitorPointId);
-        if(terminalId==null || terminalId.length == 0 || StringUtils.isEmpty(terminalId[0])) {
-            return monitorPoint;
-        }else {
-            Iterator<TerminalInfo> iterator = monitorPoint.getTerminalInfoList().iterator();
-            while (iterator.hasNext()){
-                if(iterator.next().getId() != Long.parseLong(terminalId[0])){
-                    iterator.remove();
-                }
-            }
+
+        if(terminalId == null || terminalId.length ==0 || StringUtils.isEmpty(terminalId[0])) {
             return monitorPoint;
         }
+        long tid = Long.parseLong(terminalId[0]);
+        Iterator iterator = monitorPoint.getTerminalInfoList().iterator();
+        TerminalInfo terminalInfo;
+        while (iterator.hasNext()){
+            terminalInfo = (TerminalInfo) iterator.next();
+            if(terminalInfo.getId() != tid){
+                iterator.remove();
+                continue;
+            }
+            List<SensorInfo> sensorInfos = new ArrayList<>(sensorInfoService.findByMPIdTerminalId(terminalInfo.getId()));
+            terminalInfo.setSensorInfoList(sensorInfos) ;
+        }
+        return monitorPoint;
     }
 
     @Override

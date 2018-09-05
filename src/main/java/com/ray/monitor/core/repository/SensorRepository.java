@@ -38,15 +38,14 @@ public interface SensorRepository extends CrudRepository<SensorInfo, Long> {
             @Param(value="sensorName") String sensorName);
 
 
-    @Query(value = "select s  from SensorInfo s where s.terminalInfo.monitorPoint.id=:monitorPointId and s.terminalInfo.id=:terminalId")
-    Set<SensorInfo> findByMPIdTerminalId(
-            @Param(value="monitorPointId") long monitorPointId,
-            @Param(value="terminalId") long terminalId
-    );
+    @Query(value = "select s  from SensorInfo s where s.terminalInfo.id=:terminalId")
+    Set<SensorInfo> findByMPIdTerminalId(@Param(value="terminalId") long terminalId);
 
     @Query(value = "select s  from SensorInfo s where s.terminalInfo.id=:terminalId")
     Set<SensorInfo> findByTerminalId(
             @Param(value="terminalId") long terminalId
     );
+
+    void deleteByTerminalInfo_Id(long terminalId);
 
 }

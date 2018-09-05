@@ -106,7 +106,7 @@ public class MonitorPointController {
         monitorPoint.setArea(area);
         monitorPointService.save(monitorPoint);
 
-        monitorCache.resetAreaMP(areaId);
+        monitorCache.mpOrTerminalChanged(areaId);
         return 0;
     }
 
@@ -117,7 +117,7 @@ public class MonitorPointController {
         MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(mpId);
         monitorPointService.deleteMP(mpId);
 
-        monitorCache.resetAreaMP(monitorPoint.getArea().getId());
+        monitorCache.mpOrTerminalChanged(monitorPoint.getArea().getId());
         return 0;
     }
 }
