@@ -77,7 +77,13 @@
                 art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'客户公司', ok:true,});
                 return false;
             }
-            if($("#district").val()==""){
+            var  areaId;
+            if($('#district').val()){
+                areaId = $('#district').val()
+            }else {
+                areaId = $('#city').val()
+            }
+            if(areaId==""){
                 art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'区域', ok:true,});
                 return false;
             }
