@@ -81,7 +81,7 @@
             <div id="box_center">
                 检测点：
                 <select name="monitorPoint" id="monitorPoint" style="width: 120px;height: 30px;margin: 2px 2px 2px 5px;" onchange="monitorPointSelect();">
-                    @if(!isEmpty(monitorPointList)){
+                    @if(!isEmpty(monitorPointList) && monitorPointList[0].terminalVOList!=null){
                     @for(monitorPoint in monitorPointList){
                     <option value=${monitorPoint.id}>${monitorPoint.monitorPointName}</option>
                     @}

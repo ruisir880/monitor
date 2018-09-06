@@ -117,7 +117,7 @@
                 终端：
                 <select name="terminal" id="terminal" style="width: 120px;height: 30px;margin: 2px 2px 2px 5px;">
                     <option value="">--请选择--</option>
-                    @if(!isEmpty(monitorPointList)){
+                    @if(!isEmpty(monitorPointList) && monitorPointList[0].terminalVOList!=null){
                     @for(terminal in monitorPointList[0].terminalVOList){
                     <option value=${terminal.id}>${terminal.name}</option>
                     @}

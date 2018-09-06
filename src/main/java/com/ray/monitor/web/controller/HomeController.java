@@ -2,11 +2,8 @@ package com.ray.monitor.web.controller;
 
 import com.ray.monitor.model.PrivilegeInfo;
 import com.ray.monitor.model.RoleInfo;
-import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.UserInfo;
-import com.ray.monitor.web.vo.PrivilegeVO;
 import com.ray.monitor.web.vo.RoleVO;
-import netscape.security.Privilege;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -20,14 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.management.relation.Role;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Created by rui on 2018/8/12.

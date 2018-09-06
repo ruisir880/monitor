@@ -143,7 +143,9 @@ public class SensorController {
         MonitorSensorVO vo =  ParseUtil.getMonitorSensorVO(monitorPoint);
 //        List<Long> idList = monitorPoint.getTerminalInfoList().stream().map(terminalInfo -> terminalInfo.getId()).collect(Collectors.toList());
 //        vo.setTerminalVOList(ParseUtil.getTerminalVOS(terminalService.findWithSensor(idList)));'
-
+        if(vo.getTerminalVOList() == null){
+            return vo;
+        }
         vo.getTerminalVOList().stream().forEach(terminalVO -> {
             try {
                 terminalVO.setSensorVOList(monitorCache.gettTerminal(terminalVO.getId()).getSensorVOList());
