@@ -12,7 +12,7 @@
         /**退出系统**/
         function logout(){
             if(confirm("您确定要退出本系统吗？")){
-                window.location.href = "/logout";
+                window.location.href = "${ctxPath}/logout";
             }
         }
 
@@ -186,34 +186,34 @@
 
             var data =new Array();
             if(resourceType=='SYSTEM'){
-                $.getJSON("/getPrivilege",function(result){
+                $.getJSON("${ctxPath}/getPrivilege",function(result){
 
                     if(result.privilegeNameList.indexOf('权限管理')!=-1) {
                         data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":2,"resourceName":"权限管理","resourceOrder":0,"resourceType":""})
-                        data.push({"accessPath":"/privilegeList","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":4,"resourceName":"权限列表","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/privilegeList","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":4,"resourceName":"权限列表","resourceOrder":0,"resourceType":""})
                     }
                     data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":3,"resourceName":"用户管理","resourceOrder":0,"resourceType":""})
                     if(result.privilegeNameList.indexOf('用户查询')!=-1 ) {
-                        data.push({"accessPath":"/userList","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":6,"resourceName":"用户列表","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/userList","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":6,"resourceName":"用户列表","resourceOrder":0,"resourceType":""})
                     }
                     if(result.privilegeNameList.indexOf('用户编辑')!=-1 ) {
-                        data.push({"accessPath":"/userAdd","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":7,"resourceName":"用户添加","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/userAdd","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":7,"resourceName":"用户添加","resourceOrder":0,"resourceType":""})
                     }
 
                     data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":8,"resourceName":"监测点管理","resourceOrder":0,"resourceType":""})
                     if(result.privilegeNameList.indexOf('监测点查询')!=-1 ) {
-                        data.push({"accessPath":"/monitorPointList","checked":false,"delFlag":0,"parentID":8,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":81,"resourceName":"监测点查询","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/monitorPointList","checked":false,"delFlag":0,"parentID":8,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":81,"resourceName":"监测点查询","resourceOrder":0,"resourceType":""})
                     }
                     if(result.privilegeNameList.indexOf('监测点查询')!=-1){
-                        data.push({"accessPath":"/monitorPointAdd","checked":false,"delFlag":0,"parentID":8,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":82,"resourceName":"监测点添加","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/monitorPointAdd","checked":false,"delFlag":0,"parentID":8,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":82,"resourceName":"监测点添加","resourceOrder":0,"resourceType":""})
                     }
 
                     data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":9,"resourceName":"终端管理","resourceOrder":0,"resourceType":""})
                     if(result.privilegeNameList.indexOf('终端查询')!=-1 ) {
-                        data.push({"accessPath":"/terminalList","checked":false,"delFlag":0,"parentID":9,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":91,"resourceName":"终端查询","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/terminalList","checked":false,"delFlag":0,"parentID":9,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":91,"resourceName":"终端查询","resourceOrder":0,"resourceType":""})
                     }
                     if(result.privilegeNameList.indexOf('终端编辑')!=-1 ) {
-                        data.push({"accessPath":"/terminalAdd","checked":false,"delFlag":0,"parentID":9,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":92,"resourceName":"终端添加","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/terminalAdd","checked":false,"delFlag":0,"parentID":9,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":92,"resourceName":"终端添加","resourceOrder":0,"resourceType":""})
                     }
 
                     loadTree(data,treeObj);
@@ -222,29 +222,29 @@
 
             }else if(resourceType=='SYSTEMMOULE'){
 
-                $.getJSON("/getPrivilege",function(result){
+                $.getJSON("${ctxPath}/getPrivilege",function(result){
                     data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":10,"resourceName":"高德地图显示","resourceOrder":0,"resourceType":""})
                     data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":2,"resourceName":"测温信息管理","resourceOrder":0,"resourceType":""})
                     if(result.privilegeNameList.indexOf('温度信息查询')!=-1) {
-                        data.push({"accessPath":"/currentTemp","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":11,"resourceName":"当前温度状态","resourceOrder":0,"resourceType":""})
-                        data.push({"accessPath":"/tempInfoList","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":12,"resourceName":"温度信息查询","resourceOrder":0,"resourceType":""})
-                        data.push({"accessPath":"/tempInfoChart","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":14,"resourceName":"温度信息图表","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/currentTemp","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":11,"resourceName":"当前温度状态","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/tempInfoList","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":12,"resourceName":"温度信息查询","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/tempInfoChart","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":14,"resourceName":"温度信息图表","resourceOrder":0,"resourceType":""})
                     }
                     if(result.privilegeNameList.indexOf('温度信息编辑')!=-1 ) {
-                        data.push({"accessPath":"/tempInfoListDel","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":13,"resourceName":"温度信息删除","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/tempInfoListDel","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":13,"resourceName":"温度信息删除","resourceOrder":0,"resourceType":""})
                     }
 
                     data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":3,"resourceName":"传感信息管理","resourceOrder":0,"resourceType":""})
                     if(result.privilegeNameList.indexOf('传感器查询')!=-1 ) {
-                        data.push({"accessPath":"/transducerInfoChart","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":20,"resourceName":"传感配置信息","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/transducerInfoChart","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":20,"resourceName":"传感配置信息","resourceOrder":0,"resourceType":""})
                     }
                     if(result.privilegeNameList.indexOf('传感器编辑')!=-1 ) {
-                        data.push({"accessPath":"/sensorInfoSet","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":21,"resourceName":"传感配置管理","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/sensorInfoSet","checked":false,"delFlag":0,"parentID":3,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":21,"resourceName":"传感配置管理","resourceOrder":0,"resourceType":""})
                     }
 
                     data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":4,"resourceName":"传感告警管理","resourceOrder":0,"resourceType":""})
                     if(result.privilegeNameList.indexOf('传感器阈值设置')!=-1 ) {
-                        data.push({"accessPath":"/sensorThresholdSet","checked":false,"delFlag":0,"parentID":4,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":31,"resourceName":"告警阈值设置","resourceOrder":0,"resourceType":""})
+                        data.push({"accessPath":"${ctxPath}/sensorThresholdSet","checked":false,"delFlag":0,"parentID":4,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":31,"resourceName":"告警阈值设置","resourceOrder":0,"resourceType":""})
                     }
 
                     data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":4,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":32,"resourceName":"告警异常处理","resourceOrder":0,"resourceType":""})
@@ -278,7 +278,7 @@
             <ul>
                 <li >
                     <img alt="当前用户"  src="${ctxPath}/images/common/user.jpg" >：
-                    <span>admin</span>
+                    <span>${username}</span>
                 </li>
             </ul>
         </div>

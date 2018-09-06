@@ -67,7 +67,7 @@ public class QuartzService {
         SUCCESSED_PATH = env.getProperty("syn.file.successed.path");
     }
 
-    @Scheduled(cron = "0/10 * * * * ?")
+    //@Scheduled(cron = "0/10 * * * * ?")
     public void synData(){
         File rootDir = new File(FILE_PATH);
         if(!rootDir.exists()){

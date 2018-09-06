@@ -28,8 +28,12 @@ public class HomeController {
     private static Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @RequestMapping({ "/", "index" })
-    public String index() {
-        return "/index";
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
+        modelAndView.setViewName("index");
+        modelAndView.addObject("username",userInfo.getUsername());
+        return modelAndView;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -60,10 +64,10 @@ public class HomeController {
             }
             logger.warn("Login info:" + exception);
             modelAndView.addObject("result",result);
-            modelAndView.setViewName("/login");
+            modelAndView.setViewName("login");
             return modelAndView;
         }
-        modelAndView.setViewName("/index");
+        modelAndView.setViewName("index");
         return modelAndView;
     }
 

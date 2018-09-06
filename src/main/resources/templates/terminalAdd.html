@@ -38,7 +38,7 @@
             if(name!="" && monitorPoint!="" ){
                 $.ajax({
                     type:"POST",
-                    url:"/addTerminal",
+                    url:"${ctxPath}/addTerminal",
                     data:{"name":name,"monitorPointId":monitorPoint},
                     dataType : "text",
                     success:function(data) {

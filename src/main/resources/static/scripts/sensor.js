@@ -10,7 +10,7 @@ function monitorPointSelect() {
     var monitorPoint = $("#monitorPoint").val()
     $.ajax({
         type: "GET",
-        url: "/getTerminal",
+        url: "/monitor/getTerminal",
         data: {"monitorPointId":monitorPoint},
         success: function (result) {
             var terminal

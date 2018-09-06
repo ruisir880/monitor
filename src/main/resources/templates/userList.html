@@ -32,7 +32,7 @@
             var username = $("#username").val();
             var realName = $("#realName").val();
             var mobile = $("#mobile").val();
-            var targetUrl = "/queryUserPage?username="+username+"&realName="+realName+"&mobile="+mobile;
+            var targetUrl = "${ctxPath}/queryUserPage?username="+username+"&realName="+realName+"&mobile="+mobile;
             window.location.href=targetUrl;
         }
 
@@ -40,7 +40,7 @@
         function deleteUser(userId){
             $.ajax({
                 type:"POST",
-                url:"/deleteUser",
+                url:"${ctxPath}/deleteUser",
                 data:{"userId":userId},
                 dataType : "text",
                 success:function(data){
@@ -100,7 +100,7 @@
                         <td>${user.mobile}</td>
                         <td>${user.email}</td>
                         <td>
-                            <a href="/userEdit.html?userId=${user.uid}" class="edit">编辑</a>
+                            <a href="${ctxPath}/userEdit?userId=${user.uid}" class="edit">编辑</a>
                             <a href="javascript:deleteUser(${user.uid});">删除</a>
                         </td>
                     </tr>

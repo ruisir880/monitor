@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8"/>
     <script type="text/javascript" src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
-    <script type="text/javascript" src="/webjars/echarts/4.0.4/dist/echarts.js"></script>
-    <script type="text/javascript" src="/webjars/echarts/4.0.4/dist/echarts.common.min.js"></script>
-    <script type="text/javascript" src="/webjars/echarts/4.0.4/theme/vintage.js"></script>
+    <script type="text/javascript" src="${ctxPath}/webjars/echarts/4.0.4/dist/echarts.js"></script>
+    <script type="text/javascript" src="${ctxPath}/webjars/echarts/4.0.4/dist/echarts.common.min.js"></script>
+    <script type="text/javascript" src="${ctxPath}/webjars/echarts/4.0.4/theme/vintage.js"></script>
     <script type="text/javascript" src="${ctxPath}/scripts/sensor.js"></script>
     <title>电力测温智能化管理</title>
 </head>
@@ -23,7 +23,7 @@
     function showData() {
         $.ajax({
             type: "GET",
-            url: "checkCurrentTempInfo",
+            url: "${ctxPath}/checkCurrentTempInfo",
             data: {"monitorPointId":$("#monitorPoint").val(),
                 "terminalId":$("#terminal").val()
             },

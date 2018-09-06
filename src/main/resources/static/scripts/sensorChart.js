@@ -2,7 +2,7 @@ function showData() {
     myChart.refresh()
     $.ajax({
         type: "GET",
-        url: "checkSensorInfo",
+        url: "/monitor/checkSensorInfo",
         data: {"monitorPointId":$("#monitorPoint").val(),
             "terminalId":$("#terminal").val()},
         success: function (result) {

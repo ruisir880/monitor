@@ -48,7 +48,7 @@
             if(name!="" && address!="" && clientCompany!="" && areaId!=""){
                 $.ajax({
                     type:"POST",
-                    url:"/editMonitorpoint",
+                    url:"${ctxPath}/editMonitorpoint",
                     data:{"name":name,"address":address,"clientCompany":clientCompany, "areaId":areaId,"monitorPointId":monitorPointId},
                     dataType : "text",
                     success:function(data) {

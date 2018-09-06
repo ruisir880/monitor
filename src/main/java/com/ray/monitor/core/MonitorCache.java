@@ -13,6 +13,7 @@ import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sun.management.Sensor;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -125,5 +126,15 @@ public class MonitorCache implements MonitorCacheListener {
 
     public void terminalOrSensorChanged(long terminalId){
         TERMINAL_SENSOR_CACHE.invalidate(terminalId);
+    }
+
+    public void sensorChanged(SensorInfo sensor){
+        TERMINAL_SENSOR_CACHE.invalidate(sensor.getTerminalInfo().getId());
+
+        SENSOR_CACHE.invalidate(
+                Joiner.on(",").join(sensor.getTerminalInfo().getMonitorPoint().getArea().getId(),
+                sensor.getTerminalInfo().getMonitorPoint().getName(),
+                sensor.getTerminalInfo().getTerminalId(),
+                sensor.getSensorId()));
     }
 }

@@ -20,7 +20,7 @@
             }
             $.ajax({
                 type:"POST",
-                url:"/updatePrivilege",
+                url:"${ctxPath}/updatePrivilege",
                 data:{"roleId":$("#role").val(),
                 "privilegeIds":arrayObj},
                 dataType : "text",
@@ -38,7 +38,7 @@
             $("input[type='checkbox']").attr("checked", false);
             $.ajax({
                 type:"GET",
-                url:"/getPrivilegeByRole",
+                url:"${ctxPath}/getPrivilegeByRole",
                 data:{"roleId":$("#role").val()},
                 dataType : "text",
                 success:function(data) {

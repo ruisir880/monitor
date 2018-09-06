@@ -14,7 +14,7 @@ function getSonArea(areaId, nextSelect){
     var firstId
     $.ajax({
         type:"GET",
-        url:"/getSonAreas",
+        url:"/monitor/getSonAreas",
         data:{"areaId":areaId},
         dataType : "text",
         success:function(data){

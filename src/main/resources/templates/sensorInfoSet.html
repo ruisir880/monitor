@@ -68,7 +68,7 @@
         var terminalId = $("#terminal").val()
         $.ajax({
             type:"POST",
-            url:"/deleteSensor",
+            url:"${ctxPath}/deleteSensor",
             data:{"sensorname":deleteSensorName,
                 "monitorPointId":$("#monitorPoint").val(),
                 "terminalId":terminalId},
@@ -93,7 +93,7 @@
         var terminalId = $("#terminal").val()
         $.ajax({
             type:"POST",
-            url:"/addSensor",
+            url:"${ctxPath}/addSensor",
             data:{"sensorname":sensorname,"monitorPointId":$("#monitorPoint").val(),"terminalId":terminalId},
             dataType : "text",
             success:function(data){

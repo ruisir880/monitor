@@ -1,5 +1,6 @@
 package com.ray.monitor.web.config;
 
+import org.beetl.core.resource.ClasspathResourceLoader;
 import org.beetl.core.resource.WebAppResourceLoader;
 import org.beetl.ext.spring.BeetlGroupUtilConfiguration;
 import org.beetl.ext.spring.BeetlSpringViewResolver;
@@ -18,17 +19,20 @@ import java.io.IOException;
 @Configuration
 public class BeetlConfiguration {
 
-    @Bean(initMethod = "init", name = "beetlConfig")
+    @Bean(name = "beetlConfig")
     public BeetlGroupUtilConfiguration getBeetlGroupUtilConfiguration() {
         BeetlGroupUtilConfiguration beetlGroupUtilConfiguration = new BeetlGroupUtilConfiguration();
         ResourcePatternResolver patternResolver = ResourcePatternUtils
                 .getResourcePatternResolver(new DefaultResourceLoader());
         try {
             // WebAppResourceLoader 配置root路径是关键
-            WebAppResourceLoader webAppResourceLoader =
+           /* WebAppResourceLoader webAppResourceLoader =
                     new WebAppResourceLoader(patternResolver.getResource("classpath:/").getFile().getPath());
-            beetlGroupUtilConfiguration.setResourceLoader(webAppResourceLoader);
-        } catch (IOException e) {
+                     beetlGroupUtilConfiguration.setResourceLoader(webAppResourceLoader);*/
+            ClasspathResourceLoader classpathResourceLoader = new ClasspathResourceLoader();
+            beetlGroupUtilConfiguration.setResourceLoader(classpathResourceLoader);
+            beetlGroupUtilConfiguration.init();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         //读取配置文件信息
@@ -40,7 +44,7 @@ public class BeetlConfiguration {
     BeetlGroupUtilConfiguration beetlGroupUtilConfiguration) {
         BeetlSpringViewResolver beetlSpringViewResolver = new BeetlSpringViewResolver();
         //beetlSpringViewResolver.setPrefix("WEB-INF/views/");
-        beetlSpringViewResolver.setPrefix("templates/");
+        beetlSpringViewResolver.setPrefix("/templates/");
         beetlSpringViewResolver.setSuffix(".html");
         beetlSpringViewResolver.setContentType("text/html;charset=UTF-8");
         beetlSpringViewResolver.setOrder(0);

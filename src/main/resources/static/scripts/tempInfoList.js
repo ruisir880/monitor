@@ -8,7 +8,7 @@ function search(jumpPage) {
     var monitorPoint = $("#monitorPoint").val();
     $.ajax({
         type: "GET",
-        url: "checkTempInfo",
+        url: "/monitor/checkTempInfo",
         data: {"monitorPointId":monitorPoint,
             "terminalId":$("#terminal").val(),
             "startTime":startTime,

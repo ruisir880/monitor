@@ -59,7 +59,7 @@
             if(username!="" && realName!="" && mobile!="" && address!=""&& email!=""){
                 $.ajax({
                     type:"POST",
-                    url:"/addUser",
+                    url:"${ctxPath}/addUser",
                     data:{"username":username,"password":password,"realName":realName, "mobile":mobile,
                         "address":address, "email":email,"areaId":areaId,"role":role},
                     dataType : "text",

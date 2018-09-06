@@ -59,7 +59,7 @@
             if(realName!="" && mobile!="" && email!=""){
                 $.ajax({
                     type:"POST",
-                    url:"/updateUser",
+                    url:"${ctxPath}/updateUser",
                     data:{"uid":userId,"password":password,"realName":realName, "mobile":mobile,
                         "address":address, "email":email,"areaId":areaId,"role":role},
                     dataType : "text",

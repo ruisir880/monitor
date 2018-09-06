@@ -96,8 +96,9 @@ public class SensorController {
     @ResponseBody
     public int deleteSensor(long terminalId,String sensorname){
         try {
+            SensorInfo sensorInfo = sensorInfoService.findBySensorName(terminalId,sensorname);
             sensorInfoService.deleteSensor(terminalId, sensorname);
-            monitorCache.terminalOrSensorChanged(terminalId);
+            monitorCache.sensorChanged(sensorInfo);
         }catch (Exception e){
             logger.error("Error occurs when delete sensor:",e);
             return 1;
@@ -127,6 +128,7 @@ public class SensorController {
     public int setThreshold(long terminalId,String sensorName,double threshold){
         try {
             sensorInfoService.setThreshold(terminalId, sensorName, threshold);
+            monitorCache.terminalOrSensorChanged(terminalId);
         }catch (Exception e){
             logger.error("Error occurs when set threshold:",e);
             return 1;
