@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+	<script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <title>电力测温智能化管理</title>
+    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/style/authority/map.css" rel="stylesheet" type="text/css">
+    <script src="https://webapi.amap.com/maps?v=1.4.9&key=18f10c3e889637e88e4b3806726e1605"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <script type="text/javascript" src='https://a.amap.com/jsapi_demos/static/resource/capitals.js'></script>
+</head>
+<body>
+<div id="container">
+    <div class="ui_content">
+        <div id="box_border">
+            <div id="box_center">
+                监测点：
+                <select name="monitorPoint" id="monitorPoint" style="width: 120px;height: 30px;margin: 2px 2px 2px 5px;" >
+                    <option value="">--请选择--</option>
+                    @if(!isEmpty(monitorPointList)){
+                    @for(monitorPoint in monitorPointList){
+                    <option value=${monitorPoint.id}>${monitorPoint.monitorPointName}</option>
+                    @}
+                    @}
+                    <input type="button" value="保存坐标" class="ui_input_btn01" onclick="saveCoordinate();" />
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="ui_content">
+         <div id="mapContainer"></div>
+    </div>
+
+</div>
+
+<script>
+    var siteLatitude;
+    var siteDimension;
+    var marker;
+
+    var map = new AMap.Map('mapContainer', {
+        resizeEnable: true
+    });
+
+    map.on('moveend', getCity);
+    function getCity() {
+        map.getCity(function(data) {
+            if (data['province'] && typeof data['province'] === 'string') {
+                document.getElementById('info').innerHTML = '城市：' + (data['city'] || data['province']);
+            }
+        });
+    }
+
+    map.on('click', function(e) {
+        siteLatitude = e.lnglat.getLat();
+        siteDimension = e.lnglat.getLng();
+        alert('您在[ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ]的位置点击了地图！');
+    });
+
+
+    AMap.event.addDomListener(document.getElementById('monitorPoint'), 'change', function() {
+        addMarker();
+    }, false);
+    
+    function addMarker() {
+        if (marker) {
+            marker.setMap(null);
+            marker = null;
+        }
+        if($("#monitorPoint").val() == ""){
+            return;
+        }
+        $.getJSON("/monitor/getMp?mpId="+$("#monitorPoint").val(),
+            function(data) {
+                if (data != "" && data.latitude != "" && data.dimension != "") {
+                    marker = new AMap.Marker({
+                        icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+                        position: [data.dimension, data.latitude]
+                    });
+                    marker.setMap(map);
+                }
+
+            });
+    }
+    
+    function saveCoordinate() {
+        if(!check()){
+            return;
+        }
+        $.ajax({
+            type:"POST",
+            url:"/monitor/saveCoordinate",
+            data:{"mpId":$("#monitorPoint").val(),
+                "siteLatitude": siteLatitude,
+                "siteDimension": siteDimension},
+            dataType : "text",
+            success:function(data) {
+                if(data=="0"){
+                    art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'更新成功', ok:true,});
+                }
+            }
+        });
+    }
+    
+    function check() {
+        if($("#monitorPoint").val()==""){
+            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'监测点', ok:true,});
+            return false;
+        }
+        if(siteLatitude == "" || siteDimension==""){
+            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'地点', ok:true,});
+            return false;
+        }
+        return true;
+    }
+
+</script>
+</body>
+</html>

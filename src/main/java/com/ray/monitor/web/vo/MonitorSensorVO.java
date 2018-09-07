@@ -22,6 +22,11 @@ public class MonitorSensorVO implements Serializable {
 
     private String area;
 
+    private Double latitude;
+
+    private Double dimension;
+
+
     private List<TerminalVO> terminalVOList;
 
     public long getId() {
@@ -79,5 +84,21 @@ public class MonitorSensorVO implements Serializable {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getDimension() {
+        return dimension;
+    }
+
+    public void setDimension(Double dimension) {
+        this.dimension = dimension;
     }
 }

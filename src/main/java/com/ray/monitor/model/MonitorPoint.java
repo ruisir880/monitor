@@ -25,6 +25,10 @@ public class MonitorPoint implements Serializable {
 
     private String address;
 
+    private Double latitude;
+
+    private Double dimension;
+
     @OneToOne
     @JoinColumn(name="area_id")//设置在employee表中的关联字段(外键)
     private Area area;
@@ -86,5 +90,21 @@ public class MonitorPoint implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getDimension() {
+        return dimension;
+    }
+
+    public void setDimension(Double dimension) {
+        this.dimension = dimension;
     }
 }
