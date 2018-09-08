@@ -42,9 +42,9 @@
                     data:{"name":name,"monitorPointId":monitorPoint},
                     dataType : "text",
                     success:function(data) {
-                        if (data == "0") {
+                        if (data == 0) {
                             art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'添加成功', ok:true,});
-                        }else if (data == "1") {
+                        }else if (data == 1) {
                             art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'终端已存在', ok:true,});
                         }
                     }

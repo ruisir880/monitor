@@ -14,8 +14,10 @@
             var checkList = $("input[type='checkbox']")
             var arrayObj = new Array();
             for(var i in checkList){
-                if(checkList[i].checked){
-                    arrayObj.push(i)
+                if(checkList[i].checked) {
+                    if (i > 0) {
+                        arrayObj.push(checkList[i].name.substring(7))
+                    }
                 }
             }
             $.ajax({

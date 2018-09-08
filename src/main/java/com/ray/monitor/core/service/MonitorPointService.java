@@ -21,4 +21,6 @@ public interface MonitorPointService {
     int findCount(long areaId,String name);
 
     void deleteMP(long id) throws SonRecordFoundException;
+
+    List<MonitorPoint> findAllUnderArea(long areaId);
 }

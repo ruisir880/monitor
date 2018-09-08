@@ -8,10 +8,14 @@ public class Constants {
     public static final String TEMP_STATE_NORMAL ="normal";
     public static final String TEMP_STATE_WARN ="warn";
 
-
     public static final String LOG_GETMONITOR_ERROR ="Error occurs when get monitorPointList under user:";
 
     public static final String SON_RECORDS_ERROR_MSG ="This is son records found:";
+
+    public static final String SITMAP_EDIT_PERMISSION ="siteMap.edit";
+
+    public static final int RESULT_SUCCESS =0;
+    public static final int RESULT_FAIL =1;
 
 
 }

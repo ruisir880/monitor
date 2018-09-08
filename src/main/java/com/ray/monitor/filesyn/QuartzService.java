@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class QuartzService {
         SUCCESSED_PATH = env.getProperty("syn.file.successed.path");
     }
 
-    //@Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0/10 * * * * ?")
     public void synData(){
         File rootDir = new File(FILE_PATH);
         if(!rootDir.exists()){
@@ -131,9 +132,12 @@ public class QuartzService {
             log.error("upexpected error:",e);
             hasError = true;
         }finally {
-            String targetPath = hasError? FAILED_PATH : SUCCESSED_PATH;
+            String targetPathStr = hasError? FAILED_PATH : SUCCESSED_PATH;
             try {
-                Files.move(Paths.get(file.getPath()),Paths.get(targetPath,file.getName()));
+                Path targetPath = Paths.get(targetPathStr,file.getName());
+                Path sourcePath = Paths.get(file.getPath());
+                Files.deleteIfExists(targetPath);
+                Files.move(sourcePath,targetPath);
             } catch (IOException e) {
                 log.error("Error occurs when move file:"+ file.getPath(),e);
             }

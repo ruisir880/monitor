@@ -23,10 +23,10 @@ public interface TempRepository extends CrudRepository<TempInfo, Long> {
     @Query(value = "select * from (SELECT * FROM temp_info where sensor_id in(:sensorIds) order by gen_time desc ) T group by T.sensor_id",nativeQuery = true)
     List<TempInfo> findBySensorId(@Param(value="sensorIds") List<Long> sensorIds);
 
-    @Query("select t from TempInfo t where t.sensorInfo.terminalInfo.monitorPoint.id=:monitorPointId and t.genTime between :startDate and :endDate order by t.sensorInfo.id")
+    @Query("select t from TempInfo t where t.sensorInfo.terminalInfo.monitorPoint.id=:monitorPointId and t.genTime between :startDate and :endDate order by t.genTime,t.sensorInfo.sensorId")
     List<TempInfo> findTempByCondition(@Param(value="monitorPointId") long monitorPointId,@Param(value="startDate")Date startDate,@Param(value="endDate")Date endDate);
 
-    @Query("select t from TempInfo t where t.sensorInfo.terminalInfo.id=:terminalId and t.genTime between :startDate and :endDate order by t.sensorInfo.id")
+    @Query("select t from TempInfo t where t.sensorInfo.terminalInfo.id=:terminalId and t.genTime between :startDate and :endDate order by t.genTime,t.sensorInfo.sensorId")
     List<TempInfo> findTempByTerminalId(
             @Param(value="terminalId") long terminalId,
             @Param(value="startDate")Date startDate,

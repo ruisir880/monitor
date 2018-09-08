@@ -30,6 +30,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
 import static com.ray.monitor.core.constant.Constants.LOG_GETMONITOR_ERROR;
+import static com.ray.monitor.core.constant.Constants.SITMAP_EDIT_PERMISSION;
 
 /**
  * Created by rui on 2018/8/12.
@@ -53,6 +54,7 @@ public class SiteMapController {
         try {
             List<MonitorSensorVO> monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
             modelAndView.addObject("monitorPointList",monitorPointList);
+            modelAndView.addObject("showAddBtn",userInfo.getRoleInfo().getPermissions().stream().anyMatch(privilegeInfo -> privilegeInfo.getPrivilegeName().equals(SITMAP_EDIT_PERMISSION)));
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);
         }
@@ -98,7 +100,7 @@ public class SiteMapController {
         monitorPointService.save(monitorPointDB);
 
         UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-        monitorCache.mpOrTerminalChanged(userInfo.getArea().getId());
+        monitorCache.mpOrTerminalChanged(userInfo.getArea());
         return 0;
     }
 }

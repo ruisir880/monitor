@@ -119,7 +119,9 @@ public class TerminalController {
            result = updateTerminal(name,monitorPointId,Long.parseLong(terminalId));
        }
        MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(monitorPointId);
-       monitorCache.mpOrTerminalChanged(monitorPoint.getArea().getId());
+        if(result == 0) {
+            monitorCache.mpOrTerminalChanged(monitorPoint.getArea());
+        }
        return result;
     }
 

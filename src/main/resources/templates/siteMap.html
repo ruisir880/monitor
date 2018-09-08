@@ -27,7 +27,9 @@
                     <option value=${monitorPoint.id}>${monitorPoint.monitorPointName}</option>
                     @}
                     @}
+                    @if(showAddBtn){
                     <input type="button" value="保存坐标" class="ui_input_btn01" onclick="saveCoordinate();" />
+                    @}
                 </select>
             </div>
         </div>
@@ -93,7 +95,7 @@
         $.getJSON("/monitor/getMp?mpId="+$("#monitorPoint").val(),
             function(data) {
                 for (var i in data){
-                    if (data[i] != "" && data[i].latitude != "" && data[i].dimension != "") {
+                    if (data[i] != "" && data[i].latitude != null && data[i].dimension != null ) {
                         marker = new AMap.Marker({
                             icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
                             position: [data[i].dimension, data[i].latitude]

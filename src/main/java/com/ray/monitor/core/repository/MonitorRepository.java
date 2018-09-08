@@ -20,4 +20,7 @@ public interface MonitorRepository extends CrudRepository<MonitorPoint, Long> {
     int findCount(
             @Param(value="areaId")  long areaId,
             @Param(value="name") String name);
+
+    @Query(value ="select mp.* from monitor_point as mp left join area a1 on mp.area_id=a1.id left join area a2 on a1.parentid=a2.id left join area a3 on a2.parentid=a3.id where a1.id=:areaId or a2.id=:areaId or a3.id=:areaId",nativeQuery = true)
+    List<MonitorPoint> findAllUnderArea( @Param(value="areaId")  long areaId);
 }

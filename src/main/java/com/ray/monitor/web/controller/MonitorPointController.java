@@ -129,7 +129,7 @@ public class MonitorPointController {
         monitorPoint.setArea(area);
         monitorPointService.save(monitorPoint);
 
-        monitorCache.mpOrTerminalChanged(areaId);
+        monitorCache.mpOrTerminalChanged(area);
         return 0;
     }
 
@@ -140,7 +140,7 @@ public class MonitorPointController {
         MonitorPoint monitorPoint = monitorPointService.findMonitorPoint(mpId);
         try {
             monitorPointService.deleteMP(mpId);
-            monitorCache.mpOrTerminalChanged(monitorPoint.getArea().getId());
+            monitorCache.mpOrTerminalChanged(monitorPoint.getArea());
         } catch (SonRecordFoundException e) {
             logger.error("deleteMonitorpoint:",e);
             return 2;

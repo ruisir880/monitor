@@ -71,7 +71,7 @@ public class MonitorCache implements MonitorCacheListener {
         return AREA_MONITOR_CACHE.get(areaId, new Callable<List<MonitorSensorVO>>() {
             @Override
             public List<MonitorSensorVO> call() throws Exception {
-                return ParseUtil.getMonitorSensorVOList(monitorRepository.findByAreaId(areaId));
+                return ParseUtil.getMonitorSensorVOList(monitorRepository.findAllUnderArea(areaId));
             }
         });
     }
@@ -96,7 +96,8 @@ public class MonitorCache implements MonitorCacheListener {
                 if(terminalInfo == null){
                     return null;
                 }
-                for(SensorInfo sensorInfo : terminalInfo.getSensorInfoList()){
+                Set<SensorInfo> sensorInfoSet = sensorRepository.findByTerminalId(terminalInfo.getId());
+                for(SensorInfo sensorInfo : sensorInfoSet){
                     if (sensorInfo.getSensorId().equals(sensorName)) {
                         result = sensorInfo;
                     }
@@ -120,8 +121,17 @@ public class MonitorCache implements MonitorCacheListener {
     }
 
 
-    public void mpOrTerminalChanged(long areaId){
-        AREA_MONITOR_CACHE.invalidate(areaId);
+    public void mpOrTerminalChanged(Area area){
+        if(area == null){
+            return;
+        }
+        AREA_MONITOR_CACHE.invalidate(area.getId());
+        Area temp = area.getParentArea();
+        while (temp !=null){
+            AREA_MONITOR_CACHE.invalidate(temp.getId());
+            temp = temp.getParentArea();
+        }
+
     }
 
     public void terminalOrSensorChanged(long terminalId){

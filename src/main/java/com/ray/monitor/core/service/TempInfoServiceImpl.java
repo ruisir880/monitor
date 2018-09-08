@@ -108,6 +108,7 @@ public class TempInfoServiceImpl implements TempInfoService {
                 predicates.add(cb.lessThanOrEqualTo(root.get("genTime").as(String.class), endDate));
 
                 query.orderBy(cb.asc(root.get("genTime")));
+                query.orderBy(cb.asc(root.get("sensorInfo").get("sensorId")));
                 return cb.and(predicates.toArray(new Predicate[0]));
             }
         };

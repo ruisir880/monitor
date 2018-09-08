@@ -76,4 +76,9 @@ public class MonitorPointServiceImpl implements MonitorPointService{
         }
         monitorRepository.delete(id);
     }
+
+    @Override
+    public List<MonitorPoint> findAllUnderArea(long areaId) {
+        return monitorRepository.findAllUnderArea(areaId);
+    }
 }

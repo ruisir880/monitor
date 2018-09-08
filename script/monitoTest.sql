@@ -4,7 +4,7 @@ insert into user_info(username,password,real_name,mobile,address,salt) value ('t
 
 
 
-INSERT INTO area VALUES ('0', '中国', '0');
+INSERT INTO area VALUES ('0', '中国', null);
 INSERT INTO area VALUES ('110000', '北京市', '0');
 INSERT INTO area VALUES ('110100', '东城区', '110000');
 INSERT INTO area VALUES ('110200', '西城区', '110000');
@@ -3372,10 +3372,5 @@ insert into temp_info(sensor_id,temperature,state) values(2,39,'FALSE');
 insert into temp_info(sensor_id,temperature,state) values(2,15,'TRUE');
 insert into temp_info(sensor_id,temperature,state) values(2,10,'TRUE');
 
+insert into user_area_map values(1,0);
 
-
-insert into comment_info(message,sensor_id) values("this is comment1",1);
-insert into comment_info(message,sensor_id) values("comment2",1);
-insert into comment_info(message,sensor_id) values("comment3",1);
-
-insert into comment_info(message,sensor_id) values("comment12",2);
