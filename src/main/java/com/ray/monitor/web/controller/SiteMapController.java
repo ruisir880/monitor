@@ -11,6 +11,7 @@ import com.ray.monitor.web.vo.RoleVO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class SiteMapController {
     private MonitorPointService monitorPointService;
 
     @RequestMapping("/siteMap")
+    @RequiresPermissions("siteMap.query")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("siteMap");
@@ -87,6 +89,7 @@ public class SiteMapController {
 
 
     @PostMapping("/saveCoordinate")
+    @RequiresPermissions("siteMap.edit")
     @ResponseBody
     public int updateCoodinate (long mpId, double siteLatitude, double siteDimension) {
         MonitorPoint monitorPointDB = monitorPointService.findMonitorPoint(mpId);

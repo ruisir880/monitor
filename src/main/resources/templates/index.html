@@ -223,7 +223,9 @@
             }else if(resourceType=='SYSTEMMOULE'){
 
                 $.getJSON("${ctxPath}/getPrivilege",function(result){
-                    data.push({"accessPath":"${ctxPath}/siteMap","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":10,"resourceName":"高德地图显示","resourceOrder":0,"resourceType":""})
+                    if(result.privilegeNameList.indexOf('地图查看')!=-1 || result.privilegeNameList.indexOf('地图监测点定位')!=-1) {
+                        data.push({"accessPath":"${ctxPath}/siteMap","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":10,"resourceName":"高德地图显示","resourceOrder":0,"resourceType":""})
+                    }
                     data.push({"accessPath":"","checked":false,"delFlag":0,"parentID":1,"resourceCode":"","resourceDesc":"","resourceGrade":2,"resourceID":2,"resourceName":"测温信息管理","resourceOrder":0,"resourceType":""})
                     if(result.privilegeNameList.indexOf('温度信息查询')!=-1) {
                         data.push({"accessPath":"${ctxPath}/currentTemp","checked":false,"delFlag":0,"parentID":2,"resourceCode":"","resourceDesc":"","resourceGrade":3,"resourceID":11,"resourceName":"当前温度状态","resourceOrder":0,"resourceType":""})

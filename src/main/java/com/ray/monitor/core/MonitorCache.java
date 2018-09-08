@@ -137,4 +137,8 @@ public class MonitorCache implements MonitorCacheListener {
                 sensor.getTerminalInfo().getTerminalId(),
                 sensor.getSensorId()));
     }
+
+    public void rolePermissionChanged(){
+        roleInfoList = permissionService.findAllRoles();
+    }
 }

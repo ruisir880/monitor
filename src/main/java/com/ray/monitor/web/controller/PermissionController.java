@@ -57,6 +57,7 @@ public class PermissionController {
         RoleInfo roleInfo = permissionService.findRole(roleId);
         roleInfo.setPermissions(permissions);
         permissionService.saveRole(roleInfo);
+        monitorCache.rolePermissionChanged();
         return 0;
     }
 

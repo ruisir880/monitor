@@ -1,36 +1,7 @@
-insert into privilege_info (privilege_name,description) values('privilege.management','权限管理');
-
-insert into privilege_info (privilege_name,description) values('user.list','用户查询');
-insert into privilege_info (privilege_name,description) values('user.edit','用户编辑');
-
-insert into privilege_info (privilege_name,description) values('monitorPoint.list','监测点查询');
-insert into privilege_info (privilege_name,description) values('monitorPoint.edit','监测点编辑');
-
-
-insert into privilege_info (privilege_name,description) values('terminal.list','终端查询');
-insert into privilege_info (privilege_name,description) values('terminal.edit','终端编辑');
-
-insert into privilege_info (privilege_name,description) values('sensor.list','传感器查询');
-insert into privilege_info (privilege_name,description) values('sensor.edit','传感器编辑');
-insert into privilege_info (privilege_name,description) values('sensorThreshold.edit','传感器阈值设置');
-insert into privilege_info (privilege_name,description) values('tempInfo.List','温度信息查询');
-insert into privilege_info (privilege_name,description) values('tempInfo.edit','温度信息编辑');
-
-
-
-insert into user_info(username,password,real_name,mobile,address,salt) value ('admin','4da85196d96808f7d69e5ac6f5354cda','???','123456789','??????','f319cd5b392d16c68e3abd8af3fde536');
-
 insert into user_info(username,password,real_name,mobile,address,salt) value ('test1','c60c16f45dd07ab2c481d2235f5017bd','???','123456789','????????????????','f319cd5b392d16c68e3abd8af3fde536');
 
 insert into user_info(username,password,real_name,mobile,address,salt) value ('test2','20e00a1a2332ca406bb0c46b99d9a68d','??','123456789','??????','f319cd5b392d16c68e3abd8af3fde536');
 
-insert into role_info(role_name,description) values('admin','管理员');
-insert into role_info(role_name,description) values('projectManager','项目负责人');
-insert into role_info(role_name,description) values('cooperation','协作单位');
-insert into role_info(role_name,description) values('technician','技术专家');
-
-
-insert into role_privilege_map(role_id,privilege_id) values(1,1);
 
 
 INSERT INTO area VALUES ('0', '中国', '0');
@@ -3386,20 +3357,20 @@ insert into sensor_info(monitor_point_id,sensor_id) values(3,2);
 insert into sensor_info(monitor_point_id,sensor_id) values(3,1);
 
 
-insert into temp_info(sensor_id,temperature,state) values(1,15.2,'normal');
-insert into temp_info(sensor_id,temperature,state) values(2,19,'normal');
-insert into temp_info(sensor_id,temperature,state) values(3,20,'normal');
-insert into temp_info(sensor_id,temperature,state) values(4,15,'normal');
-insert into temp_info(sensor_id,temperature,state) values(5,10,'normal');
-insert into temp_info(sensor_id,temperature,state) values(6,30,'warning');
-insert into temp_info(sensor_id,temperature,state) values(7,38,'warning');
-insert into temp_info(sensor_id,temperature,state) values(8,20,'normal');
-insert into temp_info(sensor_id,temperature,state) values(10,26.5,'normal');
-insert into temp_info(sensor_id,temperature,state) values(1,22.2,'normal');
-insert into temp_info(sensor_id,temperature,state) values(1,19,'normal');
-insert into temp_info(sensor_id,temperature,state) values(2,39,'warning');
-insert into temp_info(sensor_id,temperature,state) values(2,15,'normal');
-insert into temp_info(sensor_id,temperature,state) values(2,10,'normal');
+insert into temp_info(sensor_id,temperature,state) values(1,15.2,'TRUE');
+insert into temp_info(sensor_id,temperature,state) values(2,19,'TRUE');
+insert into temp_info(sensor_id,temperature,state) values(3,20,'TRUE');
+insert into temp_info(sensor_id,temperature,state) values(4,15,'TRUE');
+insert into temp_info(sensor_id,temperature,state) values(5,10,'TRUE');
+insert into temp_info(sensor_id,temperature,state) values(6,30,'FALSE');
+insert into temp_info(sensor_id,temperature,state) values(7,38,'FALSE');
+insert into temp_info(sensor_id,temperature,state) values(8,20,'TRUE');
+insert into temp_info(sensor_id,temperature,state) values(10,26.5,'TRUE');
+insert into temp_info(sensor_id,temperature,state) values(1,22.2,'TRUE');
+insert into temp_info(sensor_id,temperature,state) values(1,19,'TRUE');
+insert into temp_info(sensor_id,temperature,state) values(2,39,'FALSE');
+insert into temp_info(sensor_id,temperature,state) values(2,15,'TRUE');
+insert into temp_info(sensor_id,temperature,state) values(2,10,'TRUE');
 
 
 

@@ -48,10 +48,7 @@
     alter table role_privilege_map add constraint uq_role_privilege unique (role_id,privilege_id);
     alter table role_privilege_map add constraint fk_role_privilege_r foreign key (role_id)  references role_info (id);
     ALTER TABLE role_privilege_map add constraint fk_role_privilege_p foreign key (privilege_id)  references privilege_info (id);
-	
-	
-	
---业务数据表
+
 	
 	
 create table area(
