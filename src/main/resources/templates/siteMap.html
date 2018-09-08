@@ -34,6 +34,19 @@
     </div>
     <div class="ui_content">
          <div id="mapContainer"></div>
+        <div id="myPageTop">
+            <table>
+                <tr>
+                    <td class="column2">
+                        <label>左击获取经纬度：</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="column2">
+                        <input type="text" readonly="true" id="lnglat">
+                    </td>
+                </tr>
+            </table>
     </div>
 
 </div>
@@ -41,11 +54,18 @@
 <script>
     var siteLatitude;
     var siteDimension;
-    var marker;
+    var markers=[]
 
     var map = new AMap.Map('mapContainer', {
         resizeEnable: true
     });
+    addMarker();
+    //使用CSS默认样式定义地图上的鼠标样式
+    map.setDefaultCursor("pointer");
+    //自定义鼠标样式图标
+    function switchCursor() {
+        map.setDefaultCursor("crosshair");
+    }
 
     map.on('moveend', getCity);
     function getCity() {
@@ -56,10 +76,11 @@
         });
     }
 
-    map.on('click', function(e) {
+    //为地图注册click事件获取鼠标点击出的经纬度坐标
+    var clickEventListener = map.on('click', function(e) {
         siteLatitude = e.lnglat.getLat();
         siteDimension = e.lnglat.getLng();
-        alert('您在[ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ]的位置点击了地图！');
+        document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
     });
 
 
@@ -68,30 +89,35 @@
     }, false);
     
     function addMarker() {
-        if (marker) {
-            marker.setMap(null);
-            marker = null;
-        }
-        if($("#monitorPoint").val() == ""){
-            return;
-        }
+        initMap();
         $.getJSON("/monitor/getMp?mpId="+$("#monitorPoint").val(),
             function(data) {
-                if (data != "" && data.latitude != "" && data.dimension != "") {
-                    marker = new AMap.Marker({
-                        icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-                        position: [data.dimension, data.latitude]
-                    });
-                    marker.setMap(map);
+                for (var i in data){
+                    if (data[i] != "" && data[i].latitude != "" && data[i].dimension != "") {
+                        marker = new AMap.Marker({
+                            icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+                            position: [data[i].dimension, data[i].latitude]
+                        });
+                        marker.setMap(map);
+                        markers.push(marker)
+                    }
                 }
 
             });
     }
-    
+
+    function  initMap() {
+        if (markers.length!=0) {
+            map.remove(markers);
+            markers = [];
+        }
+    }
+
     function saveCoordinate() {
         if(!check()){
             return;
         }
+        initMap();
         $.ajax({
             type:"POST",
             url:"/monitor/saveCoordinate",

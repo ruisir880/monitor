@@ -16,10 +16,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -58,18 +60,24 @@ public class SiteMapController {
 
     @GetMapping("/getMp")
     @ResponseBody
-    public MonitorSensorVO getMp(long mpId) {
+    public List<MonitorSensorVO> getMp(String mpId) {
         try {
             UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
             List<MonitorSensorVO> monitorPointList = monitorCache.getMonitorSensorVO(userInfo.getArea().getId());
+            if(StringUtils.isEmpty(mpId)){
+                return monitorPointList;
+            }
+            long id = Long.parseLong(mpId);
             Optional<MonitorSensorVO> mpOptional =  monitorPointList.stream().filter(new Predicate<MonitorSensorVO>() {
                 @Override
                 public boolean test(MonitorSensorVO monitorSensorVO) {
-                    return monitorSensorVO.getId() == mpId;
+                    return monitorSensorVO.getId() == id;
                 }
             }).findAny();
             if(mpOptional.isPresent()){
-                return mpOptional.get();
+                List<MonitorSensorVO> result = new ArrayList<>();
+                result.add(mpOptional.get());
+                return result;
             }
         } catch (ExecutionException e) {
             logger.error(LOG_GETMONITOR_ERROR,e);

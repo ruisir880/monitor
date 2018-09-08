@@ -12,5 +12,8 @@ alter table sensor_info drop foreign key fk_sensor_info;
 alter table sensor_info add terminal_id bigint ;
 alter table sensor_info add constraint fk_sensor_terminal foreign key (terminal_id)  references terminal_info (id);
 alter table sensor_info drop column monitor_point_id;
+alter table sensor_info add constraint uq_sensor unique(sensor_id,terminal_id);
 
 alter table monitor_point add constraint uq_monitor_point unique(name,area_id);
+alter table monitor_point add latitude double;
+alter table monitor_point add dimension double;

@@ -30,6 +30,9 @@ insert into role_info(role_name,description) values('cooperation','协作单位'
 insert into role_info(role_name,description) values('technician','技术专家');
 
 
+insert into role_privilege_map(role_id,privilege_id) values(1,1);
+
+
 INSERT INTO area VALUES ('0', '中国', '0');
 INSERT INTO area VALUES ('110000', '北京市', '0');
 INSERT INTO area VALUES ('110100', '东城区', '110000');
