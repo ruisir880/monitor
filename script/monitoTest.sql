@@ -1,9 +1,3 @@
-insert into user_info(username,password,real_name,mobile,address,salt) value ('test1','c60c16f45dd07ab2c481d2235f5017bd','???','123456789','????????????????','f319cd5b392d16c68e3abd8af3fde536');
-
-insert into user_info(username,password,real_name,mobile,address,salt) value ('test2','20e00a1a2332ca406bb0c46b99d9a68d','??','123456789','??????','f319cd5b392d16c68e3abd8af3fde536');
-
-
-
 INSERT INTO area VALUES ('0', '中国', null);
 INSERT INTO area VALUES ('110000', '北京市', '0');
 INSERT INTO area VALUES ('110100', '东城区', '110000');
@@ -3336,41 +3330,6 @@ INSERT INTO area VALUES ('991200', '第十二师', '990000');
 INSERT INTO area VALUES ('991300', '第十三师', '990000');
 INSERT INTO area VALUES ('991400', '第十四师', '990000');
 
-
-insert into monitor_point(name,client_company,area_id) values('监测点1','clientcompany 上海大学',310300);
-insert into monitor_point(name,client_company,area_id) values('监测点2','clientcompany 上海交大',311200);
-insert into monitor_point(name,client_company,area_id) values('监测点3','clientcompany 南京大学',320102);
-
-/*insert into user_monitor_map(user_id,monitor_point_id) values(1,1);
-insert into user_monitor_map(user_id,monitor_point_id) values(1,2);
-insert into user_monitor_map(user_id,monitor_point_id) values(2,2);
-insert into user_monitor_map(user_id,monitor_point_id) values(2,3);*/
-
-insert into sensor_info(monitor_point_id,sensor_id) values(1,10);
-insert into sensor_info(monitor_point_id,sensor_id) values(1,8);
-insert into sensor_info(monitor_point_id,sensor_id) values(1,7);
-insert into sensor_info(monitor_point_id,sensor_id) values(2,6);
-insert into sensor_info(monitor_point_id,sensor_id) values(3,5);
-insert into sensor_info(monitor_point_id,sensor_id) values(3,4);
-insert into sensor_info(monitor_point_id,sensor_id) values(3,3);
-insert into sensor_info(monitor_point_id,sensor_id) values(3,2);
-insert into sensor_info(monitor_point_id,sensor_id) values(3,1);
-
-
-insert into temp_info(sensor_id,temperature,state) values(1,15.2,'TRUE');
-insert into temp_info(sensor_id,temperature,state) values(2,19,'TRUE');
-insert into temp_info(sensor_id,temperature,state) values(3,20,'TRUE');
-insert into temp_info(sensor_id,temperature,state) values(4,15,'TRUE');
-insert into temp_info(sensor_id,temperature,state) values(5,10,'TRUE');
-insert into temp_info(sensor_id,temperature,state) values(6,30,'FALSE');
-insert into temp_info(sensor_id,temperature,state) values(7,38,'FALSE');
-insert into temp_info(sensor_id,temperature,state) values(8,20,'TRUE');
-insert into temp_info(sensor_id,temperature,state) values(10,26.5,'TRUE');
-insert into temp_info(sensor_id,temperature,state) values(1,22.2,'TRUE');
-insert into temp_info(sensor_id,temperature,state) values(1,19,'TRUE');
-insert into temp_info(sensor_id,temperature,state) values(2,39,'FALSE');
-insert into temp_info(sensor_id,temperature,state) values(2,15,'TRUE');
-insert into temp_info(sensor_id,temperature,state) values(2,10,'TRUE');
 
 insert into user_area_map values(1,0);
 
