@@ -89,6 +89,7 @@ public class UserInfoController {
      */
     @PostMapping("/deleteUser")
     @RequiresPermissions("user.edit")
+    @ResponseBody
     public int userDel(long userId){
         userInfoService.deleteUser(userId);
         return 0;
