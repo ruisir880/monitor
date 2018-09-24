@@ -36,6 +36,8 @@ public class MonitorPoint implements Serializable {
     @OneToMany(mappedBy="monitorPoint",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private Set<TerminalInfo> terminalInfoList;
 
+    private String emailList;
+
     public long getId() {
         return id;
     }
@@ -106,5 +108,13 @@ public class MonitorPoint implements Serializable {
 
     public void setDimension(Double dimension) {
         this.dimension = dimension;
+    }
+
+    public String getEmailList() {
+        return emailList;
+    }
+
+    public void setEmailList(String emailList) {
+        this.emailList = emailList;
     }
 }

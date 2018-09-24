@@ -135,7 +135,7 @@ public class TempInfoServiceImpl implements TempInfoService {
             query.setParameter("state",state.toString());
         }
         if(!terminalCondition){
-            query.setParameter("terminalId",terminalId);
+            query.setParameter("terminalId",Long.valueOf(terminalId[0]));
         }
         return query.executeUpdate();
     }

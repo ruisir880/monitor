@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>电力测温智能化管理</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="${ctxPath}/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript"  src="${ctxPath}/scripts/authority/commonAll.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/jquery/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript"  src="${ctxPath}/scripts/artDialog/artDialog.js?skin=default"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#submitbutton").click(function() {
+                checkSubmit();
+            });
+
+            $("#cancelbutton").click(function() {
+                $('#emailList').val("");
+            });
+        })
+
+        function checkSubmit(){
+            var monitorPoint = $('#monitorPoint').val();
+            if( monitorPoint!="" ){
+                $.ajax({
+                    type:"POST",
+                    url:"${ctxPath}/setEmailList",
+                    data:{"emailList": $('#emailList').val(),"monitorPointId":monitorPoint},
+                    dataType : "text",
+                    success:function(data) {
+                        if (data == 0) {
+                            art.dialog({icon:'succeed', title:'友情提示', drag:false, resize:false, content:'设置成功', ok:true,});
+                        }else if (data == 2) {
+                            art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'收件人格式不合法', ok:true,});
+                        }
+                    }
+                });
+            }
+            return true;
+        }
+
+        function monitorPointSelect() {
+            $('#emailList').val("");
+            var monitorPoint = $("#monitorPoint").val()
+            $.ajax({
+                type: "GET",
+                url: "/monitor/getEmailList",
+                data: {"monitorPointId":monitorPoint},
+                success: function (result) {
+                    $('#emailList').val(result);
+                }
+            });
+        }
+
+    </script>
+
+</head>
+<body>
+<form id="submitForm" name="submitForm" method="post">
+    <div id="container">
+        <td class="ui_content">
+            <form id="eidtMonitorpoint" action="">
+                <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
+                    <tr>
+                        <td class="ui_text_lt" width="80">所属监测点</td>
+                        <td class="ui_text_lt">
+                            <select name="monitorPoint" id="monitorPoint" class="ui_select01" onchange="monitorPointSelect()">
+                                @if(!isEmpty(monitorPointList)){
+                                @for(monitorPoint in monitorPointList){
+                                <option value=${monitorPoint.id}>${monitorPoint.monitorPointName}</option>
+                                @}
+                                @}
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td ></td>
+                        <td >
+                            <textarea id="emailList" name="emailList" cols="20" rows="3" style="width: 160px;margin: 2px 2px 2px 5px;">
+                                 @if(!isEmpty(emailLIst)){
+                                ${emailLIst}
+                                @}
+                            </textarea>
+                            <label >多个收件人中间用;隔开</label>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td class="ui_text_lt">
+                            &nbsp;<input id="submitbutton" type="button" value="提交" class="ui_input_btn01"/>
+                            &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+    </div>
+    </div>
+</form>
+
+</body>
+</html>

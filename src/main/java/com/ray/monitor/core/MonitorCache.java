@@ -2,8 +2,10 @@ package com.ray.monitor.core;
 
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
 import com.ray.monitor.core.repository.MonitorRepository;
 import com.ray.monitor.core.repository.SensorRepository;
 import com.ray.monitor.core.repository.TerminalRepository;
@@ -13,10 +15,12 @@ import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import sun.management.Sensor;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -39,6 +43,8 @@ public class MonitorCache implements MonitorCacheListener {
 
     //areaId,mpName,terminalName,sensorName->SensorInfo
     private Cache<String, SensorInfo> SENSOR_CACHE = CacheBuilder.newBuilder().softValues().build();
+
+    private Cache<String, List<String>> MP_EMAIL_CACHE = CacheBuilder.newBuilder().softValues().build();
 
     private List<PrivilegeVO> privilegeVOListList = new ArrayList<>();
     private List<RoleVO> roleVOList  = new ArrayList<>();
@@ -108,6 +114,19 @@ public class MonitorCache implements MonitorCacheListener {
         });
     }
 
+    public List<String> getEmailList(long areaId,String mpName) throws ExecutionException {
+        return MP_EMAIL_CACHE.get(areaId+"|"+mpName, new Callable<List<String>>() {
+            @Override
+            public List<String>  call() throws Exception {
+                MonitorPoint monitorPoint = monitorRepository.findOne(areaId,mpName);
+                if(!StringUtils.isEmpty(monitorPoint.getEmailList())){
+                   return Lists.newArrayList(Splitter.on(";").split(monitorPoint.getEmailList())) ;
+                }
+                return Collections.EMPTY_LIST;
+            }
+        });
+    }
+
     public List<PrivilegeVO> getPrivilegeVOList() {
         return privilegeVOListList;
     }
@@ -150,5 +169,9 @@ public class MonitorCache implements MonitorCacheListener {
 
     public void rolePermissionChanged(){
         roleInfoList = permissionService.findAllRoles();
+    }
+
+    public void emailListChanged(long areaId, String mpName){
+        MP_EMAIL_CACHE.invalidate(areaId+"|"+mpName);
     }
 }

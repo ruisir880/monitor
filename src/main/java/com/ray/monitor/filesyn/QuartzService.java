@@ -1,8 +1,10 @@
 package com.ray.monitor.filesyn;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.repository.TempRepository;
+import com.ray.monitor.core.service.MailService;
 import com.ray.monitor.exception.FileReadException;
 import com.ray.monitor.model.SensorInfo;
 import com.ray.monitor.model.TempInfo;
@@ -61,6 +63,9 @@ public class QuartzService {
 
     @Autowired
     private TempRepository tempRepository;
+
+    @Autowired
+    private MailService mailService;
     @PostConstruct
     public void init(){
         FILE_PATH = env.getProperty("syn.file.path");
@@ -104,6 +109,7 @@ public class QuartzService {
             Date date = DateUtil.getDate(stringList.get(3));
 
             List<TempInfo> tempInfoList = new ArrayList<>();
+            List<String> warnMsgList = new ArrayList<>();
             for(int i=4; i<stringList.size(); i++){
                 List<String> tempList = Splitter.on(",").splitToList(stringList.get(i));
                 sensorName = tempList.get(0);
@@ -116,7 +122,11 @@ public class QuartzService {
                 tempInfo.setSensorInfo(sensorInfo);
 
                 tempInfoList.add(tempInfo);
+                if(tempInfo.getTemperature() > sensorInfo.getThresholdValue()) {
+                    warnMsgList.add(String.format("传感器：%s,温度%s,阈值：%s;", sensorInfo.getSensorId(), tempInfo.getTemperature(), sensorInfo.getThresholdValue()));
+                }
             }
+            sendEmail(areaId,mpName,warnMsgList);
             tempRepository.save(tempInfoList);
         } catch (FileReadException e) {
             log.error("Data txt problem:",e);
@@ -157,6 +167,18 @@ public class QuartzService {
             return result.replaceAll("(\r*\n+)+","\n");
         } catch (Exception e) {
             throw new FileReadException(e);
+        }
+    }
+
+    private void sendEmail(long areaId, String mpName, List<String> warnMsgList){
+        try {
+            List<String> emailList = monitorCache.getEmailList(areaId,mpName);
+            if(emailList.size()>0) {
+                mailService.sendSimpleEmail(emailList.toArray(new String[emailList.size()]), Joiner.on("\n").join(warnMsgList));
+            }
+        }catch (Exception e){
+            log.warn("===================================Send email failed==================================");
+            log.warn("Error occurs when send email",e);
         }
     }
 
