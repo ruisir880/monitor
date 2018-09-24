@@ -1,3 +1,7 @@
+var red="#900"
+var yellow="#96992a"
+var green="#14991c"
+
 function showData() {
     myChart.refresh()
     $.ajax({
@@ -21,9 +25,10 @@ function showData() {
                 option.series[0].data[0].children[index] = t
 
                 for (var i in terminal.sensorVOList) {
+                    var sensor = terminal.sensorVOList[i]
                     var color;
-                    if ('normal' == terminal.sensorVOList[i].state) {
-                        color = green;
+                    if (sensor.threshold>sensor.currentTemp) {
+                        color = yellow;
                     } else {
                         color = red;
                     }

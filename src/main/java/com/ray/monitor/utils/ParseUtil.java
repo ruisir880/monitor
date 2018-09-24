@@ -189,4 +189,17 @@ public class ParseUtil {
 
         return sensorVOList;
     }
+
+    public static List<SensorVO> getSensorVOList(List<TempInfo> tempInfoList ){
+        List<SensorVO> voList = new ArrayList<>();
+        for(TempInfo tempInfo: tempInfoList){
+            voList.add(new SensorVO(
+                    tempInfo.getSensorInfo().getId(),
+                    tempInfo.getSensorInfo().getSensorId(),
+                    tempInfo.getSensorInfo().getTerminalInfo().getTerminalId(),
+                    tempInfo.getSensorInfo().getThresholdValue(),
+                    tempInfo.getTemperature()));
+        }
+        return voList;
+    }
 }

@@ -18,6 +18,8 @@ public class SensorVO implements Serializable,Comparable{
 
     private double threshold;
 
+    private double currentTemp;
+
     private List<TempHistoryVO> tempHistoryVOList;
 
 
@@ -26,6 +28,14 @@ public class SensorVO implements Serializable,Comparable{
         this.sensorName = sensorName;
         this.terminalName = terminalName;
         this.threshold = threshold;
+    }
+
+    public SensorVO(long sensorId, String sensorName,String terminalName,double threshold,double currentTemp) {
+        this.sensorId = sensorId;
+        this.sensorName = sensorName;
+        this.terminalName = terminalName;
+        this.threshold = threshold;
+        this.currentTemp = currentTemp;
     }
 
     public long getSensorId() {
@@ -74,5 +84,13 @@ public class SensorVO implements Serializable,Comparable{
             return this.getSensorName().compareTo(((SensorVO)o).getSensorName());
         }
         return 0;
+    }
+
+    public double getCurrentTemp() {
+        return currentTemp;
+    }
+
+    public void setCurrentTemp(double currentTemp) {
+        this.currentTemp = currentTemp;
     }
 }

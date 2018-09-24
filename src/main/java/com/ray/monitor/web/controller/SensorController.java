@@ -3,10 +3,12 @@ package com.ray.monitor.web.controller;
 import com.ray.monitor.core.MonitorCache;
 import com.ray.monitor.core.service.MonitorPointService;
 import com.ray.monitor.core.service.SensorInfoService;
+import com.ray.monitor.core.service.TempInfoService;
 import com.ray.monitor.core.service.TerminalService;
 import com.ray.monitor.model.*;
 import com.ray.monitor.utils.ParseUtil;
 import com.ray.monitor.web.vo.MonitorSensorVO;
+import com.ray.monitor.web.vo.SensorVO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -19,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import static com.ray.monitor.core.constant.Constants.LOG_GETMONITOR_ERROR;
 
@@ -39,6 +43,9 @@ public class SensorController {
 
     @Autowired
     private TerminalService terminalService;
+
+    @Autowired
+    private TempInfoService tempInfoService;
 
     @Autowired
     private MonitorCache monitorCache;
@@ -150,7 +157,9 @@ public class SensorController {
         }
         vo.getTerminalVOList().stream().forEach(terminalVO -> {
             try {
-                terminalVO.setSensorVOList(monitorCache.gettTerminal(terminalVO.getId()).getSensorVOList());
+                List<Long> sensorIdList = new ArrayList<>();
+                monitorCache.gettTerminal(terminalVO.getId()).getSensorVOList().stream().forEach(sensorVO -> sensorIdList.add(sensorVO.getSensorId()));
+                terminalVO.setSensorVOList(ParseUtil.getSensorVOList(tempInfoService.findBySensorIds(sensorIdList)));
             } catch (ExecutionException e) {
                 logger.error("Error occurs when get terminal vo from cache:",e);
             }
