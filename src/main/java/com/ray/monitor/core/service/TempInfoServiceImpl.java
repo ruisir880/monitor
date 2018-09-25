@@ -2,11 +2,10 @@ package com.ray.monitor.core.service;
 
 import com.ray.monitor.core.constant.Constants;
 import com.ray.monitor.core.constant.TempState;
-import com.ray.monitor.core.repository.SensorRepository;
 import com.ray.monitor.core.repository.TempRepository;
 import com.ray.monitor.model.TempInfo;
-import com.ray.monitor.model.UserInfo;
 import com.ray.monitor.utils.DateUtil;
+import com.ray.monitor.web.vo.SensorVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +33,20 @@ public class TempInfoServiceImpl implements TempInfoService {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Override
+    public List<SensorVO> findByTerminalId(List<Long> terminalIds) {
+        List<Object[]>  objectList =tempRepository.findByTerminalId(terminalIds);
+        List<SensorVO> sensorVOs = new ArrayList<>();
+        for(Object[] elem : objectList){
+            sensorVOs.add(new SensorVO(Long.valueOf(elem[0].toString()),
+                    elem[1].toString(),
+                    elem[2].toString(),
+                    elem[3] == null ? 0.0 : (Double) elem[3],
+                    elem[4] == null ? 0.0 : (Double) elem[4]));
+        }
+        return sensorVOs;
+    }
 
     @Override
     public List<TempInfo> findBySensorIds(List<Long> sensorIdList) {
